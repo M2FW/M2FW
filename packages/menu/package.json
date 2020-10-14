@@ -1,0 +1,23 @@
+{
+  "name": "@m2fw/menu",
+  "version": "0.0.1-beta.5",
+  "description": "M2 framework server side module",
+  "main": "dist/index.js",
+  "repository": "https://github.com/m2fw/menu",
+  "author": "Jay Lee <jaylee.possible@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "tsc",
+    "build:dev": "tsc -w",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "dependencies": {
+    "@m2fw/base-controller": "^0.0.1-beta.1",
+    "@m2fw/graphql-manager": "^0.0.1-alpha.0",
+    "typeorm": "^0.2.24"
+  },
+  "devDependencies": {
+    "typescript": "^3.7.2"
+  }
+}

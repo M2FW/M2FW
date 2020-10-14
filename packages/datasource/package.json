@@ -1,0 +1,22 @@
+{
+  "name": "@m2fw/datasource",
+  "version": "0.0.2-beta.5",
+  "description": "M2 framework datasource core module",
+  "main": "dist/index.js",
+  "repository": "https://github.com/m2fw/datasource.git",
+  "author": "Jay Lee <jaylee.possible@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "tsc",
+    "build:dev": "tsc -w",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "dependencies": {
+    "typeorm": "^0.2.20"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.6",
+    "typescript": "^3.7.2"
+  }
+}

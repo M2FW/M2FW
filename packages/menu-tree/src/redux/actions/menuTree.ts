@@ -1,0 +1,4 @@
+export const SET_MENUS = 'SET_MENUS'
+export const SET_CURRENT_MENU = 'SET_CURRENT_MENU'
+export const OPEN_GROUP_MENU = 'OPEN_GROUP_MENU'
+export const CLOSE_GROUP_MENU = 'CLOSE_GROUP_MENU'

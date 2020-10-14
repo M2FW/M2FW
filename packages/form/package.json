@@ -1,0 +1,24 @@
+{
+  "name": "@m2fw/form",
+  "version": "0.0.1-alpha.2",
+  "description": "form powered by M2 Framework",
+  "main": "dist/index.js",
+  "repository": "https://github.com/m2fw/form",
+  "author": "Jay Lee <jaylee.possible@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build:dev": "webpack --config ./webpack.config.dev.js",
+    "build": "webpack",
+    "clean": "rm -rf ./dist",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "dependencies": {
+    "lit-element": "^2.2.1"
+  },
+  "devDependencies": {
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  }
+}

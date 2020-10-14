@@ -1,0 +1,26 @@
+{
+  "name": "@m2fw/router",
+  "version": "0.0.1",
+  "description": "M2 framework router for client side",
+  "main": "dist/index.js",
+  "repository": "https://github.com/m2fw/router",
+  "author": "Jay Lee <jaylee.possible@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build:dev": "webpack --config ./webpack.config.dev.js",
+    "build": "webpack",
+    "clean": "rm -rf ./dist",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "dependencies": {
+    "@m2fw/redux-manager": "^0.0.1-alpha.12",
+    "lit-element": "^2.2.1",
+    "pwa-helpers": "^0.9.1"
+  },
+  "devDependencies": {
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  }
+}
