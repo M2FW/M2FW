@@ -1,0 +1,24 @@
+{
+  "name": "@m2fw/base-controller",
+  "version": "0.0.1-beta.18",
+  "description": "M2 framework base controller module",
+  "main": "dist/index.js",
+  "repository": "https://github.com/m2fw/base-controller",
+  "author": "Jay Lee <jaylee.possible@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "tsc",
+    "build:dev": "tsc -w",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "dependencies": {
+    "@m2fw/datasource": "^0.0.2-beta.5",
+    "express": "^4.17.1",
+    "typeorm": "^0.2.20"
+  },
+  "devDependencies": {
+    "typescript": "^3.7.2",
+    "@types/node": "^13.7.7"
+  }
+}

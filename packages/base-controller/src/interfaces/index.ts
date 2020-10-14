@@ -1,0 +1,6 @@
+export * from './IBaseController'
+export * from './IDeleteBaseController'
+export * from './IInsertBaseController'
+export * from './IQueryCondition'
+export * from './IReadBaseController'
+export * from './IUpdateBaseController'
