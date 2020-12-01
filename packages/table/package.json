@@ -13,7 +13,6 @@
     "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
-    "@m2fw/redux-manager": "^0.0.1-alpha.16",
     "lit-element": "^2.3.1",
     "pwa-helpers": "^0.9.1"
   },
