@@ -1,2 +1,2 @@
-export * from './NavBar'
-export * from './PageRouter'
+export * from './nav-bar'
+export * from './page-router'

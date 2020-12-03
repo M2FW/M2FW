@@ -1,24 +1,25 @@
-import { store } from '@m2fw/redux-manager'
 import {
-  css,
   CSSResult,
-  customElement,
-  html,
   LitElement,
-  property,
   PropertyValues,
   TemplateResult,
+  css,
+  customElement,
+  html,
+  property,
 } from 'lit-element'
+
+import { PageInfo } from '../interfaces'
 import { connect } from 'pwa-helpers/connect-mixin'
-import { PageInfoInterface } from '../interfaces'
-import { navigate } from '../redux/reducers'
+import { navigate } from '../redux/actions'
+import { store } from '@m2fw/redux-manager'
 
 @customElement('nav-bar')
 export class NavBar extends connect(store)(LitElement) {
-  @property({ type: String }) _title: string
-  @property({ type: String }) _route: string
-  @property({ type: Object }) _currentPageElement: PageInfoInterface
-  @property({ type: Array }) _pages: PageInfoInterface[] = []
+  @property({ type: String }) title: string = ''
+  @property({ type: String }) route: string = ''
+  @property({ type: Object }) currentPageElement?: PageInfo
+  @property({ type: Array }) pages: PageInfo[] = []
   @property({ type: Boolean }) useTooltip: boolean = true
   @property({ type: Boolean }) storeHistory: boolean = true
   @property({ type: String }) historyKey: string = '__m2fw__nav_histories__'
@@ -71,7 +72,7 @@ export class NavBar extends connect(store)(LitElement) {
           padding: var(--nav-bar-page-item-activated-padding, 5px);
         }
         #nav-bar > .page-item > .tooltip {
-          cusor: inherit;
+          cursor: inherit;
           visibility: hidden;
           position: absolute;
           font-size: var(--nav-bar-tooltip-font-size, 10pt);
@@ -90,17 +91,17 @@ export class NavBar extends connect(store)(LitElement) {
   render(): TemplateResult {
     return html`
       <div id="nav-bar">
-        ${this._pages.map(
-          (_page: PageInfoInterface) => html`
+        ${this.pages.map(
+          (page: PageInfo) => html`
             <div
               class="page-item"
-              @click="${this._navigateTo}"
-              route="${_page.route}"
-              ?activated="${_page.activated}"
+              @click="${this.navigateTo}"
+              route="${page.route}"
+              ?activated="${page.activated}"
             >
-              ${_page.title}
+              ${page.title}
               ${this.useTooltip
-                ? html` <span class="tooltip">${_page.route}</span> `
+                ? html` <span class="tooltip">${page.route}</span> `
                 : ''}
             </div>
           `
@@ -109,26 +110,29 @@ export class NavBar extends connect(store)(LitElement) {
     `
   }
 
-  get navBar(): HTMLDivElement {
-    return this.shadowRoot.querySelector('div#nav-bar')
+  get navBar(): HTMLDivElement | null {
+    return this.renderRoot?.querySelector('div#nav-bar')
   }
 
   /**
    * @description Get stored pages from localStorage
    *
-   * @returns {PageInfoInterface} pages
+   * @returns {PageInfo} pages
    */
-  get storedPages(): PageInfoInterface[] {
-    return (
-      (JSON.parse(
-        window.localStorage.getItem(this.historyKey)
-      ) as PageInfoInterface[]) || []
+  get storedPages(): PageInfo[] {
+    const storedPages: string | null = window.localStorage.getItem(
+      this.historyKey
     )
+    if (storedPages) {
+      return JSON.parse(storedPages)
+    } else {
+      return []
+    }
   }
 
   updated(changeProps: PropertyValues): void {
-    if (changeProps.has('_currentPageElement')) {
-      this._toggleCurrentPage(this._currentPageElement)
+    if (changeProps.has('currentPageElement') && this.currentPageElement) {
+      this.toggleCurrentPage(this.currentPageElement)
     }
 
     if (changeProps.has('maxItemCount')) {
@@ -139,14 +143,14 @@ export class NavBar extends connect(store)(LitElement) {
   /**
    * @description Renew _pages property to update UI
    *
-   * @param {PageInfoInterface} pageElement
+   * @param {PageInfo} pageElement
    */
-  _toggleCurrentPage(pageElement: PageInfoInterface) {
+  private toggleCurrentPage(pageElement: PageInfo) {
     if (this.excludes.indexOf(pageElement.route) < 0) {
-      this._addPages(pageElement)
+      this.addPages(pageElement)
     }
 
-    this._pages = this.storedPages.map((page: PageInfoInterface) => {
+    this.pages = this.storedPages.map((page: PageInfo) => {
       return {
         ...page,
         activated: Boolean(page.route === pageElement.route),
@@ -157,14 +161,13 @@ export class NavBar extends connect(store)(LitElement) {
   /**
    * @description Add current page to localStorage and slice with maxItemCount
    *
-   * @param {PageInfoInterface} pageElement
+   * @param {PageInfo} pageElement
    */
-  _addPages(pageElement: PageInfoInterface): void {
-    const pages: PageInfoInterface[] = [
+  addPages(pageElement: PageInfo): void {
+    const pages: PageInfo[] = [
       pageElement,
       ...this.storedPages.filter(
-        (storedPage: PageInfoInterface) =>
-          storedPage.route !== pageElement.route
+        (storedPage: PageInfo) => storedPage.route !== pageElement.route
       ),
     ].slice(0, this.maxItemCount)
 
@@ -174,16 +177,20 @@ export class NavBar extends connect(store)(LitElement) {
   /**
    * @description history box click handler
    */
-  _navigateTo(e: MouseEvent): void {
-    const route: string = (e.currentTarget as HTMLElement).getAttribute('route')
-    navigate(route)
-    this._currentPageElement = this.storedPages.find(
-      (page: PageInfoInterface) => page.route === route
+  navigateTo(e: MouseEvent): void {
+    const route: string | null = (e.currentTarget as HTMLElement).getAttribute(
+      'route'
     )
+    if (route) {
+      navigate(route)
+      this.currentPageElement = this.storedPages.find(
+        (page: PageInfo) => page.route === route
+      )
+    }
   }
 
   _adjustBlockMaxWidth(): void {
-    this.navBar.style.setProperty(
+    this.navBar?.style.setProperty(
       'grid-template-columns',
       `repeat(${this.maxItemCount}, 1fr)`
     )
@@ -191,7 +198,7 @@ export class NavBar extends connect(store)(LitElement) {
 
   stateChanged(state: any): void {
     if (typeof state?.route?.route !== 'undefined') {
-      this._currentPageElement = {
+      this.currentPageElement = {
         title: state.route.title,
         route: state.route.route,
       }

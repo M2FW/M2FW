@@ -1,1 +1,1 @@
-export * from './RouteStateInterface'
+export * from './route-state'

@@ -1,33 +1,34 @@
-import { store } from '@m2fw/redux-manager'
 import {
-  css,
   CSSResult,
-  customElement,
-  html,
   LitElement,
-  property,
   PropertyValues,
   TemplateResult,
+  css,
+  customElement,
+  html,
+  property,
 } from 'lit-element'
+import { navigate, switchToImported } from '../redux/actions'
+
+import { PageDetail } from '../interfaces'
 import { connect } from 'pwa-helpers/connect-mixin'
-import { PageDetailInterface } from '../interfaces'
-import { navigate, switchToImported } from '../redux/reducers'
+import { store } from '@m2fw/redux-manager'
 
 @customElement('page-router')
 export class PageRouter extends connect(store)(LitElement) {
   @property({ type: Boolean }) __history_back_flag__ = false
-  @property({ type: Array }) pages: PageDetailInterface[] = []
-  @property({ type: String }) title: string
-  @property({ type: String }) route: string
+  @property({ type: Array }) pages: PageDetail[] = []
+  @property({ type: String }) title: string = ''
+  @property({ type: String }) route: string = ''
   @property({ type: Boolean }) useHash: boolean = false
-  @property({ type: String }) contextPath: string
-  @property({ type: Function }) onRouteChanged: Function = async (
+  @property({ type: String }) contextPath?: string
+  @property({ type: Object }) onRouteChanged: (
     e: CustomEventInit
-  ) => {
-    await this._importElement(e.detail.new.value)
-    this._hidePage(e.detail.old.value)
-    this._updateRoute(this.title, e.detail.new.value)
-    this._showPage(e.detail.new.value)
+  ) => Promise<void> = async (e: CustomEventInit): Promise<void> => {
+    await this.importElement(e.detail.new.value)
+    this.hidePage(e.detail.old.value)
+    this.updateRoute(this.title, e.detail.new.value)
+    this.showPage(e.detail.new.value)
   }
 
   static get styles(): CSSResult[] {
@@ -45,10 +46,10 @@ export class PageRouter extends connect(store)(LitElement) {
           flex-direction: column;
           overflow: hidden;
         }
-        :host > content > ::slotted(*) {
+        :host > *::slotted(*) {
           display: none;
         }
-        :host > content > ::slotted(*[show]) {
+        :host > *::slotted(*[show]) {
           display: var(--m2-page-router-content-display, inherit);
         }
       `,
@@ -56,11 +57,7 @@ export class PageRouter extends connect(store)(LitElement) {
   }
 
   render(): TemplateResult {
-    return html`
-      <content>
-        <slot></slot>
-      </content>
-    `
+    return html` <slot></slot> `
   }
 
   constructor() {
@@ -68,21 +65,13 @@ export class PageRouter extends connect(store)(LitElement) {
     this.addEventListener('routeChanged', this.onRouteChanged.bind(this))
   }
 
-  get pageSlot(): HTMLSlotElement {
-    return this.shadowRoot.querySelector('slot')
-  }
-
-  /**
-   * @description Return content section
-   *
-   * @returns HTMLElement
-   */
-  get content(): HTMLElement {
-    return this.shadowRoot.querySelector('content')
+  get pageSlot(): HTMLSlotElement | void {
+    const slot: HTMLSlotElement | null = this.renderRoot.querySelector('slot')
+    if (slot) return slot
   }
 
   firstUpdated(): void {
-    if (!this.route) navigate(this._getUrlRoute() as string)
+    if (!this.route) navigate(this.getUrlRoute() as string)
   }
 
   /**
@@ -91,11 +80,11 @@ export class PageRouter extends connect(store)(LitElement) {
    * @returns {void}
    */
   updated(props: PropertyValues): void {
-    this._eventDispatcher(props)
-    this._addUrlChangedHandler(props)
+    this.eventDispatcher(props)
+    this.addUrlChangedHandler(props)
   }
 
-  _getUrlRoute(): string {
+  private getUrlRoute(): string | undefined {
     if (this.useHash) return location.hash.replace('#', '')
     const pathname = location.pathname.replace('/', '')
     if (this.contextPath)
@@ -109,7 +98,7 @@ export class PageRouter extends connect(store)(LitElement) {
    * @param {PropertyValues} props
    * @returns {void}
    */
-  _eventDispatcher(props: PropertyValues): void {
+  private eventDispatcher(props: PropertyValues): void {
     if (props.has('contextPath')) {
       this.dispatchEvent(
         new CustomEvent('pagesChanged', {
@@ -155,7 +144,7 @@ export class PageRouter extends connect(store)(LitElement) {
     }
   }
 
-  _addUrlChangedHandler(props: PropertyValues): void {
+  private addUrlChangedHandler(props: PropertyValues): void {
     if (props.has('useHash') && this.useHash) {
       window.addEventListener(
         'hashchange',
@@ -173,7 +162,7 @@ export class PageRouter extends connect(store)(LitElement) {
     }
   }
 
-  _addHashChangeHandler(props: PropertyValues): void {}
+  private addHashChangeHandler(props: PropertyValues): void {}
 
   /**
    * @description Find and return by route from pages property
@@ -181,12 +170,14 @@ export class PageRouter extends connect(store)(LitElement) {
    * @param {String} route
    * @returns {Element} page element
    */
-  getPageElementByRoute(route: string): HTMLElement {
-    return this.pageSlot
-      .assignedElements()
-      .find(
-        (page: Element) => page.getAttribute('route') === route
-      ) as HTMLElement
+  getPageElementByRoute(route: string): HTMLElement | void {
+    if (this.pageSlot) {
+      return this.pageSlot
+        .assignedElements()
+        .find(
+          (page: Element) => page.getAttribute('route') === route
+        ) as HTMLElement
+    }
   }
 
   /**
@@ -195,13 +186,15 @@ export class PageRouter extends connect(store)(LitElement) {
    * @param {String} route
    * @returns {void}
    */
-  async _importElement(route: string): Promise<void> {
-    if (!this._checkImported(route)) {
-      const page = this.pages.find(
-        (page: PageDetailInterface) => page.route === route
+  private async importElement(route: string): Promise<void> {
+    if (!this.checkImported(route)) {
+      const page: PageDetail | undefined = this.pages.find(
+        (page: PageDetail) => page.route === route
       )
-      await page.importer.call(page.importer)
-      switchToImported(page.route)
+      if (page) {
+        await page.importer.call(page.importer)
+        switchToImported(page.route)
+      }
     }
   }
 
@@ -211,30 +204,32 @@ export class PageRouter extends connect(store)(LitElement) {
    * @param {String} route
    * @returns {Boolean}
    */
-  _checkImported(route: string): boolean {
-    return Boolean(
-      this.pages.find((page: PageDetailInterface) => page.route === route)
-        .imported
+  private checkImported(route: string): boolean | void {
+    const page: PageDetail | undefined = this.pages.find(
+      (page: PageDetail) => page.route === route
     )
+    if (page) {
+      return Boolean(page.imported)
+    }
   }
 
-  _updateRoute(
+  private updateRoute(
     title: string = this.title,
     route: string = this.route,
     data?: {}
   ): void {
     if (route === (null || undefined)) return
     if (this.useHash) {
-      this._changeHash(route)
+      this.changeHash(route)
     } else {
-      this._updateHistory(title, route, data)
+      this.updateHistory(title, route, data)
     }
   }
 
-  _changeHash(route: string): void {
+  private changeHash(route: string): void {
     if (
       location.pathname.split('/').join('') !==
-        this.contextPath.split('/').join('') ||
+        this.contextPath?.split('/').join('') ||
       location.hash.replace('#', '') !== route
     ) {
       const redirectLocation: URL = new URL(location.origin)
@@ -244,7 +239,7 @@ export class PageRouter extends connect(store)(LitElement) {
     }
   }
 
-  _updateHistory(title: string, route: string, data?: {}): void {
+  private updateHistory(title: string, route: string, data?: {}): void {
     let pathname: string = location.pathname.replace('/', '')
     if (this.contextPath) pathname = this.contextPath
     if (route !== (null || undefined)) pathname = `/${pathname}/${route}`
@@ -263,8 +258,11 @@ export class PageRouter extends connect(store)(LitElement) {
    * @param {String} route
    * @returns {void}
    */
-  _hidePage(route?: string): void {
-    this.getPageElementByRoute(route)?.removeAttribute('show')
+  private hidePage(route: string): void {
+    const page: HTMLElement | void = this.getPageElementByRoute(route)
+    if (page) {
+      page.removeAttribute('show')
+    }
   }
 
   /**
@@ -273,8 +271,11 @@ export class PageRouter extends connect(store)(LitElement) {
    * @param {String} route
    * @returns {void}
    */
-  _showPage(route: string): void {
-    this.getPageElementByRoute(route)?.setAttribute('show', '')
+  private showPage(route: string): void {
+    const page: HTMLElement | void = this.getPageElementByRoute(route)
+    if (page) {
+      page.setAttribute('show', '')
+    }
   }
 
   stateChanged(state: any): void {

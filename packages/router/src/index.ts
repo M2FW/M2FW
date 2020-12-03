@@ -1,2 +1,2 @@
 export * from './components'
-export * from './redux/reducers'
+export * from './redux'
