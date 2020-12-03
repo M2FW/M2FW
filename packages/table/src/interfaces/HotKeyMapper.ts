@@ -1,4 +1,4 @@
-export interface HotKeyMapperInterface {
+export interface HotKeyMapper {
   TOGGLE_EDITING: string[]
 
   MOVE_FOCUSING: string[]

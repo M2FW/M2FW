@@ -1,6 +1,6 @@
 import { ColumnAlign, ColumnTypes } from '../enums'
 
-export interface BaseColumnConfigInterface {
+export interface BaseColumnConfig {
   name: string
   primary?: boolean
   header?: string | Function

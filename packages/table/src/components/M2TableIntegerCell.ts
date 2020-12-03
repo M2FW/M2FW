@@ -1,11 +1,13 @@
-import { customElement, html, property, TemplateResult } from 'lit-element'
+import { TemplateResult, customElement, html, property } from 'lit-element'
+
 import { AbstractM2TableCell } from '../abstracts/AbstractM2TableCell'
 import { Events } from '../enums'
-import { NumberColumnConfigInterface } from '../interfaces'
+import { NumberColumnConfig } from '../interfaces'
+import { ifDefined } from 'lit-html/directives/if-defined'
 
 @customElement('m2-table-integer-cell')
 export class M2TableIntegerCell extends AbstractM2TableCell {
-  @property({ type: Object }) config?: NumberColumnConfigInterface
+  @property({ type: Object }) config?: NumberColumnConfig
   @property({ type: Number }) value?: number
 
   render(): TemplateResult {
@@ -14,9 +16,9 @@ export class M2TableIntegerCell extends AbstractM2TableCell {
         ? html`
             <input
               type="number"
-              value="${this.value}"
-              min="${this.config?.min && this.config.min !== undefined}"
-              max="${this.config?.max && this.config.max !== undefined}"
+              value="${ifDefined(this.value)}"
+              min="${ifDefined(this.config?.min)}"
+              max="${ifDefined(this.config?.max)}"
             />
           `
         : html`${this.displayValue}`}

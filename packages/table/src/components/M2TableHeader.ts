@@ -1,13 +1,14 @@
-import { CSSResult, customElement, html, TemplateResult } from 'lit-element'
+import { ButtonType, Events } from '../enums'
+import { CSSResult, TemplateResult, customElement, html } from 'lit-element'
+import {
+  ColumnConfig,
+  IconButtonOptions,
+  TableButton,
+  TextButtonOptions,
+} from '../interfaces'
+
 import { AbstractM2TablePart } from '../abstracts'
 import { headerStyle } from '../assets/styles'
-import { ButtonType, Events } from '../enums'
-import {
-  ColumnConfigInterface,
-  IconButtonOptionsInterface,
-  TableButtonInterface,
-  TextButtonOptionsInterface,
-} from '../interfaces'
 
 @customElement('m2-table-header')
 export class M2TableHeader extends AbstractM2TablePart {
@@ -21,10 +22,10 @@ export class M2TableHeader extends AbstractM2TablePart {
         <tr>
           ${this.numbering ? this._renderRowNumbering() : ''}
           ${this.selectable ? this._renderSelectInput() : ''}
-          ${this.buttons.map((button: TableButtonInterface) =>
+          ${this.buttons.map((button: TableButton) =>
             this._renderButton(button)
           )}
-          ${this.columns.map((column: ColumnConfigInterface) =>
+          ${this.columns.map((column: ColumnConfig) =>
             this._renderTableCell(column)
           )}
         </tr>
@@ -36,10 +37,10 @@ export class M2TableHeader extends AbstractM2TablePart {
     return html` <th width="15px"></th> `
   }
 
-  _renderButton(button: TableButtonInterface): TemplateResult | void {
+  _renderButton(button: TableButton): TemplateResult | void {
     if (button.type === ButtonType.Icon) {
       let icon: any
-      const buttonOptions: IconButtonOptionsInterface = button.options as IconButtonOptionsInterface
+      const buttonOptions: IconButtonOptions = button.options as IconButtonOptions
       if (typeof buttonOptions.icon === 'function') {
         icon = icon as HTMLElement
         icon = buttonOptions.icon.call(this)
@@ -49,17 +50,13 @@ export class M2TableHeader extends AbstractM2TablePart {
       }
 
       return html`<th>
-        <button>
-          ${icon}
-        </button>
+        <button>${icon}</button>
       </th>`
     } else if (button.type === ButtonType.Text) {
-      const buttonOptions: TextButtonOptionsInterface = button.options as TextButtonOptionsInterface
+      const buttonOptions: TextButtonOptions = button.options as TextButtonOptions
 
       return html` <th>
-        <button>
-          ${buttonOptions.text}
-        </button>
+        <button>${buttonOptions.text}</button>
       </th>`
     }
   }
@@ -76,7 +73,7 @@ export class M2TableHeader extends AbstractM2TablePart {
     `
   }
 
-  _renderTableCell(column: ColumnConfigInterface): TemplateResult {
+  _renderTableCell(column: ColumnConfig): TemplateResult {
     return html`
       <th width="${column.width || 150}" ?hidden="${column.hidden}">
         ${this.displayHeader(column)}
@@ -88,7 +85,7 @@ export class M2TableHeader extends AbstractM2TablePart {
    * @description This is the function to concrete how header looks like.
    * @param config configuration for header
    */
-  displayHeader(config: ColumnConfigInterface): string {
+  displayHeader(config: ColumnConfig): string {
     if (config.header) {
       if (typeof config.header === 'function') {
         return config.header()

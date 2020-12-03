@@ -1,18 +1,20 @@
+import './M2TableBody'
+import './M2TableFooter'
+import './M2TableHeader'
+
 import {
-  css,
   CSSResult,
+  TemplateResult,
+  css,
   customElement,
   html,
   property,
-  TemplateResult,
 } from 'lit-element'
+
 import { AbstractM2TablePart } from '../abstracts'
-import { TableDataInterface } from '../interfaces'
-import './M2TableBody'
 import { M2TableBody } from './M2TableBody'
-import './M2TableFooter'
-import './M2TableHeader'
 import { M2TableHeader } from './M2TableHeader'
+import { TableData } from '../interfaces'
 
 @customElement('m2-table')
 export class M2Table extends AbstractM2TablePart {
@@ -40,12 +42,12 @@ export class M2Table extends AbstractM2TablePart {
         .scrollSpeedLevel="${this.scrollSpeedLevel}"
         @selectAll="${this.onSelectAllHandler.bind(this)}"
         @deselectAll="${this.onDeselectAllHandler.bind(this)}"
-        @wheel="${this.onHeaderWheelHandelr}"
+        @wheel="${this.onHeaderWheelHandler}"
       ></m2-table-header>
 
       <m2-table-body
-        .appendable="${this.appendable}"
-        .deletable="${this.deletable}"
+        .addable="${this.addable}"
+        .removable="${this.removable}"
         .columns="${this.columns}"
         .buttons="${this.buttons}"
         .data="${this.data}"
@@ -67,44 +69,44 @@ export class M2Table extends AbstractM2TablePart {
    * @description Returning selected data
    * @param withProps Whether __props__ of data is involved or not
    */
-  getSelected(withProps: boolean = false): TableDataInterface[] | void {
+  getSelected(withProps: boolean = false): TableData[] | void {
     return this.tableBody?.getSelected(withProps)
   }
 
   /**
    * @description Returning changed data with non changed field of data as well
    * @param withProps Whether __props__ of data is involved or not
-   * @returns {TableDataInterface[]}
+   * @returns {TableData[]}
    */
-  getChanged(withProps: boolean = false): TableDataInterface[] | void {
+  getChanged(withProps: boolean = false): TableData[] | void {
     return this.tableBody?.getChanged(withProps)
   }
 
   /**
    * @description Returning changed data with only changed fields of data
-   * @returns {TableDataInterface[]}
+   * @returns {TableData[]}
    */
-  getChangedOnly(): TableDataInterface[] | void {
+  getChangedOnly(): TableData[] | void {
     return this.tableBody?.getChangedOnly()
   }
 
   /**
-   * @description Returning appeneded data (Newly added)
+   * @description Returning appended data (Newly added)
    * @param withProps Whether __props__ of data is involved or not
-   * @returns {TableDataInterface[]}
+   * @returns {TableData[]}
    */
-  getAppended(withProps: boolean = false): TableDataInterface[] | void {
+  getAppended(withProps: boolean = false): TableData[] | void {
     return this.tableBody?.getAppended(withProps)
   }
 
   /**
    * @description Returning deleted data
-   * (Appeneded data will be deleted automatically when user press delete button (If key map is configured  as default)
-   * but the deleting target data is not appeneded one, it will change the status of data and user can get those data by this function
+   * (Appended data will be deleted automatically when user press delete button (If key map is configured  as default)
+   * but the deleting target data is not appended one, it will change the status of data and user can get those data by this function
    * @param withProps Whether __props__ of data is involved or not
-   * @returns {TableDataInterface[]}
+   * @returns {TableData[]}
    */
-  getDeleted(withProps: boolean = false): TableDataInterface[] | void {
+  getDeleted(withProps: boolean = false): TableData[] | void {
     return this.tableBody?.getDeleted(withProps)
   }
 
@@ -123,10 +125,10 @@ export class M2Table extends AbstractM2TablePart {
   }
 
   /**
-   * @description Event handler for wheel from m2-table-header, It scrolls tabel from left to right
+   * @description Event handler for wheel from m2-table-header, It scrolls table from left to right
    * @param e Wheel Event
    */
-  onHeaderWheelHandelr(e: WheelEvent) {
+  onHeaderWheelHandler(e: WheelEvent) {
     this.scrollLeft += e.deltaY / this.scrollSpeedLevel
   }
 }

@@ -1,9 +1,9 @@
-import { HotKeyMapperInterface } from '../interfaces'
+import { HotKeyMapper } from '../interfaces'
 
 /**
  * @description Mapped object for action and keys by default
  */
-const DEFAULT_KEY_MAP: HotKeyMapperInterface = {
+const DEFAULT_KEY_MAP: HotKeyMapper = {
   TOGGLE_EDITING: ['Enter'],
   MOVE_FOCUSING: ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'],
   MOVE_FOCUSING_UP: ['ArrowUp'],
@@ -37,7 +37,7 @@ export enum KeyActions {
 export function keyMapper(
   key: string,
   action: KeyActions,
-  keyMap: HotKeyMapperInterface = DEFAULT_KEY_MAP
+  keyMap: HotKeyMapper = DEFAULT_KEY_MAP
 ): boolean {
   return Boolean(keyMap[action].indexOf(key) >= 0)
 }

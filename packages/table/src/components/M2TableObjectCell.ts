@@ -1,13 +1,11 @@
-import { customElement, html, property, TemplateResult } from 'lit-element'
+import { SelectColumnConfig, SelectOption } from '../interfaces'
+import { TemplateResult, customElement, html, property } from 'lit-element'
+
 import { AbstractM2TableCell } from '../abstracts/AbstractM2TableCell'
-import {
-  SelectColumnConfigInterface,
-  SelectOptionInterface,
-} from '../interfaces'
 
 @customElement('m2-table-object-cell')
 export class M2TableObjectCell extends AbstractM2TableCell {
-  @property({ type: Object }) config?: SelectColumnConfigInterface
+  @property({ type: Object }) config?: SelectColumnConfig
 
   render(): TemplateResult {
     if (!this.config?.options)
@@ -19,18 +17,19 @@ export class M2TableObjectCell extends AbstractM2TableCell {
             <select>
               <option></option>
               ${((this.config?.options as any) || []).map(
-                (option: string | SelectOptionInterface): TemplateResult => {
+                (option: string | SelectOption): TemplateResult => {
                   if (typeof option === 'string') {
-                    return html`<option ?selected="${option === this.value}"
-                      >${option}</option
-                    >`
+                    return html`<option ?selected="${option === this.value}">
+                      ${option}
+                    </option>`
                   } else {
-                    option = option as SelectOptionInterface
+                    option = option as SelectOption
                     return html`<option
                       value="${option.value}"
                       ?selected="${option.value === this.value}"
-                      >${option.display}</option
-                    >`
+                    >
+                      ${option.display}
+                    </option>`
                   }
                 }
               )}

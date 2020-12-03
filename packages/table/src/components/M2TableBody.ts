@@ -10,12 +10,12 @@ import {
   property,
 } from 'lit-element'
 import {
-  ColumnConfigInterface,
-  IconButtonOptionsInterface,
-  TableButtonInterface,
-  TableChangeValuePropertiesInterface,
-  TableDataInterface,
-  TextButtonOptionsInterface,
+  ColumnConfig,
+  IconButtonOptions,
+  TableButton,
+  TableChangeValueProperties,
+  TableData,
+  TextButtonOptions,
 } from '../interfaces'
 import { KeyActions, keyMapper } from '../utils/KeyMapper'
 
@@ -25,11 +25,11 @@ import { bodyStyle } from '../assets/styles'
 
 @customElement('m2-table-body')
 export class M2TableBody extends AbstractM2TablePart {
-  @property({ type: Array }) data: TableDataInterface[] = []
+  @property({ type: Array }) data: TableData[] = []
   @property({ type: Object }) focusedCell?: HTMLElement
   @property({ type: Boolean }) _isEditing: boolean = false
   @property({ type: Object }) _focusedCell?: M2TableCell
-  @property({ type: Object }) _data: TableDataInterface = []
+  @property({ type: Object }) _data: TableData = []
 
   static get styles(): CSSResult[] {
     return [bodyStyle]
@@ -45,7 +45,7 @@ export class M2TableBody extends AbstractM2TablePart {
     return html`
       <tbody>
         ${this.data.map(
-      (record: TableDataInterface, rowIdx: number) => html`
+          (record: TableData, rowIdx: number) => html`
             <tr
               rowIdx="${rowIdx}"
               ?changed="${record?.__props__?.changed || false}"
@@ -55,16 +55,15 @@ export class M2TableBody extends AbstractM2TablePart {
             >
               ${this.numbering ? this._renderRowNumbering(rowIdx) : ''}
               ${this.selectable ? this._renderSelectInput(rowIdx, record) : ''}
-              ${this.buttons.map((button: TableButtonInterface) =>
-        this._renderButton(button, record)
-      )}
-              ${this.columns.map(
-        (column: ColumnConfigInterface, columnIdx: number) =>
-          this._renderTableCell(column, record, rowIdx, columnIdx)
-      )}
+              ${this.buttons.map((button: TableButton) =>
+                this._renderButton(button, record)
+              )}
+              ${this.columns.map((column: ColumnConfig, columnIdx: number) =>
+                this._renderTableCell(column, record, rowIdx, columnIdx)
+              )}
             </tr>
           `
-    )}
+        )}
       </tbody>
     `
   }
@@ -73,10 +72,7 @@ export class M2TableBody extends AbstractM2TablePart {
     return html` <td class="row-numbering" width="15px">${rowIdx + 1}.</td> `
   }
 
-  _renderSelectInput(
-    rowIdx: number,
-    record: TableDataInterface
-  ): TemplateResult {
+  _renderSelectInput(rowIdx: number, record: TableData): TemplateResult {
     return html`<td>
       <input
         rowIdx="${rowIdx}"
@@ -87,13 +83,10 @@ export class M2TableBody extends AbstractM2TablePart {
     </td>`
   }
 
-  _renderButton(
-    button: TableButtonInterface,
-    record: TableDataInterface
-  ): TemplateResult | void {
+  _renderButton(button: TableButton, record: TableData): TemplateResult | void {
     if (button.type === ButtonType.Icon) {
       let icon: any
-      const buttonOptions: IconButtonOptionsInterface = button.options as IconButtonOptionsInterface
+      const buttonOptions: IconButtonOptions = button.options as IconButtonOptions
       if (typeof buttonOptions.icon === 'function') {
         icon = icon as HTMLElement
         icon = buttonOptions.icon(record)
@@ -105,23 +98,23 @@ export class M2TableBody extends AbstractM2TablePart {
       return html`<td>
         <button
           @click="${() => {
-          const handler: any = buttonOptions?.handlers?.click
-          if (handler && typeof handler === 'function') {
-            handler(record)
-          }
-        }}"
+            const handler: any = buttonOptions?.handlers?.click
+            if (handler && typeof handler === 'function') {
+              handler(record)
+            }
+          }}"
           @dblclick="${() => {
-          const handler: any = buttonOptions?.handlers?.dblclick
-          if (handler && typeof handler === 'function') {
-            handler(record)
-          }
-        }}"
+            const handler: any = buttonOptions?.handlers?.dblclick
+            if (handler && typeof handler === 'function') {
+              handler(record)
+            }
+          }}"
         >
           ${icon}
         </button>
       </td>`
     } else if (button.type === ButtonType.Text) {
-      const buttonOptions: TextButtonOptionsInterface = button.options as TextButtonOptionsInterface
+      const buttonOptions: TextButtonOptions = button.options as TextButtonOptions
 
       let text: any
       if (typeof buttonOptions.text === 'function') {
@@ -133,17 +126,17 @@ export class M2TableBody extends AbstractM2TablePart {
       return html` <td>
         <button
           @click="${() => {
-          const handler: any = buttonOptions?.handlers?.click
-          if (handler && typeof handler === 'function') {
-            handler(record)
-          }
-        }}"
+            const handler: any = buttonOptions?.handlers?.click
+            if (handler && typeof handler === 'function') {
+              handler(record)
+            }
+          }}"
           @dblclick="${() => {
-          const handler: any = buttonOptions?.handlers?.click
-          if (handler && typeof handler === 'function') {
-            handler(record)
-          }
-        }}"
+            const handler: any = buttonOptions?.handlers?.click
+            if (handler && typeof handler === 'function') {
+              handler(record)
+            }
+          }}"
         >
           ${text}
         </button>
@@ -152,8 +145,8 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   _renderTableCell(
-    column: ColumnConfigInterface,
-    record: TableDataInterface,
+    column: ColumnConfig,
+    record: TableData,
     rowIdx: number,
     columnIdx: number
   ): TemplateResult {
@@ -174,8 +167,8 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   updated(changedProps: PropertyValues) {
-    if (changedProps.has('data') || changedProps.has('appendable')) {
-      if (this.data?.length === 0 && this.appendable) {
+    if (changedProps.has('data') || changedProps.has('addable')) {
+      if (this.data?.length === 0 && this.addable) {
         this._appendData()
       }
     }
@@ -184,15 +177,15 @@ export class M2TableBody extends AbstractM2TablePart {
   /**
    * @description Returning selected data rows
    * @param withProps Whether __props__ of data is involved or not
-   * @returns {TableDataInterface[]} selected data list
+   * @returns {TableData[]} selected data list
    */
-  getSelected(withProps: boolean = false): TableDataInterface[] {
-    let selectedData: TableDataInterface[] = this.data.filter(
-      (record: TableDataInterface) => record?.__props__?.selected
+  getSelected(withProps: boolean = false): TableData[] {
+    let selectedData: TableData[] = this.data.filter(
+      (record: TableData) => record?.__props__?.selected
     )
 
     if (!withProps) {
-      selectedData = selectedData.map((record: TableDataInterface) => {
+      selectedData = selectedData.map((record: TableData) => {
         delete record.__props__
         return record
       })
@@ -204,35 +197,33 @@ export class M2TableBody extends AbstractM2TablePart {
   /**
    * @description Getting changes of specific data by row index
    * @param rowIdx
-   * @returns {TableChangeValuePropertiesInterface[]} changed value properties
+   * @returns {TableChangeValueProperties[]} changed value properties
    */
-  getChangesByRowIdx(
-    rowIdx: number
-  ): TableChangeValuePropertiesInterface[] | null {
+  getChangesByRowIdx(rowIdx: number): TableChangeValueProperties[] | null {
     return this.data[rowIdx]?.__props__?.changedValues || null
   }
 
   /**
    * @description Returning changed data with non changed field of data as well
    * @param withProps Whether __props__ of data is involved or not
-   * @returns {TableDataInterface[]}
+   * @returns {TableData[]}
    */
-  getChanged(withProps: boolean = false): TableDataInterface[] {
+  getChanged(withProps: boolean = false): TableData[] {
     return this.getDataByStatus(DataStatus.Changed, withProps)
   }
 
   /**
    * @description Returning changed data with only changed fields of data
-   * @returns {TableDataInterface[]}
+   * @returns {TableData[]}
    */
-  getChangedOnly(): TableDataInterface[] {
-    let changedData: TableDataInterface = this.getChanged(true)
-    return changedData.map((record: TableDataInterface) => {
+  getChangedOnly(): TableData[] {
+    let changedData: TableData = this.getChanged(true)
+    return changedData.map((record: TableData) => {
       let extractedRecord = record?.__props__?.changedValues?.reduce(
         (
-          changedData: TableDataInterface,
-          changedValue: TableChangeValuePropertiesInterface
-        ): TableDataInterface => {
+          changedData: TableData,
+          changedValue: TableChangeValueProperties
+        ): TableData => {
           changedData[changedValue.field] = changedValue.changes
           return changedData
         },
@@ -249,9 +240,9 @@ export class M2TableBody extends AbstractM2TablePart {
   /**
    * @description Returning appeneded data (Newly added)
    * @param withProps Whether __props__ of data is involved or not
-   * @returns {TableDataInterface[]}
+   * @returns {TableData[]}
    */
-  getAppended(withProps: boolean = false): TableDataInterface[] {
+  getAppended(withProps: boolean = false): TableData[] {
     return this.getDataByStatus(DataStatus.Appended, withProps)
   }
 
@@ -260,9 +251,9 @@ export class M2TableBody extends AbstractM2TablePart {
    * (Appeneded data will be deleted automatically when user press delete button (If key map is configured  as default)
    * but the deleting target data is not appeneded one, it will change the status of data and user can get those data by this function
    * @param withProps Whether __props__ of data is involved or not
-   * @returns {TableDataInterface[]}
+   * @returns {TableData[]}
    */
-  getDeleted(withProps: boolean = false): TableDataInterface[] {
+  getDeleted(withProps: boolean = false): TableData[] {
     return this.getDataByStatus(DataStatus.Deleted, withProps)
   }
 
@@ -270,15 +261,12 @@ export class M2TableBody extends AbstractM2TablePart {
    * @description Returning data which has status as its status
    * @param status {DataStatus} Status of target data to get
    * @param withProps Whether __props__ of data is involved or not
-   * @returns {TableDataInterface[]}
+   * @returns {TableData[]}
    */
-  getDataByStatus(
-    status: DataStatus,
-    withProps: boolean = false
-  ): TableDataInterface[] {
-    let filteredData: TableDataInterface[] = this.data
-      .filter((record: TableDataInterface) => record?.__props__?.[status])
-      .map((record: TableDataInterface) => {
+  getDataByStatus(status: DataStatus, withProps: boolean = false): TableData[] {
+    let filteredData: TableData[] = this.data
+      .filter((record: TableData) => record?.__props__?.[status])
+      .map((record: TableData) => {
         const keys: string[] = Object.keys(record)
         keys.forEach((key: string) => {
           if (!record[key]) {
@@ -291,7 +279,7 @@ export class M2TableBody extends AbstractM2TablePart {
 
     if (!withProps) {
       filteredData = filteredData.map(
-        (record: TableDataInterface): TableDataInterface => {
+        (record: TableData): TableData => {
           delete record.__props__
           return record
         }
@@ -305,11 +293,11 @@ export class M2TableBody extends AbstractM2TablePart {
    * @description When the columns involves a column which has primary property
    * Returning object of primary key and value pair
    * @param record
-   * @returns {TableDataInterface}
+   * @returns {TableData}
    */
-  _getPrimaryField(record: TableDataInterface): TableDataInterface {
-    const primaryColumn: ColumnConfigInterface | undefined = this.columns.find(
-      (column: ColumnConfigInterface) => column.primary
+  _getPrimaryField(record: TableData): TableData {
+    const primaryColumn: ColumnConfig | undefined = this.columns.find(
+      (column: ColumnConfig) => column.primary
     )
     if (primaryColumn) {
       return { [primaryColumn.name]: record[primaryColumn.name] }
@@ -323,7 +311,7 @@ export class M2TableBody extends AbstractM2TablePart {
    */
   selectAll(): void {
     this.data = this.data.map(
-      (record: TableDataInterface): TableDataInterface => {
+      (record: TableData): TableData => {
         return {
           ...record,
           __props__: { ...record.__props__, selected: true },
@@ -337,7 +325,7 @@ export class M2TableBody extends AbstractM2TablePart {
    */
   deselectAll(): void {
     this.data = this.data.map(
-      (record: TableDataInterface): TableDataInterface => {
+      (record: TableData): TableData => {
         return {
           ...record,
           __props__: { ...record.__props__, selected: false },
@@ -498,7 +486,7 @@ export class M2TableBody extends AbstractM2TablePart {
     const rowIdx: number = focusedCell.rowIdx + 1
     const columnIdx: number = focusedCell.columnIdx
 
-    if (rowIdx > this.data.length - 1 && this.appendable) {
+    if (rowIdx > this.data.length - 1 && this.addable) {
       await this._appendData()
     }
 
@@ -529,7 +517,7 @@ export class M2TableBody extends AbstractM2TablePart {
         this.moveFocusUp(this._focusedCell)
       }
     } else if (!this.data[rowIdx]?.__props__?.appended) {
-      if (this.deletable) {
+      if (this.removable) {
         this.data[rowIdx] = this.getAdjustedDeleted(this.data[rowIdx])
       }
     }
@@ -604,21 +592,21 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param newValue
    */
   getAdjustedChanges(
-    record: TableDataInterface,
+    record: TableData,
     field: string,
     newValue: any
-  ): TableDataInterface {
-    let changedValues: TableChangeValuePropertiesInterface[] =
+  ): TableData {
+    let changedValues: TableChangeValueProperties[] =
       record?.__props__?.changedValues || []
 
     if (
       changedValues.find(
-        (changedValue: TableChangeValuePropertiesInterface) =>
+        (changedValue: TableChangeValueProperties) =>
           changedValue.field === field
       )
     ) {
       changedValues = changedValues
-        .map((changedValue: TableChangeValuePropertiesInterface) => {
+        .map((changedValue: TableChangeValueProperties) => {
           if (
             changedValue.field === field &&
             changedValue.origin !== newValue
@@ -630,7 +618,7 @@ export class M2TableBody extends AbstractM2TablePart {
             return changedValue
           }
         })
-        .filter(Boolean) as TableChangeValuePropertiesInterface[]
+        .filter(Boolean) as TableChangeValueProperties[]
     } else {
       changedValues.push({
         field,
@@ -656,10 +644,10 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param appendedValue
    */
   getAdjustedAppend(
-    record: TableDataInterface,
+    record: TableData,
     field: string,
     appendedValue: any
-  ): TableDataInterface {
+  ): TableData {
     return {
       ...record,
       [field]: appendedValue,
@@ -674,7 +662,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @description Adjust record status to deleted (Soft delete)
    * @param record
    */
-  getAdjustedDeleted(record: TableDataInterface): TableDataInterface {
+  getAdjustedDeleted(record: TableData): TableData {
     return {
       ...record,
       __props__: {

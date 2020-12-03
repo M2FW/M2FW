@@ -1,11 +1,13 @@
-import { customElement, html, property, TemplateResult } from 'lit-element'
+import { TemplateResult, customElement, html, property } from 'lit-element'
+
 import { AbstractM2TableCell } from '../abstracts/AbstractM2TableCell'
 import { Events } from '../enums'
-import { FloatColumnConfigInterface } from '../interfaces'
+import { FloatColumnConfig } from '../interfaces'
+import { ifDefined } from 'lit-html/directives/if-defined'
 
 @customElement('m2-table-float-cell')
 export class M2TableFloatCell extends AbstractM2TableCell {
-  @property({ type: Object }) config?: FloatColumnConfigInterface
+  @property({ type: Object }) config?: FloatColumnConfig
   @property({ type: Number }) value?: number
 
   render(): TemplateResult {
@@ -14,10 +16,10 @@ export class M2TableFloatCell extends AbstractM2TableCell {
         ? html`
             <input
               type="number"
-              value="${this.value}"
-              min="${this.config?.min}"
-              max="${this.config?.max}"
-              step="${this.config?.step}"
+              value="${ifDefined(this.value)}"
+              min="${ifDefined(this.config?.min)}"
+              max="${ifDefined(this.config?.max)}"
+              step="${ifDefined(this.config?.step)}"
             />
           `
         : html`${this.displayValue}`}

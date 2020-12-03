@@ -1,11 +1,12 @@
-import { customElement, html, property, TemplateResult } from 'lit-element'
+import { TemplateResult, customElement, html, property } from 'lit-element'
+
 import { AbstractM2TableCell } from '../abstracts/AbstractM2TableCell'
+import { BooleanColumnConfig } from '../interfaces'
 import { Events } from '../enums'
-import { BooleanColumnConfigInterface } from '../interfaces'
 
 @customElement('m2-table-boolean-cell')
 export class M2TableBooleanCell extends AbstractM2TableCell {
-  @property({ type: Object }) config?: BooleanColumnConfigInterface
+  @property({ type: Object }) config?: BooleanColumnConfig
   @property({ type: Boolean }) value?: boolean
 
   render(): TemplateResult {

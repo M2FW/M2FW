@@ -1,10 +1,12 @@
-import { customElement, html, property, TemplateResult } from 'lit-element'
+import { TemplateResult, customElement, html, property } from 'lit-element'
+
 import { AbstractM2TableCell } from '../abstracts/AbstractM2TableCell'
-import { StringColumnConfigInterface } from '../interfaces/'
+import { StringColumnConfig } from '../interfaces/'
+import { ifDefined } from 'lit-html/directives/if-defined'
 
 @customElement('m2-table-string-cell')
 export class M2TableStringCell extends AbstractM2TableCell {
-  @property({ type: Object }) config?: StringColumnConfigInterface
+  @property({ type: Object }) config?: StringColumnConfig
   @property({ type: String }) value?: string
 
   render(): TemplateResult {
@@ -12,8 +14,8 @@ export class M2TableStringCell extends AbstractM2TableCell {
       ${this._isEditing
         ? html`
             <input
-              value="${this.value}"
-              placeholder="${this.config?.placeholder || ''}"
+              value="${ifDefined(this.value)}"
+              placeholder="${ifDefined(this.config?.placeholder)}"
             />
           `
         : html`${this.displayValue}`}

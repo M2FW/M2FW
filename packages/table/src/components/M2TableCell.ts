@@ -1,33 +1,35 @@
-import {
-  css,
-  CSSResult,
-  customElement,
-  html,
-  LitElement,
-  property,
-  TemplateResult,
-} from 'lit-element'
-import { ColumnTypes } from '../enums'
-import {
-  BooleanColumnConfigInterface,
-  ColumnConfigInterface,
-  FloatColumnConfigInterface,
-  NumberColumnConfigInterface,
-  SelectColumnConfigInterface,
-  StringColumnConfigInterface,
-} from '../interfaces'
 import './M2TableBooleanCell'
 import './M2TableFloatCell'
 import './M2TableIntegerCell'
 import './M2TableObjectCell'
 import './M2TableStringCell'
 
+import {
+  BooleanColumnConfig,
+  ColumnConfig,
+  FloatColumnConfig,
+  NumberColumnConfig,
+  SelectColumnConfig,
+  StringColumnConfig,
+} from '../interfaces'
+import {
+  CSSResult,
+  LitElement,
+  TemplateResult,
+  css,
+  customElement,
+  html,
+  property,
+} from 'lit-element'
+
+import { ColumnTypes } from '../enums'
+
 @customElement('m2-table-cell')
 export class M2TableCell extends LitElement {
   @property({ type: String }) type?: ColumnTypes
-  @property({ type: Object }) config?: ColumnConfigInterface
+  @property({ type: Object }) config?: ColumnConfig
   @property() value: any
-  @property({ type: Boolean }) _isFocuseed: boolean = false
+  @property({ type: Boolean }) _isFocused: boolean = false
   @property({ type: Number }) rowIdx: number = -1
   @property({ type: Number }) columnIdx: number = -1
   @property({ type: Object }) TAG_MAPPER: Record<string, string> = {
@@ -62,7 +64,7 @@ export class M2TableCell extends LitElement {
         ? html`
             <m2-table-string-cell
               class="${this._computeClasses(this.config)}"
-              .config="${this.config as StringColumnConfigInterface}"
+              .config="${this.config as StringColumnConfig}"
               .value="${String(this.value)}"
             ></m2-table-string-cell>
           `
@@ -70,7 +72,7 @@ export class M2TableCell extends LitElement {
         ? html`
             <m2-table-boolean-cell
               class="${this._computeClasses(this.config)}"
-              .config="${this.config as BooleanColumnConfigInterface}"
+              .config="${this.config as BooleanColumnConfig}"
               .value="${Boolean(this.value)}"
             ></m2-table-boolean-cell>
           `
@@ -78,7 +80,7 @@ export class M2TableCell extends LitElement {
         ? html`
             <m2-table-float-cell
               class="${this._computeClasses(this.config)}"
-              .config="${this.config as FloatColumnConfigInterface}"
+              .config="${this.config as FloatColumnConfig}"
               .value="${Number(this.value)}"
             ></m2-table-float-cell>
           `
@@ -86,7 +88,7 @@ export class M2TableCell extends LitElement {
         ? html`
             <m2-table-integer-cell
               class="${this._computeClasses(this.config)}"
-              .config="${this.config as NumberColumnConfigInterface}"
+              .config="${this.config as NumberColumnConfig}"
               .value="${Number(this.value)}"
             ></m2-table-integer-cell>
           `
@@ -94,13 +96,13 @@ export class M2TableCell extends LitElement {
         ? html`
             <m2-table-object-cell
               class="${this._computeClasses(this.config)}"
-              .config="${this.config as SelectColumnConfigInterface}"
+              .config="${this.config as SelectColumnConfig}"
               .value="${this.value}"
             ></m2-table-object-cell>
           `
         : html` <m2-table-string-cell
             class="${this._computeClasses(this.config)}"
-            .config="${this.config as StringColumnConfigInterface}"
+            .config="${this.config as StringColumnConfig}"
             .value="${String(this.value)}"
           ></m2-table-string-cell>`}
     `
@@ -117,7 +119,7 @@ export class M2TableCell extends LitElement {
    * currently alignment for innsert text of cell is only supported.
    * @param config Object having class list
    */
-  _computeClasses(config?: ColumnConfigInterface): string {
+  _computeClasses(config?: ColumnConfig): string {
     const { align } = config || {}
     let classes: string[] = []
     if (align) classes.push(align)

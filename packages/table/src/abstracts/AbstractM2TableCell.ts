@@ -8,11 +8,11 @@ import {
 } from 'lit-element'
 import { KeyActions, keyMapper } from '../utils/KeyMapper'
 
-import { ColumnConfigInterface } from '../interfaces'
+import { ColumnConfig } from '../interfaces'
 import { cellStyle } from '../assets/styles'
 
 export abstract class AbstractM2TableCell extends LitElement {
-  @property({ type: Object }) config?: ColumnConfigInterface
+  @property({ type: Object }) config?: ColumnConfig
   @property({ type: String }) value?: any
   @property({ type: Boolean }) _isEditing: boolean = false
   @property({ type: Boolean }) _isFocused: boolean = false
@@ -50,7 +50,7 @@ export abstract class AbstractM2TableCell extends LitElement {
   }
 
   get defaultDisplay(): TemplateResult {
-    return html`<div @focus=>${this.value}</div>`
+    return html`<div>${this.value}</div>`
   }
 
   updated(changedProps: PropertyValues) {
