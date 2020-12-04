@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/router",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-alpha.1",
   "description": "M2 framework router for client side",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/router",
@@ -13,7 +13,7 @@
     "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
-    "@m2fw/redux-manager": "^0.1.0-alpha.0",
+    "@m2fw/redux-manager": "^0.1.0-alpha.1",
     "lit-element": "^2.2.1",
     "pwa-helpers": "^0.9.1"
   },
