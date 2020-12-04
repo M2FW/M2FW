@@ -6,16 +6,16 @@
 
 ## Modules
 
-|      Name       |    Version     | Description |                 Link                 |
-| :-------------: | :------------: | ----------- | :----------------------------------: |
-| base-controller | 0.0.1-beta.18  |             | [:link:](./packages/base-controller) |
-|   datasource    |  0.0.2-beta.5  |             |   [:link:](./packages/datasource)    |
-|      form       | 0.0.1-alpha.2  |             |      [:link:](./packages/form)       |
-| graphql-manager | 0.0.1-alpha.0  |             | [:link:](./packages/graphql-manager) |
-|      menu       |  0.0.1-beta.5  |             |      [:link:](./packages/menu)       |
-|    menu-tree    |     0.0.1      |             |    [:link:](./packages/menu-tree)    |
-|  redux-manager  | 0.0.1-alpha.16 |             |  [:link:](./packages/redux-manager)  |
-|    resource     |     0.0.1      |             |    [:link:](./packages/resource)     |
-|     router      |     0.0.1      |             |     [:link:](./packages/router)      |
-|      table      |     0.0.2      |             |      [:link:](./packages/table)      |
-|      user       |  0.0.1-beta.2  |             |      [:link:](./packages/user)       |
+| No  |      Name       | Description |                 Link                 |
+| :-: | :-------------: | ----------- | :----------------------------------: |
+|  1  | base-controller |             | [:link:](./packages/base-controller) |
+|  2  |   datasource    |             |   [:link:](./packages/datasource)    |
+|  3  |      form       |             |      [:link:](./packages/form)       |
+|  4  | graphql-manager |             | [:link:](./packages/graphql-manager) |
+|  5  |      menu       |             |      [:link:](./packages/menu)       |
+|  6  |    menu-tree    |             |    [:link:](./packages/menu-tree)    |
+|  7  |  redux-manager  |             |  [:link:](./packages/redux-manager)  |
+|  8  |    resource     |             |    [:link:](./packages/resource)     |
+|  9  |     router      |             |     [:link:](./packages/router)      |
+| 10  |      table      |             |      [:link:](./packages/table)      |
+| 11  |      user       |             |      [:link:](./packages/user)       |
