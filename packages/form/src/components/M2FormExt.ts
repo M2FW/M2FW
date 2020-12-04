@@ -28,20 +28,24 @@ export class M2FormExt extends HTMLFormElement {
 
   /**
    * @description Fill up form by passed object
-   * @param obj Data object to fill up form fields
+   * @param record Data object to fill up form fields
    */
-  fillUp(obj: object): void {
-    for (let key in obj) {
-      const field: HTMLInputElement | HTMLSelectElement = this.getField(key)
+  fillUp(record: Record<string, any>): void {
+    for (let key in record) {
+      const field: HTMLInputElement | HTMLSelectElement | null = this.getField(
+        key
+      )
 
       if (field instanceof HTMLInputElement) {
-        field.value = obj[key] || ''
+        field.value = record[key] || ''
       } else if (field instanceof HTMLSelectElement) {
-        Array.from(field.options).find((option: HTMLOptionElement) => {
-          if (option.value === obj[key].id) {
-            return option
-          }
-        }).selected = true
+        const options: HTMLOptionsCollection = field.options
+        const targetOption: HTMLOptionElement | undefined = Array.from(
+          options
+        ).find((option: HTMLOptionElement) => option.value === record[key].id)
+        if (targetOption) {
+          targetOption.selected = true
+        }
       }
     }
   }
@@ -62,7 +66,7 @@ export class M2FormExt extends HTMLFormElement {
   getField(
     propValue: string,
     prop: string = 'name'
-  ): HTMLInputElement | HTMLSelectElement {
+  ): HTMLInputElement | HTMLSelectElement | null {
     return this.querySelector(
       `input[${prop}=${propValue}], select[${prop}=${propValue}]`
     )
@@ -73,7 +77,7 @@ export class M2FormExt extends HTMLFormElement {
    * @param param name of element or element itself
    */
   getValue(param: string | HTMLInputElement | HTMLSelectElement): any {
-    let element: HTMLInputElement | HTMLSelectElement
+    let element: HTMLInputElement | HTMLSelectElement | null
     let value: any = undefined
 
     if (param instanceof String) {

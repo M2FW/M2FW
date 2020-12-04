@@ -8,17 +8,17 @@ import {
   property,
 } from 'lit-element'
 
-import { MenuItemInterface } from '../interfaces'
+import { MenuItem } from '../interfaces'
 import { connect } from 'pwa-helpers/connect-mixin'
 import { setCurrentMenu } from '../redux/reducers'
 import { store } from '@m2fw/redux-manager'
 
 @customElement('menu-tree-item')
 export class MenuTreeItem extends connect(store)(LitElement) {
-  @property({ type: Object }) menu: MenuItemInterface
-  @property({ type: String }) text: string
-  @property({ type: String }) routing: string
-  @property({ type: Function }) router: Function
+  @property({ type: Object }) menu?: MenuItem
+  @property({ type: String }) text: string = ''
+  @property({ type: String }) routing: string = ''
+  @property({ type: Object }) router?: Function
 
   static get styles(): CSSResult {
     return css`
@@ -33,10 +33,12 @@ export class MenuTreeItem extends connect(store)(LitElement) {
       <li
         .routing="${this.routing}"
         @click="${(e: MouseEvent): void => {
-        e.stopPropagation()
-        setCurrentMenu(store, this.menu)
-        this.router(this.menu)
-      }}"
+          if (this.router && this.menu) {
+            e.stopPropagation()
+            setCurrentMenu(store, this.menu)
+            this.router(this.menu)
+          }
+        }}"
       >
         ${this.text}
       </li>

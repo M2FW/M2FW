@@ -1,5 +1,5 @@
 import { DeleteResult } from 'typeorm'
 
-export interface IDeleteBaseController<T> {
+export interface DeleteBaseController<T> {
   delete(data: string[] | number[] | string | number): Promise<DeleteResult>
 }

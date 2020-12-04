@@ -1,1 +1,1 @@
-export * from './MenuTreeInterface'
+export * from './menu-tree'

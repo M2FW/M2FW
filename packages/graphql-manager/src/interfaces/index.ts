@@ -1,1 +1,1 @@
-export * from './ResolverInteface'
+export * from './resolver'

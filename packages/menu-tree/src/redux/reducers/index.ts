@@ -1,1 +1,1 @@
-export * from './menuTree'
+export * from './menu-tree'

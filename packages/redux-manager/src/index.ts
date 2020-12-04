@@ -1,6 +1,6 @@
 import {
   lazyReducerEnhancer,
-  LazyStore
+  LazyStore,
 } from 'pwa-helpers/lazy-reducer-enhancer'
 import {
   Action,
@@ -8,9 +8,15 @@ import {
   combineReducers,
   compose,
   createStore,
-  Store
+  Store,
 } from 'redux'
 import reduxThunk from 'redux-thunk'
+
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose
+  }
+}
 
 const devCompose = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose
 

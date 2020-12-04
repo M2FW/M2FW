@@ -1,4 +1,9 @@
-import { getConnection } from '@m2fw/datasource'
+import {
+  BaseController,
+  FindOptions,
+  ListResult,
+  QueryCondition,
+} from '../interfaces'
 import {
   DeleteResult,
   EntityManager,
@@ -6,14 +11,10 @@ import {
   ObjectType,
   UpdateResult,
 } from 'typeorm'
-import {
-  IBaseController,
-  IFindOptions,
-  IListResult,
-  IQueryCondition,
-} from '../interfaces'
 
-export abstract class BaseController<T> implements IBaseController<T> {
+import { getConnection } from '@m2fw/datasource'
+
+export abstract class AbstractBaseController<T> implements BaseController<T> {
   entity: ObjectType<T>
 
   constructor(entity: ObjectType<T>) {
@@ -23,24 +24,24 @@ export abstract class BaseController<T> implements IBaseController<T> {
 
   public async findById(
     id: string | number,
-    findOptions?: IFindOptions<T>
-  ): Promise<T> {
+    findOptions?: FindOptions<T>
+  ): Promise<T | void> {
     return await getConnection()
       .getRepository(this.entity)
       .findOne(id, findOptions)
   }
 
   public async findOne(
-    queryCondition?: IQueryCondition<T> | string
-  ): Promise<T> {
+    queryCondition?: QueryCondition<T> | string
+  ): Promise<T | undefined> {
     return await getConnection()
       .getRepository(this.entity)
       .findOne(queryCondition as any)
   }
 
   public async find(
-    queryCondition?: IQueryCondition<T>
-  ): Promise<IListResult<T>> {
+    queryCondition?: QueryCondition<T>
+  ): Promise<ListResult<T>> {
     const result: [T[], number] = await getConnection()
       .getRepository(this.entity)
       .findAndCount(queryCondition)

@@ -1,15 +1,16 @@
-import { Store } from '@m2fw/redux-manager'
-import { MenuItemInterface, MenuTreeStateInterface } from '../../interfaces'
-import { SET_CURRENT_MENU, SET_MENUS } from '../actions/menuTree'
+import { MenuItem, MenuTreeState } from '../../interfaces'
+import { SET_CURRENT_MENU, SET_MENUS } from '../actions/menu-tree'
 
-const INITIAL_STATE: MenuTreeStateInterface = {
+import { Store } from '@m2fw/redux-manager'
+
+const INITIAL_STATE: MenuTreeState = {
   menus: [],
   navigator: () => {},
 }
 
 export const menuTree = (
   state: Record<string, any> = INITIAL_STATE,
-  action: MenuTreeStateInterface & { type: string }
+  action: MenuTreeState & { type: string }
 ): any => {
   switch (action.type) {
     case SET_CURRENT_MENU:
@@ -29,13 +30,10 @@ export const menuTree = (
   }
 }
 
-export function setCurrentMenu(
-  store: Store,
-  currentMenu: MenuItemInterface
-): void {
+export function setCurrentMenu(store: Store, currentMenu: MenuItem): void {
   store.dispatch({ type: SET_CURRENT_MENU, currentMenu })
 }
 
-export function setMenus(store: Store, menus: MenuItemInterface[]): void {
+export function setMenus(store: Store, menus: MenuItem[]): void {
   store.dispatch({ type: SET_MENUS, menus })
 }

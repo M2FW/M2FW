@@ -1,20 +1,20 @@
 import { QueryOperators } from '../enums'
 
-export interface IComparableValues {
+export interface ComparableValues {
   a: any
   b: any
 }
 
-export interface IWhereObject {
+export interface WhereObject {
   operator: QueryOperators
-  value: IComparableValues | string | number
+  value: ComparableValues | string | number
 }
 
-export interface IOrderObject {
+export interface OrderObject {
   [field: string]: 'ASC' | 'DESC'
 }
 
-export interface IFindOptions<T> {
+export interface FindOptions<T> {
   select?: (keyof T)[]
   order?: { [P in keyof T]?: 'ASC' | 'DESC' }
   skip?: number
@@ -22,6 +22,6 @@ export interface IFindOptions<T> {
   relations?: string[]
 }
 
-export interface IQueryCondition<T> extends IFindOptions<T> {
+export interface QueryCondition<T> extends FindOptions<T> {
   where?: T | any
 }

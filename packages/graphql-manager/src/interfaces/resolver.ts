@@ -1,4 +1,4 @@
-export interface QueryInterface {
+export interface Query {
   [queryName: string]: (
     parentObj: any,
     param: any,
@@ -6,7 +6,7 @@ export interface QueryInterface {
   ) => Promise<any> | any
 }
 
-export interface MutationInterface {
+export interface Mutation {
   [mutationName: string]: (
     parentObj: any,
     param: any,
@@ -14,8 +14,8 @@ export interface MutationInterface {
   ) => Promise<any> | any
 }
 
-export interface ResolverInterface {
-  Query: QueryInterface
-  Mutation: MutationInterface
-  [prop: string]: QueryInterface
+export interface Resolver {
+  Query: Query
+  Mutation: Mutation
+  [prop: string]: Query
 }

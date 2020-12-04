@@ -1,7 +1,7 @@
 import { NextFunction } from 'express'
 import { Between, Equal, Like, Not, Raw } from 'typeorm'
 import { QueryOperators } from '../enums'
-import { IComparableValues, IWhereObject } from '../interfaces'
+import { ComparableValues, WhereObject } from '../interfaces'
 
 export const baseRouterMiddleware = (
   req: any,
@@ -18,14 +18,14 @@ export const baseRouterMiddleware = (
   next()
 }
 
-export const buildWhereClause = (conditions: IWhereObject) => {
-  let where = {}
+export const buildWhereClause = (conditions: Record<string, WhereObject>) => {
+  let where: Record<string, any> = {}
   for (let field in conditions) {
-    const condition: IWhereObject = conditions[field]
+    const condition: WhereObject = conditions[field]
     const operator: QueryOperators = condition.operator
 
     if (conditions[field].value instanceof Object) {
-      const value: IComparableValues = <IComparableValues>condition.value
+      const value: ComparableValues = <ComparableValues>condition.value
       where[field] = operatorFactory(operator, value.a, value.b)
     } else {
       const value: string | number = <string | number>condition.value

@@ -1,5 +1,5 @@
 import { UpdateResult } from 'typeorm'
 
-export interface IUpdateBaseController<T> {
+export interface UpdateBaseController<T> {
   update(data: T | T[]): Promise<UpdateResult | UpdateResult[]>
 }
