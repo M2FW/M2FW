@@ -18,5 +18,6 @@
   "devDependencies": {
     "@types/node": "^12.12.6",
     "typescript": "^3.7.2"
-  }
+  },
+  "gitHead": "188c96779ccff0a18269b2e39e305a1e1a10bbf4"
 }

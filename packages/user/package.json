@@ -22,5 +22,6 @@
     "@types/jsonwebtoken": "^8.3.9",
     "@types/node": "^13.7.7",
     "typescript": "^3.7.5"
-  }
+  },
+  "gitHead": "188c96779ccff0a18269b2e39e305a1e1a10bbf4"
 }
