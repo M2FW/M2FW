@@ -1,1 +1,1 @@
-export * from './M2Table'
+export * from './m2-table'

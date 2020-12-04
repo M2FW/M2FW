@@ -1,6 +1,6 @@
 import { TemplateResult, customElement, html, property } from 'lit-element'
 
-import { AbstractM2TableCell } from '../abstracts/AbstractM2TableCell'
+import { AbstractM2TableCell } from '../abstracts/abstract-m2-table-cell'
 import { BooleanColumnConfig } from '../interfaces'
 import { Events } from '../enums'
 

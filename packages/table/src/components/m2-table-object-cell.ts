@@ -1,7 +1,7 @@
 import { SelectColumnConfig, SelectOption } from '../interfaces'
 import { TemplateResult, customElement, html, property } from 'lit-element'
 
-import { AbstractM2TableCell } from '../abstracts/AbstractM2TableCell'
+import { AbstractM2TableCell } from '../abstracts/abstract-m2-table-cell'
 
 @customElement('m2-table-object-cell')
 export class M2TableObjectCell extends AbstractM2TableCell {

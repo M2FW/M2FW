@@ -6,7 +6,7 @@ import {
   html,
   property,
 } from 'lit-element'
-import { KeyActions, keyMapper } from '../utils/KeyMapper'
+import { KeyActions, keyMapper } from '../utils/key-mapper'
 
 import { ColumnConfig } from '../interfaces'
 import { cellStyle } from '../assets/styles'

@@ -1,4 +1,4 @@
-import './M2TableCell'
+import './m2-table-cell'
 
 import { ButtonType, DataStatus, Events } from '../enums'
 import {
@@ -17,10 +17,10 @@ import {
   TableData,
   TextButtonOptions,
 } from '../interfaces'
-import { KeyActions, keyMapper } from '../utils/KeyMapper'
+import { KeyActions, keyMapper } from '../utils/key-mapper'
 
 import { AbstractM2TablePart } from '../abstracts'
-import { M2TableCell } from './M2TableCell'
+import { M2TableCell } from './m2-table-cell'
 import { bodyStyle } from '../assets/styles'
 
 @customElement('m2-table-body')

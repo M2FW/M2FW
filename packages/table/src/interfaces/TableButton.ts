@@ -1,4 +1,4 @@
-import { ButtonType } from '../enums/ButtonType'
+import { ButtonType } from '../enums/button-type'
 import { TableData } from './TableData'
 
 export interface TableButton {

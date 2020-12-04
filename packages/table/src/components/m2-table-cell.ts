@@ -1,8 +1,8 @@
-import './M2TableBooleanCell'
-import './M2TableFloatCell'
-import './M2TableIntegerCell'
-import './M2TableObjectCell'
-import './M2TableStringCell'
+import './m2-table-boolean-cell'
+import './m2-table-float-cell'
+import './m2-table-integer-cell'
+import './m2-table-object-cell'
+import './m2-table-string-cell'
 
 import {
   BooleanColumnConfig,
@@ -116,7 +116,7 @@ export class M2TableCell extends LitElement {
 
   /**
    * @description Set class list for every single cell
-   * currently alignment for innsert text of cell is only supported.
+   * currently alignment for insert text of cell is only supported.
    * @param config Object having class list
    */
   _computeClasses(config?: ColumnConfig): string {

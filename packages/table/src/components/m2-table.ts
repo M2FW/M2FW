@@ -1,6 +1,6 @@
-import './M2TableBody'
-import './M2TableFooter'
-import './M2TableHeader'
+import './m2-table-body'
+import './m2-table-footer'
+import './m2-table-header'
 
 import {
   CSSResult,
@@ -12,8 +12,8 @@ import {
 } from 'lit-element'
 
 import { AbstractM2TablePart } from '../abstracts'
-import { M2TableBody } from './M2TableBody'
-import { M2TableHeader } from './M2TableHeader'
+import { M2TableBody } from './m2-table-body'
+import { M2TableHeader } from './m2-table-header'
 import { TableData } from '../interfaces'
 
 @customElement('m2-table')

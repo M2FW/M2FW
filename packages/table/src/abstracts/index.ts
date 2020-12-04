@@ -1,2 +1,2 @@
-export * from './AbstractM2TableCell'
-export * from './AbstractM2TablePart'
+export * from './abstract-m2-table-cell'
+export * from './abstract-m2-table-part'
