@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/menu",
-  "version": "0.0.1-beta.5",
+  "version": "0.1.0-alpha.0",
   "description": "M2 framework server side module",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/menu",
@@ -13,8 +13,8 @@
     "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
-    "@m2fw/base-controller": "^0.0.1-beta.1",
-    "@m2fw/graphql-manager": "^0.0.1-alpha.0",
+    "@m2fw/base-controller": "^0.1.0-alpha.0",
+    "@m2fw/graphql-manager": "^0.1.0-alpha.0",
     "typeorm": "^0.2.24"
   },
   "devDependencies": {
