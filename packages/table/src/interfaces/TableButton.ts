@@ -7,8 +7,8 @@ export interface TableButton {
 }
 
 export interface ButtonOptionHandlers {
-  click?: (record: TableData) => void | any
-  dblclick?: (record: TableData) => void | any
+  click?: (record: any) => void | any
+  dblclick?: (record: any) => void | any
 }
 
 export interface ButtonOptions {
