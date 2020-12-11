@@ -6,6 +6,9 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts'],
   },
+  externals: {
+    '@m2fw/redux-manager': '@m2fw/redux-manager',
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.js',
