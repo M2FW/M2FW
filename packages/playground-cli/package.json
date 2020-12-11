@@ -1,0 +1,32 @@
+{
+  "name": "@m2fw/playground-cli",
+  "version": "0.0.1",
+  "description": "playground-cli powerd by M2 Framework",
+  "main": "index.js",
+  "repository": "https://github.com/m2fw/playground-cli",
+  "author": "Jay Lee <jaylee.possible@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "npm run clean && webpack",
+    "prepublishOnly": "npm run build",
+    "serve": "webpack serve --config ./webpack.config.dev.js"
+  },
+  "dependencies": {
+    "@m2fw/router": "^0.1.0-alpha.1",
+    "@m2fw/table": "^0.1.0-alpha.2",
+    "lit-element": "^2.4.0",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
+  },
+  "devDependencies": {
+    "css-loader": "^5.0.1",
+    "html-webpack-plugin": "^4.5.0",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^8.0.11",
+    "typescript": "^4.1.2",
+    "webpack": "^5.10.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
+  }
+}

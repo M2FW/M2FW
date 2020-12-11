@@ -32,7 +32,7 @@ export class M2TableCell extends LitElement {
   @property({ type: Boolean }) _isFocused: boolean = false
   @property({ type: Number }) rowIdx: number = -1
   @property({ type: Number }) columnIdx: number = -1
-  @property({ type: Object }) TAG_MAPPER: Record<string, string> = {
+  @property({ type: Object }) TAG_MAPPER: Record<ColumnTypes, string> = {
     [ColumnTypes.Boolean]: 'm2-table-boolean-cell',
     [ColumnTypes.Float]: 'm2-table-float-cell',
     [ColumnTypes.Integer]: 'm2-table-integer-cell',
@@ -109,9 +109,15 @@ export class M2TableCell extends LitElement {
   }
 
   get cell(): any {
-    return this.renderRoot?.querySelector(
-      this.TAG_MAPPER[this.type || 'string']
-    )
+    if (!this.type) throw new Error('cell type is not defined')
+    const tag: string = this.TAG_MAPPER[this.type]
+    if (!tag) {
+      throw new Error(
+        `Failed to find cell by '${this.type}' type, the type may not be supported`
+      )
+    }
+
+    return this.renderRoot?.querySelector(this.TAG_MAPPER[this.type])
   }
 
   /**

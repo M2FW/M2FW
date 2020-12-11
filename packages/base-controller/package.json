@@ -8,9 +8,8 @@
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf ./dist",
-    "build": "tsc",
-    "build:dev": "tsc -w",
-    "prepublishOnly": "npm run clean && npm run build"
+    "build": "npm run clean && tsc",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@m2fw/datasource": "^0.1.0-alpha.1",

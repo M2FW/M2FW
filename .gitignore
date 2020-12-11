@@ -1,5 +1,5 @@
-node_modules
+node_modules/
+dist/
 yarn-error.log
-dist
 
 lerna-debug.log

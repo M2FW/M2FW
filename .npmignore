@@ -1,8 +1,5 @@
-node_modules
-.prettierrc
-yarn.lock
-yarn-error.log
-package-lock.json
+node_modules/
+src/
+
 tsconfig.json
 webpack.config.js
-src

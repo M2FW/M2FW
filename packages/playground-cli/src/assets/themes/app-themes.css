@@ -1,0 +1,14 @@
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+body {
+  --app-grid-template-areas: 'header header header' 'nav main aside'
+    'nav footer aside';
+  --app-grid-template-rows: 10vw 1fr 10vw;
+  --app-grid-template-columns: 10vh 1fr 5vh;
+}

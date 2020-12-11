@@ -7,10 +7,9 @@
   "author": "Jay Lee <jaylee.possible@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build:dev": "webpack --config ./webpack.config.dev.js",
-    "build": "webpack",
     "clean": "rm -rf ./dist",
-    "prepublishOnly": "npm run clean && npm run build"
+    "build": "npm run clean && webpack",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "pwa-helpers": "^0.9.1",
