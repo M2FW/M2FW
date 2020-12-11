@@ -1,16 +1,6 @@
 {
   "packages": [
-    "packages/base-controller",
-    "packages/datasource",
-    "packages/form",
-    "packages/graphql-manager",
-    "packages/menu",
-    "packages/menu-tree",
-    "packages/redux-manager",
-    "packages/resource",
-    "packages/router",
-    "packages/table",
-    "packages/user"
+    "packages/*"
   ],
   "version": "0.1.0-alpha.2",
   "npmClient": "yarn",
