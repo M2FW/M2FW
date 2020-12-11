@@ -1,7 +1,7 @@
 {
   "name": "@m2fw/playground-cli",
   "version": "0.0.1",
-  "description": "playground-cli powerd by M2 Framework",
+  "description": "playground-cli powered by M2 Framework",
   "main": "index.js",
   "repository": "https://github.com/m2fw/playground-cli",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
