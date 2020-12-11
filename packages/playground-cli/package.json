@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/playground-cli",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.3",
   "description": "playground-cli powered by M2 Framework",
   "main": "index.js",
   "repository": "https://github.com/m2fw/playground-cli",
@@ -13,8 +13,8 @@
     "serve": "webpack serve --config ./webpack.config.dev.js"
   },
   "dependencies": {
-    "@m2fw/router": "^0.1.0-alpha.1",
-    "@m2fw/table": "^0.1.0-alpha.2",
+    "@m2fw/router": "^0.1.0-alpha.3",
+    "@m2fw/table": "^0.1.0-alpha.3",
     "lit-element": "^2.4.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0"

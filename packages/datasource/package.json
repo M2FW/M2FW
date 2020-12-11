@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/datasource",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.3",
   "description": "M2 framework datasource core module",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/datasource.git",

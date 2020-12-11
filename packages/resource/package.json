@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/resource",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.3",
   "description": "resource powered by M2 Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/resource",

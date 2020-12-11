@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/base-controller",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.3",
   "description": "M2 framework base controller module",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/base-controller",
@@ -12,7 +12,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@m2fw/datasource": "^0.1.0-alpha.1",
+    "@m2fw/datasource": "^0.1.0-alpha.3",
     "express": "^4.17.1",
     "typeorm": "^0.2.20"
   },

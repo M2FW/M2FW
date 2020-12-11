@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/user",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.3",
   "description": "user powered by M2 Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/user",
@@ -12,8 +12,8 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@m2fw/datasource": "^0.1.0-alpha.1",
-    "@m2fw/graphql-manager": "^0.1.0-alpha.1",
+    "@m2fw/datasource": "^0.1.0-alpha.3",
+    "@m2fw/graphql-manager": "^0.1.0-alpha.3",
     "jsonwebtoken": "^8.5.1",
     "typeorm": "^0.2.24"
   },
