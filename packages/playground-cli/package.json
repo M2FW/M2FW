@@ -13,6 +13,7 @@
     "serve": "webpack serve --config ./webpack.config.dev.js"
   },
   "dependencies": {
+    "@m2fw/redux-manager": "^0.1.0-alpha.3",
     "@m2fw/router": "^0.1.0-alpha.3",
     "@m2fw/table": "^0.1.0-alpha.3",
     "lit-element": "^2.4.0",
