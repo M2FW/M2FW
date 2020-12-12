@@ -39,6 +39,27 @@ export class M2TableObjectCell extends AbstractM2TableCell {
     `
   }
 
+  get displayValue(): TemplateResult | void {
+    if (this.config?.options?.length) {
+      const selectedOption: string | SelectOption = (this.config
+        .options as any).find((option: string | SelectOption) => {
+        if (typeof option === 'string') {
+          return option === this.value
+        } else {
+          return option.value === this.value
+        }
+      })
+
+      if (selectedOption) {
+        const displayValue: string =
+          typeof selectedOption === 'string'
+            ? selectedOption
+            : selectedOption.display
+        return html`<div>${displayValue}</div>`
+      }
+    }
+  }
+
   get editor(): HTMLSelectElement | null {
     return this.renderRoot?.querySelector('select')
   }

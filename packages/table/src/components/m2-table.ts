@@ -18,7 +18,7 @@ import { TableData } from '../interfaces'
 
 @customElement('m2-table')
 export class M2Table extends AbstractM2TablePart {
-  @property({ type: Array }) data: object[] = []
+  @property({ type: Array }) data: any[] = []
   @property({ type: Number }) scrollSpeedLevel: number = 1
 
   static get styles(): CSSResult[] {

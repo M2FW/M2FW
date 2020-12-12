@@ -31,7 +31,7 @@ export abstract class AbstractM2TableCell extends LitElement {
     return [cellStyle]
   }
 
-  get displayValue(): TemplateResult | undefined {
+  get displayValue(): TemplateResult | void {
     if (this.config?.displayValue) {
       const displayValue: string | Function = this.config.displayValue
 
