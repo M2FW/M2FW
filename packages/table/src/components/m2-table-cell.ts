@@ -2,16 +2,9 @@ import './m2-table-boolean-cell'
 import './m2-table-float-cell'
 import './m2-table-integer-cell'
 import './m2-table-object-cell'
+import './m2-table-select-cell'
 import './m2-table-string-cell'
 
-import {
-  BooleanColumnConfig,
-  ColumnConfig,
-  FloatColumnConfig,
-  NumberColumnConfig,
-  SelectColumnConfig,
-  StringColumnConfig,
-} from '../interfaces'
 import {
   CSSResult,
   LitElement,
@@ -22,12 +15,13 @@ import {
   property,
 } from 'lit-element'
 
+import { ColumnConfig } from '../interfaces'
 import { ColumnTypes } from '../enums'
 
 @customElement('m2-table-cell')
 export class M2TableCell extends LitElement {
   @property({ type: String }) type?: ColumnTypes
-  @property({ type: Object }) config?: ColumnConfig
+  @property({ type: Object }) config: ColumnConfig
   @property() value: any
   @property({ type: Boolean }) _isFocused: boolean = false
   @property({ type: Number }) rowIdx: number = -1
@@ -36,8 +30,9 @@ export class M2TableCell extends LitElement {
     [ColumnTypes.Boolean]: 'm2-table-boolean-cell',
     [ColumnTypes.Float]: 'm2-table-float-cell',
     [ColumnTypes.Integer]: 'm2-table-integer-cell',
-    [ColumnTypes.Object]: 'm2-table-object-cell',
+    [ColumnTypes.Select]: 'm2-table-select-cell',
     [ColumnTypes.String]: 'm2-table-string-cell',
+    [ColumnTypes.Object]: 'm2-table-object-cell',
   }
 
   static get styles(): CSSResult {
@@ -53,9 +48,10 @@ export class M2TableCell extends LitElement {
   /**
    * @description set contentEditable to 'true' foe being able to focused on at this component
    */
-  constructor() {
+  constructor(config: ColumnConfig) {
     super()
     this.contentEditable = 'true'
+    this.config = config
   }
 
   render(): TemplateResult {
@@ -65,7 +61,7 @@ export class M2TableCell extends LitElement {
         ? html`
             <m2-table-string-cell
               class="${this._computeClasses(this.config)}"
-              .config="${this.config as StringColumnConfig}"
+              .config="${this.config}"
               .value="${String(this.value)}"
             ></m2-table-string-cell>
           `
@@ -73,7 +69,7 @@ export class M2TableCell extends LitElement {
         ? html`
             <m2-table-boolean-cell
               class="${this._computeClasses(this.config)}"
-              .config="${this.config as BooleanColumnConfig}"
+              .config="${this.config}"
               .value="${Boolean(this.value)}"
             ></m2-table-boolean-cell>
           `
@@ -81,7 +77,7 @@ export class M2TableCell extends LitElement {
         ? html`
             <m2-table-float-cell
               class="${this._computeClasses(this.config)}"
-              .config="${this.config as FloatColumnConfig}"
+              .config="${this.config}"
               .value="${Number(this.value)}"
             ></m2-table-float-cell>
           `
@@ -89,21 +85,30 @@ export class M2TableCell extends LitElement {
         ? html`
             <m2-table-integer-cell
               class="${this._computeClasses(this.config)}"
-              .config="${this.config as NumberColumnConfig}"
+              .config="${this.config}"
               .value="${Number(this.value)}"
             ></m2-table-integer-cell>
+          `
+        : this.type === ColumnTypes.Select
+        ? html`
+            <m2-table-select-cell
+              class="${this._computeClasses(this.config)}"
+              .config="${this.config}"
+              .value="${this.value}"
+            ></m2-table-select-cell>
           `
         : this.type === ColumnTypes.Object
         ? html`
             <m2-table-object-cell
               class="${this._computeClasses(this.config)}"
-              .config="${this.config as SelectColumnConfig}"
+              .config="${this.config}"
               .value="${this.value}"
-            ></m2-table-object-cell>
+            >
+            </m2-table-object-cell>
           `
         : html` <m2-table-string-cell
             class="${this._computeClasses(this.config)}"
-            .config="${this.config as StringColumnConfig}"
+            .config="${this.config}"
             .value="${String(this.value)}"
           ></m2-table-string-cell>`}
     `

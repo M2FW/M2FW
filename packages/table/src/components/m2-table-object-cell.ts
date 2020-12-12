@@ -1,70 +1,57 @@
-import { SelectColumnConfig, SelectOption } from '../interfaces'
-import { TemplateResult, customElement, html, property } from 'lit-element'
+import { TemplateResult, customElement, html } from 'lit-element'
 
 import { AbstractM2TableCell } from '../abstracts/abstract-m2-table-cell'
+import { ObjectColumnConfig } from '../interfaces'
 
 @customElement('m2-table-object-cell')
-export class M2TableObjectCell extends AbstractM2TableCell {
-  @property({ type: Object }) config?: SelectColumnConfig
+export class M2TableObjectCell extends AbstractM2TableCell<HTMLInputElement> {
+  editorAccessor: string = ''
 
-  render(): TemplateResult {
-    if (!this.config?.options)
-      throw new Error('Options should be defined for object column')
+  renderEditor(config: ObjectColumnConfig): void {
+    const { renderEditor }: ObjectColumnConfig = config
 
-    return html`
-      ${this._isEditing
-        ? html`
-            <select>
-              <option></option>
-              ${((this.config?.options as any) || []).map(
-                (option: string | SelectOption): TemplateResult => {
-                  if (typeof option === 'string') {
-                    return html`<option ?selected="${option === this.value}">
-                      ${option}
-                    </option>`
-                  } else {
-                    option = option as SelectOption
-                    return html`<option
-                      value="${option.value}"
-                      ?selected="${option.value === this.value}"
-                    >
-                      ${option.display}
-                    </option>`
-                  }
-                }
-              )}
-            </select>
-          `
-        : html`${this.displayValue}`}
-    `
+    if (!renderEditor) {
+      throw new Error('renderEditor is not implemented.')
+    }
+
+    renderEditor(config, this.value, (newValue: any) => {
+      this._isEditing = false
+
+      const oldValue = this.value
+      if (oldValue != newValue) {
+        this.value = newValue
+        this.dispatchValueChangeEvent(oldValue, newValue)
+      }
+    })
   }
 
-  get displayValue(): TemplateResult | void {
-    if (this.config?.options?.length) {
-      const selectedOption: string | SelectOption = (this.config
-        .options as any).find((option: string | SelectOption) => {
-        if (typeof option === 'string') {
-          return option === this.value
-        } else {
-          return option.value === this.value
-        }
-      })
+  renderDisplay(config: ObjectColumnConfig): TemplateResult {
+    let { displayField, displayValue }: ObjectColumnConfig = config
 
-      if (selectedOption) {
-        const displayValue: string =
-          typeof selectedOption === 'string'
-            ? selectedOption
-            : selectedOption.display
-        return html`<div>${displayValue}</div>`
+    if (displayValue && typeof displayValue === 'string') {
+      return this.displayCellFactory(displayValue)
+    } else if (displayValue && typeof displayValue === 'function') {
+      return this.displayCellFactory(displayValue(this.value))
+    }
+
+    if (!displayField) {
+      const keys: string[] = Object.keys(this.value)
+
+      if (keys.find((key: string) => key === 'name')) {
+        displayField = 'name'
+      } else {
+        displayField = keys[0]
       }
     }
-  }
 
-  get editor(): HTMLSelectElement | null {
-    return this.renderRoot?.querySelector('select')
+    return this.displayCellFactory(this.value[displayField])
   }
 
   focusOnEditor(): void {
-    this.editor?.focus()
+    return
+  }
+
+  onblurHandler() {
+    return
   }
 }

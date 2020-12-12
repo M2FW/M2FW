@@ -4,5 +4,11 @@ export enum Events {
 
   RowDblClick = 'rowDblClick',
 
+  /** Cell Events */
+}
+
+export enum CellEvents {
+  ModeChange = 'modeChange',
+  FocusChange = 'focusChange',
   CellValueChange = 'valueChange',
 }

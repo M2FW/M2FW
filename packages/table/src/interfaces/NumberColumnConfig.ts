@@ -1,10 +1,10 @@
 import { BaseColumnConfig } from './BaseColumnConfig'
 
-export interface NumberColumnConfig extends BaseColumnConfig {
+export interface IntegerColumnConfig extends BaseColumnConfig {
   min?: number
   max?: number
 }
 
-export interface FloatColumnConfig extends NumberColumnConfig {
+export interface FloatColumnConfig extends IntegerColumnConfig {
   step?: number
 }

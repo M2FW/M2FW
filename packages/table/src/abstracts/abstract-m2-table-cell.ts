@@ -6,19 +6,22 @@ import {
   html,
   property,
 } from 'lit-element'
+import { CellEvents, Events } from '../enums'
 import { KeyActions, keyMapper } from '../utils/key-mapper'
 
 import { ColumnConfig } from '../interfaces'
 import { cellStyle } from '../assets/styles'
 
-export abstract class AbstractM2TableCell extends LitElement {
-  @property({ type: Object }) config?: ColumnConfig
+export abstract class AbstractM2TableCell<T> extends LitElement {
+  @property({ type: Object }) config: ColumnConfig
   @property({ type: String }) value?: any
   @property({ type: Boolean }) _isEditing: boolean = false
   @property({ type: Boolean }) _isFocused: boolean = false
 
-  constructor() {
+  constructor(config: ColumnConfig) {
     super()
+    this.config = config
+
     this.contentEditable = 'true'
 
     this.addEventListener('focus', this.onfocusHandler.bind(this))
@@ -31,30 +34,29 @@ export abstract class AbstractM2TableCell extends LitElement {
     return [cellStyle]
   }
 
-  get displayValue(): TemplateResult | void {
-    if (this.config?.displayValue) {
-      const displayValue: string | Function = this.config.displayValue
+  abstract editorAccessor: string
+  abstract renderEditor(config: ColumnConfig): void
+  abstract renderDisplay(config: ColumnConfig): TemplateResult
+  abstract focusOnEditor(): void
 
-      if (displayValue instanceof String) {
-        return html`<div class="dsp-cell">
-          <span>${displayValue}</span>${displayValue}
-        </div>`
-      } else if (displayValue instanceof Function) {
-        return html`<div class="dsp-cell">
-          <span>${displayValue(this.value)}</span>
-        </div>`
-      }
-    } else {
-      return this.defaultDisplay
+  get editor(): T {
+    const editor: T | null = this.renderRoot?.querySelector(
+      this.editorAccessor
+    ) as any
+    if (!editor) {
+      throw new Error(`Failed to find editor by (${this.editorAccessor})`)
     }
+
+    return editor
   }
 
-  get editor(): HTMLElement | null {
-    throw new Error('Should be implemented')
-  }
-
-  get defaultDisplay(): TemplateResult {
-    return html`<div class="dsp-cell"><span>${this.value}</span></div>`
+  render(): TemplateResult {
+    if (!this.config) return html``
+    return html`
+      ${this._isEditing
+        ? this.renderEditor(this.config)
+        : this.renderDisplay(this.config)}
+    `
   }
 
   updated(changedProps: PropertyValues) {
@@ -78,7 +80,7 @@ export abstract class AbstractM2TableCell extends LitElement {
    */
   _dispatchModeChangeEvent(): void {
     this.dispatchEvent(
-      new CustomEvent('modeChange', {
+      new CustomEvent(CellEvents.ModeChange, {
         detail: { _isEditing: this._isEditing },
         bubbles: true,
         composed: true,
@@ -92,7 +94,7 @@ export abstract class AbstractM2TableCell extends LitElement {
    */
   _dispatchFocusChangeEvent(): void {
     this.dispatchEvent(
-      new CustomEvent('focusChange', {
+      new CustomEvent(CellEvents.FocusChange, {
         detail: { _isFocused: this._isFocused },
         bubbles: true,
         composed: true,
@@ -147,30 +149,44 @@ export abstract class AbstractM2TableCell extends LitElement {
   }
 
   /**
-   * @description Should be implemented by specific cell component, Refer: m2-table-string-column
-   */
-  focusOnEditor(): void {
-    throw new Error('Should be implemented')
-  }
-
-  /**
    * @description set value if value is changed and dispatch valueChange custom event.
    */
-  setValue(): void {
-    const oldValue: any = this.value
-    const newValue: any = (this.editor as HTMLInputElement | HTMLSelectElement)
-      .value
+  private setValue(): void {
+    const oldValue: any = this.parseValue(this.value)
+    const newValue: any = this.parseValue((this.editor as any).value)
 
     if (oldValue != newValue) {
       this.value = newValue
-      this.dispatchEvent(
-        new CustomEvent('valueChange', {
-          detail: { field: this.config?.name, oldValue, newValue },
-          bubbles: true,
-          composed: true,
-          cancelable: true,
-        })
-      )
+      this.dispatchValueChangeEvent(oldValue, newValue)
     }
+  }
+
+  parseValue(value: any): any {
+    return value
+  }
+
+  displayCellFactory(
+    innerText: string | number | TemplateResult | undefined
+  ): TemplateResult {
+    if (innerText === undefined) {
+      innerText = ''
+    }
+
+    return html`
+      <div class="dsp-cell">
+        <span>${innerText}</span>
+      </div>
+    `
+  }
+
+  dispatchValueChangeEvent(oldValue: any, newValue: any): void {
+    this.dispatchEvent(
+      new CustomEvent(CellEvents.CellValueChange, {
+        detail: { field: this.config?.name, oldValue, newValue },
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      })
+    )
   }
 }

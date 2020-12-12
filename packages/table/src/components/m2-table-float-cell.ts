@@ -1,13 +1,13 @@
 import { TemplateResult, customElement, html, property } from 'lit-element'
 
 import { AbstractM2TableCell } from '../abstracts/abstract-m2-table-cell'
-import { Events } from '../enums'
-import { FloatColumnConfig } from '../interfaces'
+import { ColumnConfig } from '../interfaces'
 import { ifDefined } from 'lit-html/directives/if-defined'
 
 @customElement('m2-table-float-cell')
-export class M2TableFloatCell extends AbstractM2TableCell {
-  @property({ type: Object }) config?: FloatColumnConfig
+export class M2TableFloatCell extends AbstractM2TableCell<HTMLInputElement> {
+  editorAccessor: string = 'input[type=number]'
+
   @property({ type: Number }) value?: number
 
   render(): TemplateResult {
@@ -22,34 +22,22 @@ export class M2TableFloatCell extends AbstractM2TableCell {
               step="${ifDefined(this.config?.step)}"
             />
           `
-        : html`${this.displayValue}`}
+        : html`${this.renderDisplay}`}
     `
   }
 
-  get editor(): HTMLInputElement | null {
-    return this.renderRoot?.querySelector('input[type=number]')
+  renderEditor(config: ColumnConfig): TemplateResult {
+    throw new Error('Method not implemented.')
+  }
+  renderDisplay(config: ColumnConfig): TemplateResult {
+    throw new Error('Method not implemented.')
   }
 
   focusOnEditor(): void {
     this.editor?.select()
   }
 
-  setValue(): void {
-    const oldValue: number = Number(this.value || 0)
-    const newValue: number = Number(
-      (this.editor as HTMLInputElement | HTMLSelectElement).value || 0
-    )
-
-    if (oldValue != newValue) {
-      this.value = newValue
-      this.dispatchEvent(
-        new CustomEvent(Events.CellValueChange, {
-          detail: { field: this.config?.name, oldValue, newValue },
-          bubbles: true,
-          composed: true,
-          cancelable: true,
-        })
-      )
-    }
+  parseValue(value: any): number {
+    return Number(value)
   }
 }

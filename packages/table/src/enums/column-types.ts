@@ -3,5 +3,6 @@ export enum ColumnTypes {
   Integer = 'integer',
   Float = 'float',
   Boolean = 'boolean',
+  Select = 'select',
   Object = 'object',
 }
