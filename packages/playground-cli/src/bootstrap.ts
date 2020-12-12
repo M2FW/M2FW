@@ -14,7 +14,6 @@ const pages = [
     importer: async () => console.log('sample'),
   },
 ]
-debugger
 addPages(pages)
 
 import('./playground-app').then(() => {
