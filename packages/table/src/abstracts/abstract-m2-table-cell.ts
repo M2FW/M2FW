@@ -36,9 +36,13 @@ export abstract class AbstractM2TableCell extends LitElement {
       const displayValue: string | Function = this.config.displayValue
 
       if (displayValue instanceof String) {
-        return html`<div>${displayValue}</div>`
+        return html`<div class="dsp-cell">
+          <span>${displayValue}</span>${displayValue}
+        </div>`
       } else if (displayValue instanceof Function) {
-        return html`<div>${displayValue(this.value)}</div>`
+        return html`<div class="dsp-cell">
+          <span>${displayValue(this.value)}</span>
+        </div>`
       }
     } else {
       return this.defaultDisplay
@@ -50,7 +54,7 @@ export abstract class AbstractM2TableCell extends LitElement {
   }
 
   get defaultDisplay(): TemplateResult {
-    return html`<div>${this.value}</div>`
+    return html`<div class="dsp-cell"><span>${this.value}</span></div>`
   }
 
   updated(changedProps: PropertyValues) {

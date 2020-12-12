@@ -69,7 +69,11 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   _renderRowNumbering(rowIdx: number): TemplateResult {
-    return html` <td class="row-numbering" width="15px">${rowIdx + 1}.</td> `
+    return html`
+      <td class="row-numbering" width="15px">
+        <span class="row-num">${rowIdx + 1}.</span>
+      </td>
+    `
   }
 
   _renderSelectInput(rowIdx: number, record: TableData): TemplateResult {

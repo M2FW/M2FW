@@ -1,4 +1,4 @@
-import { css, CSSResult } from 'lit-element'
+import { CSSResult, css } from 'lit-element'
 
 export const headerStyle: CSSResult = css`
   :host {
@@ -18,6 +18,7 @@ export const headerStyle: CSSResult = css`
     height: var(--m2-table-button-height, 20px);
   }
   tr {
+    height: var(--m2-table-header-row-height, 30px);
     background-color: var(--m2-table-header-bg-color, darkgray);
   }
   th {
@@ -47,6 +48,9 @@ export const bodyStyle: CSSResult = css`
   :host::-webkit-scrollbar {
     display: none;
   }
+  tr {
+    height: var(--m2-table-row-height, 30px);
+  }
   tr:nth-child(even) {
     background-color: var(--m2-table-even-row-bg-color, lightgray);
   }
@@ -73,6 +77,10 @@ export const bodyStyle: CSSResult = css`
     border-left: var(--m2-table-cell-border-left, none);
     border-right: var(--m2-table-cell-border-right, none);
   }
+  td,
+  span {
+    font-size: inherit;
+  }
   button {
     display: flex;
     padding: var(--m2-table-button-padding, 0px);
@@ -96,6 +104,7 @@ export const cellStyle: CSSResult = css`
     display: grid;
     outline: none;
     border: 1px solid transparent;
+    width: inherit;
   }
   :host(:focus) {
     border: 1px dashed gray;
@@ -103,7 +112,6 @@ export const cellStyle: CSSResult = css`
   :host > * {
     margin: auto 0;
     overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
     outline: none;
     border: none;
@@ -118,5 +126,14 @@ export const cellStyle: CSSResult = css`
   }
   :host(.align-center) > * {
     margin: auto;
+  }
+  input,
+  select {
+    padding: 0;
+    font-size: inherit;
+    width: inherit;
+  }
+  .dsp-cell {
+    width: inherit;
   }
 `

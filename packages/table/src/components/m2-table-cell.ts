@@ -45,6 +45,7 @@ export class M2TableCell extends LitElement {
       :host {
         display: flex;
         outline: none;
+        width: inherit;
       }
     `
   }
