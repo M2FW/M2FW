@@ -69,8 +69,12 @@ export class M2Table extends AbstractM2TablePart {
    * @description Returning selected data
    * @param withProps Whether __props__ of data is involved or not
    */
-  getSelected(withProps: boolean = false): TableData[] | void {
-    return this.tableBody?.getSelected(withProps)
+  getSelected(withProps: boolean = false): TableData[] {
+    if (!this.tableBody) {
+      throw new Error('tableBody is not exists')
+    }
+
+    return this.tableBody.getSelected(withProps)
   }
 
   /**
@@ -78,16 +82,24 @@ export class M2Table extends AbstractM2TablePart {
    * @param withProps Whether __props__ of data is involved or not
    * @returns {TableData[]}
    */
-  getChanged(withProps: boolean = false): TableData[] | void {
-    return this.tableBody?.getChanged(withProps)
+  getChanged(withProps: boolean = false): TableData[] {
+    if (!this.tableBody) {
+      throw new Error('tableBody is not exists')
+    }
+
+    return this.tableBody.getChanged(withProps)
   }
 
   /**
    * @description Returning changed data with only changed fields of data
    * @returns {TableData[]}
    */
-  getChangedOnly(): TableData[] | void {
-    return this.tableBody?.getChangedOnly()
+  getChangedOnly(): TableData[] {
+    if (!this.tableBody) {
+      throw new Error('tableBody is not exists')
+    }
+
+    return this.tableBody.getChangedOnly()
   }
 
   /**
@@ -95,8 +107,12 @@ export class M2Table extends AbstractM2TablePart {
    * @param withProps Whether __props__ of data is involved or not
    * @returns {TableData[]}
    */
-  getAppended(withProps: boolean = false): TableData[] | void {
-    return this.tableBody?.getAppended(withProps)
+  getAppended(withProps: boolean = false): TableData[] {
+    if (!this.tableBody) {
+      throw new Error('tableBody is not exists')
+    }
+
+    return this.tableBody.getAppended(withProps)
   }
 
   /**
@@ -106,8 +122,12 @@ export class M2Table extends AbstractM2TablePart {
    * @param withProps Whether __props__ of data is involved or not
    * @returns {TableData[]}
    */
-  getDeleted(withProps: boolean = false): TableData[] | void {
-    return this.tableBody?.getDeleted(withProps)
+  getDeleted(withProps: boolean = false): TableData[] {
+    if (!this.tableBody) {
+      throw new Error('tableBody is not exists')
+    }
+
+    return this.tableBody.getDeleted(withProps)
   }
 
   /**
