@@ -4,6 +4,7 @@ import './m2-table-integer-cell'
 import './m2-table-object-cell'
 import './m2-table-select-cell'
 import './m2-table-string-cell'
+import './m2-table-datetime-cell'
 
 import {
   CSSResult,
@@ -33,6 +34,7 @@ export class M2TableCell extends LitElement {
     [ColumnTypes.Select]: 'm2-table-select-cell',
     [ColumnTypes.String]: 'm2-table-string-cell',
     [ColumnTypes.Object]: 'm2-table-object-cell',
+    [ColumnTypes.DateTime]: 'm2-table-datetime-cell',
   }
 
   static get styles(): CSSResult {
@@ -105,6 +107,15 @@ export class M2TableCell extends LitElement {
               .value="${this.value}"
             >
             </m2-table-object-cell>
+          `
+        : this.type === ColumnTypes.DateTime
+        ? html`
+            <m2-table-datetime-cell
+              class="${this._computeClasses(this.config)}"
+              .config="${this.config}"
+              .value="${Number(this.value)}"
+            >
+            </m2-table-datetime-cell>
           `
         : html` <m2-table-string-cell
             class="${this._computeClasses(this.config)}"
