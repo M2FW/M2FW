@@ -9,6 +9,7 @@ import './m2-table-datetime-cell'
 import {
   CSSResult,
   LitElement,
+  PropertyValues,
   TemplateResult,
   css,
   customElement,
@@ -47,12 +48,8 @@ export class M2TableCell extends LitElement {
     `
   }
 
-  /**
-   * @description set contentEditable to 'true' foe being able to focused on at this component
-   */
   constructor(config: ColumnConfig) {
     super()
-    this.contentEditable = 'true'
     this.config = config
   }
 

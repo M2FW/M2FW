@@ -62,7 +62,7 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
         typeof selectedOption === 'string'
           ? selectedOption
           : selectedOption.display
-      return html`<div>${displayValue}</div>`
+      return this.displayCellFactory(displayValue)
     } else {
       return this.displayCellFactory('')
     }

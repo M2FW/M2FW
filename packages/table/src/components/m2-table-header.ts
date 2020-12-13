@@ -20,24 +20,24 @@ export class M2TableHeader extends AbstractM2TablePart {
     return html`
       <thead>
         <tr>
-          ${this.numbering ? this._renderRowNumbering() : ''}
-          ${this.selectable ? this._renderSelectInput() : ''}
+          ${this.selectable ? this.renderSelectInput() : ''}
+          ${this.numbering ? this.renderRowNumbering() : ''}
           ${this.buttons.map((button: TableButton) =>
-            this._renderButton(button)
+            this.renderButton(button)
           )}
           ${this.columns.map((column: ColumnConfig) =>
-            this._renderTableCell(column)
+            this.renderTableCell(column)
           )}
         </tr>
       </thead>
     `
   }
 
-  _renderRowNumbering(): TemplateResult {
-    return html` <th width="15px"></th> `
+  private renderRowNumbering(): TemplateResult {
+    return html` <th class="header-numbering" width="30">No.</th> `
   }
 
-  _renderButton(button: TableButton): TemplateResult | void {
+  private renderButton(button: TableButton): TemplateResult | void {
     if (button.type === ButtonType.Icon) {
       let icon: any
       const buttonOptions: IconButtonOptions = button.options as IconButtonOptions
@@ -61,7 +61,7 @@ export class M2TableHeader extends AbstractM2TablePart {
     }
   }
 
-  _renderSelectInput(): TemplateResult {
+  private renderSelectInput(): TemplateResult {
     return html`
       <th>
         <input
@@ -73,7 +73,7 @@ export class M2TableHeader extends AbstractM2TablePart {
     `
   }
 
-  _renderTableCell(column: ColumnConfig): TemplateResult {
+  private renderTableCell(column: ColumnConfig): TemplateResult {
     return html`
       <th width="${column.width || 150}" ?hidden="${column.hidden}">
         ${this.displayHeader(column)}

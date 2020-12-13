@@ -1,7 +1,7 @@
+import { ColumnConfig, FloatColumnConfig } from '../interfaces'
 import { TemplateResult, customElement, html, property } from 'lit-element'
 
 import { AbstractM2TableCell } from '../abstracts/abstract-m2-table-cell'
-import { ColumnConfig } from '../interfaces'
 import { ifDefined } from 'lit-html/directives/if-defined'
 
 @customElement('m2-table-float-cell')
@@ -11,15 +11,17 @@ export class M2TableFloatCell extends AbstractM2TableCell<HTMLInputElement> {
   @property({ type: Number }) value?: number
 
   render(): TemplateResult {
+    const config: FloatColumnConfig = this.config
+
     return html`
       ${this._isEditing
         ? html`
             <input
               type="number"
               value="${ifDefined(this.value)}"
-              min="${ifDefined(this.config?.min)}"
-              max="${ifDefined(this.config?.max)}"
-              step="${ifDefined(this.config?.step)}"
+              min="${ifDefined(config?.min)}"
+              max="${ifDefined(config?.max)}"
+              step="${ifDefined(config?.step)}"
             />
           `
         : html`${this.renderDisplay}`}

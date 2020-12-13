@@ -118,6 +118,9 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
    * @description double click event handler
    */
   async ondblclickHandler(): Promise<void> {
+    const editable: boolean = Boolean(this.config?.editable)
+    if (!editable) return
+
     this._isEditing = true
     await this.updateComplete
     this.focusOnEditor()
@@ -129,6 +132,8 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
    */
   onkeydownHandler(event: KeyboardEvent): void {
     if (keyMapper(event.code, KeyActions.TOGGLE_EDITING)) {
+      const editable: boolean = Boolean(this.config?.editable)
+      if (!editable) return
       this.toggleEditing()
     }
   }

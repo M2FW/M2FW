@@ -9,6 +9,9 @@ export const headerStyle: CSSResult = css`
     font-size: var(--m2-table-header-font-size, 12px);
     color: var(--m2-table-header-font-color, white);
   }
+  :host .header-numbering {
+    width: var(--m2-table-row-number-width, 30px);
+  }
   button {
     visibility: hidden;
     display: flex;
@@ -43,7 +46,8 @@ export const bodyStyle: CSSResult = css`
     font-size: var(--m2-table-font-size, 11px);
   }
   :host .row-numbering {
-    text-align: right;
+    text-align: center;
+    width: var(--m2-table-row-number-width, 30px);
   }
   :host::-webkit-scrollbar {
     display: none;
@@ -69,6 +73,10 @@ export const bodyStyle: CSSResult = css`
       --m2-table-deleted-row-text-decoration,
       line-through
     );
+  }
+  tr[selected] {
+    background-color: var(--m2-table-selected-row-bg-color, yellow);
+    font-style: var(--m2-table-selected-font-style, italic);
   }
   td {
     padding: var(--m2-table-cell-padding, 5px);
@@ -118,14 +126,17 @@ export const cellStyle: CSSResult = css`
     background-color: transparent;
     font-family: inherit;
   }
-  :host(.align-left) > * {
+  :host(.align-left) .dsp-cell > span {
     margin: auto auto auto 0px;
   }
-  :host(.align-right) > * {
+  :host(.align-right) .dsp-cell > span {
     margin: auto 0px auto auto;
   }
-  :host(.align-center) > * {
+  :host(.align-center) .dsp-cell > span {
     margin: auto;
+  }
+  .dsp-cell {
+    display: flex;
   }
   input,
   select {

@@ -10,4 +10,5 @@ export interface BaseColumnConfig {
   validator?: RegExp | Function
   hidden?: boolean
   align?: ColumnAlign
+  editable?: boolean
 }

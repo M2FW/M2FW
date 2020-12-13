@@ -29,7 +29,7 @@ export class M2TableBody extends AbstractM2TablePart {
   @property({ type: Object }) focusedCell?: HTMLElement
   @property({ type: Boolean }) _isEditing: boolean = false
   @property({ type: Object }) _focusedCell?: M2TableCell
-  @property({ type: Object }) _data: TableData = []
+  @property({ type: Object }) private _data: TableData = []
 
   static get styles(): CSSResult[] {
     return [bodyStyle]
@@ -44,22 +44,23 @@ export class M2TableBody extends AbstractM2TablePart {
   render(): TemplateResult {
     return html`
       <tbody>
-        ${this.data.map(
+        ${this._data.map(
           (record: TableData, rowIdx: number) => html`
             <tr
               rowIdx="${rowIdx}"
               ?changed="${record?.__props__?.changed || false}"
               ?appended="${record?.__props__?.appended || false}"
               ?deleted="${record?.__props__?.deleted || false}"
+              ?selected="${record?.__props__?.selected || false}"
               @dblclick="${this.onDblClickHandler}"
             >
-              ${this.numbering ? this._renderRowNumbering(rowIdx) : ''}
-              ${this.selectable ? this._renderSelectInput(rowIdx, record) : ''}
+              ${this.selectable ? this.renderSelectInput(rowIdx, record) : ''}
+              ${this.numbering ? this.renderRowNumbering(rowIdx) : ''}
               ${this.buttons.map((button: TableButton) =>
-                this._renderButton(button, record)
+                this.renderButton(button, record)
               )}
               ${this.columns.map((column: ColumnConfig, columnIdx: number) =>
-                this._renderTableCell(column, record, rowIdx, columnIdx)
+                this.renderTableCell(column, record, rowIdx, columnIdx)
               )}
             </tr>
           `
@@ -68,15 +69,15 @@ export class M2TableBody extends AbstractM2TablePart {
     `
   }
 
-  _renderRowNumbering(rowIdx: number): TemplateResult {
+  private renderRowNumbering(rowIdx: number): TemplateResult {
     return html`
-      <td class="row-numbering" width="15px">
+      <td class="row-numbering" width="30">
         <span class="row-num">${rowIdx + 1}.</span>
       </td>
     `
   }
 
-  _renderSelectInput(rowIdx: number, record: TableData): TemplateResult {
+  private renderSelectInput(rowIdx: number, record: TableData): TemplateResult {
     return html`<td>
       <input
         rowIdx="${rowIdx}"
@@ -87,7 +88,10 @@ export class M2TableBody extends AbstractM2TablePart {
     </td>`
   }
 
-  _renderButton(button: TableButton, record: TableData): TemplateResult | void {
+  private renderButton(
+    button: TableButton,
+    record: TableData
+  ): TemplateResult | void {
     if (button.type === ButtonType.Icon) {
       let icon: any
       const buttonOptions: IconButtonOptions = button.options as IconButtonOptions
@@ -148,7 +152,7 @@ export class M2TableBody extends AbstractM2TablePart {
     }
   }
 
-  _renderTableCell(
+  private renderTableCell(
     column: ColumnConfig,
     record: TableData,
     rowIdx: number,
@@ -170,10 +174,15 @@ export class M2TableBody extends AbstractM2TablePart {
     </td>`
   }
 
-  updated(changedProps: PropertyValues) {
+  updated(changedProps: PropertyValues): void {
     if (changedProps.has('data') || changedProps.has('addable')) {
+      this._data = []
+      this._data = this.data.map((d: TableData) => {
+        delete d.__props__
+        return d
+      })
       if (this.data?.length === 0 && this.addable) {
-        this._appendData()
+        this.appendData()
       }
     }
   }
@@ -184,7 +193,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @returns {TableData[]} selected data list
    */
   getSelected(withProps: boolean = false): TableData[] {
-    let selectedData: TableData[] = this.data.filter(
+    let selectedData: TableData[] = this._data.filter(
       (record: TableData) => record?.__props__?.selected
     )
 
@@ -204,7 +213,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @returns {TableChangeValueProperties[]} changed value properties
    */
   getChangesByRowIdx(rowIdx: number): TableChangeValueProperties[] | null {
-    return this.data[rowIdx]?.__props__?.changedValues || null
+    return this._data[rowIdx]?.__props__?.changedValues || null
   }
 
   /**
@@ -235,7 +244,7 @@ export class M2TableBody extends AbstractM2TablePart {
       )
 
       return {
-        ...this._getPrimaryField(record),
+        ...this.getPrimaryField(record),
         ...extractedRecord,
       }
     })
@@ -268,7 +277,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @returns {TableData[]}
    */
   getDataByStatus(status: DataStatus, withProps: boolean = false): TableData[] {
-    let filteredData: TableData[] = this.data
+    let filteredData: TableData[] = this._data
       .filter((record: TableData) => record?.__props__?.[status])
       .map((record: TableData) => {
         const keys: string[] = Object.keys(record)
@@ -299,7 +308,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param record
    * @returns {TableData}
    */
-  _getPrimaryField(record: TableData): TableData {
+  private getPrimaryField(record: TableData): TableData {
     const primaryColumn: ColumnConfig | undefined = this.columns.find(
       (column: ColumnConfig) => column.primary
     )
@@ -314,7 +323,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @description select true for every current row of indicator.
    */
   selectAll(): void {
-    this.data = this.data.map(
+    this._data = this._data.map(
       (record: TableData): TableData => {
         return {
           ...record,
@@ -328,7 +337,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @description deselect to false for every current row of indicator
    */
   deselectAll(): void {
-    this.data = this.data.map(
+    this._data = this._data.map(
       (record: TableData): TableData => {
         return {
           ...record,
@@ -394,7 +403,7 @@ export class M2TableBody extends AbstractM2TablePart {
       if (this._focusedCell) {
         const rowIdx: number = this._focusedCell.rowIdx
         const isSelected: boolean =
-          this.data[rowIdx]?.__props__?.selected || false
+          this._data[rowIdx]?.__props__?.selected || false
         if (isSelected) {
           this.deselectRow(rowIdx)
         } else {
@@ -436,8 +445,8 @@ export class M2TableBody extends AbstractM2TablePart {
     const rowIdx: number = focusedCell.rowIdx
     const columnIdx: number = focusedCell.columnIdx - 1
 
-    if (this._isFocusMovable(rowIdx, columnIdx)) {
-      this._getTableCellByIndex(rowIdx, columnIdx).cell.focus()
+    if (this.isFocusMovable(rowIdx, columnIdx)) {
+      this.getTableCellByIndex(rowIdx, columnIdx).cell.focus()
     }
   }
 
@@ -446,12 +455,12 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param rowIdx
    * @param columnIdx
    */
-  _isFocusMovable(rowIdx: number, columnIdx: number): boolean {
+  private isFocusMovable(rowIdx: number, columnIdx: number): boolean {
     return (
       columnIdx >= 0 &&
       rowIdx >= 0 &&
       columnIdx <= this.columns.length - 1 &&
-      rowIdx <= this.data.length - 1
+      rowIdx <= this._data.length - 1
     )
   }
 
@@ -463,8 +472,8 @@ export class M2TableBody extends AbstractM2TablePart {
     const rowIdx: number = focusedCell.rowIdx - 1
     const columnIdx: number = focusedCell.columnIdx
 
-    if (this._isFocusMovable(rowIdx, columnIdx)) {
-      this._getTableCellByIndex(rowIdx, columnIdx).cell.focus()
+    if (this.isFocusMovable(rowIdx, columnIdx)) {
+      this.getTableCellByIndex(rowIdx, columnIdx).cell.focus()
     }
   }
 
@@ -476,8 +485,8 @@ export class M2TableBody extends AbstractM2TablePart {
     const rowIdx: number = focusedCell.rowIdx
     const columnIdx: number = focusedCell.columnIdx + 1
 
-    if (this._isFocusMovable(rowIdx, columnIdx)) {
-      this._getTableCellByIndex(rowIdx, columnIdx).cell.focus()
+    if (this.isFocusMovable(rowIdx, columnIdx)) {
+      this.getTableCellByIndex(rowIdx, columnIdx).cell.focus()
     }
   }
 
@@ -490,20 +499,20 @@ export class M2TableBody extends AbstractM2TablePart {
     const rowIdx: number = focusedCell.rowIdx + 1
     const columnIdx: number = focusedCell.columnIdx
 
-    if (rowIdx > this.data.length - 1 && this.addable) {
-      await this._appendData()
+    if (rowIdx > this._data.length - 1 && this.addable) {
+      await this.appendData()
     }
 
-    if (this._isFocusMovable(rowIdx, columnIdx)) {
-      this._getTableCellByIndex(rowIdx, columnIdx).cell.focus()
+    if (this.isFocusMovable(rowIdx, columnIdx)) {
+      this.getTableCellByIndex(rowIdx, columnIdx).cell.focus()
     }
   }
 
   /**
    * @description append (push) new row into data of table
    */
-  async _appendData(): Promise<void> {
-    this.data.push({ __props__: { appended: true } })
+  private async appendData(): Promise<void> {
+    this._data.push({ __props__: { appended: true } })
     await this.requestUpdate()
   }
 
@@ -514,15 +523,15 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param rowIdx
    */
   async deleteRow(rowIdx: number): Promise<void> {
-    if (this.data[rowIdx]?.__props__?.appended && this.data?.length > 1) {
-      this.data.splice(rowIdx, 1)
+    if (this._data[rowIdx]?.__props__?.appended && this._data?.length > 1) {
+      this._data.splice(rowIdx, 1)
 
-      if (rowIdx === this.data.length && this._focusedCell) {
+      if (rowIdx === this._data.length && this._focusedCell) {
         this.moveFocusUp(this._focusedCell)
       }
-    } else if (!this.data[rowIdx]?.__props__?.appended) {
+    } else if (!this._data[rowIdx]?.__props__?.appended) {
       if (this.removable) {
-        this.data[rowIdx] = this.getAdjustedDeleted(this.data[rowIdx])
+        this._data[rowIdx] = this.getAdjustedDeleted(this._data[rowIdx])
       }
     }
 
@@ -534,10 +543,10 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param rowIdx
    */
   selectRow(rowIdx: number): void {
-    this.data[rowIdx] = {
-      ...this.data[rowIdx],
+    this._data[rowIdx] = {
+      ...this._data[rowIdx],
       __props__: {
-        ...this.data[rowIdx].__props__,
+        ...this._data[rowIdx].__props__,
         selected: true,
       },
     }
@@ -550,10 +559,10 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param rowIdx
    */
   deselectRow(rowIdx: number): void {
-    this.data[rowIdx] = {
-      ...this.data[rowIdx],
+    this._data[rowIdx] = {
+      ...this._data[rowIdx],
       __props__: {
-        ...this.data[rowIdx].__props__,
+        ...this._data[rowIdx].__props__,
         selected: false,
       },
     }
@@ -572,15 +581,15 @@ export class M2TableBody extends AbstractM2TablePart {
       const field: string = event.detail.field
       const newValue: any = event.detail.newValue
 
-      if (!this.data[rowIdx]?.__props__?.appended) {
-        this.data[rowIdx] = this.getAdjustedChanges(
-          this.data[rowIdx],
+      if (!this._data[rowIdx]?.__props__?.appended) {
+        this._data[rowIdx] = this.getAdjustedChanges(
+          this._data[rowIdx],
           field,
           newValue
         )
       } else {
-        this.data[rowIdx] = this.getAdjustedAppend(
-          this.data[rowIdx],
+        this._data[rowIdx] = this.getAdjustedAppend(
+          this._data[rowIdx],
           field,
           newValue
         )
@@ -681,7 +690,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param rowIdx
    * @returns {HTMLTableRowElement}
    */
-  _getTableRowByIndex(rowIdx: number): HTMLTableRowElement | null {
+  private getTableRowByIndex(rowIdx: number): HTMLTableRowElement | null {
     return this.renderRoot?.querySelector(`tr[rowIdx="${rowIdx}"`)
   }
 
@@ -690,7 +699,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param rowIdx
    * @param columnIdx
    */
-  _getTableCellByIndex(rowIdx: number, columnIdx: number): any {
+  private getTableCellByIndex(rowIdx: number, columnIdx: number): any {
     return this.renderRoot?.querySelector(
       `m2-table-cell[rowIdx="${rowIdx}"][columnIdx="${columnIdx}"]`
     ) as M2TableCell

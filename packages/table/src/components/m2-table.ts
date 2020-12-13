@@ -39,6 +39,7 @@ export class M2Table extends AbstractM2TablePart {
       <m2-table-header
         .columns="${this.columns}"
         .buttons="${this.buttons}"
+        .selectable="${this.selectable}"
         .scrollSpeedLevel="${this.scrollSpeedLevel}"
         @selectAll="${this.onSelectAllHandler.bind(this)}"
         @deselectAll="${this.onDeselectAllHandler.bind(this)}"
@@ -46,6 +47,7 @@ export class M2Table extends AbstractM2TablePart {
       ></m2-table-header>
 
       <m2-table-body
+        .selectable="${this.selectable}"
         .addable="${this.addable}"
         .removable="${this.removable}"
         .columns="${this.columns}"
