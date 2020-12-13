@@ -69,37 +69,37 @@ export class M2Table extends AbstractM2TablePart {
    * @description Returning selected data
    * @param withProps Whether __props__ of data is involved or not
    */
-  getSelected(withProps: boolean = false): TableData[] {
+  getSelected<T>(withProps: boolean = false): (T & TableData)[] {
     if (!this.tableBody) {
       throw new Error('tableBody is not exists')
     }
 
-    return this.tableBody.getSelected(withProps)
+    return this.tableBody.getSelected(withProps) as (T & TableData)[]
   }
 
   /**
    * @description Returning changed data with non changed field of data as well
    * @param withProps Whether __props__ of data is involved or not
-   * @returns {TableData[]}
+   * @returns {(T & TableData)[]}
    */
-  getChanged(withProps: boolean = false): TableData[] {
+  getChanged<T>(withProps: boolean = false): (T & TableData)[] {
     if (!this.tableBody) {
       throw new Error('tableBody is not exists')
     }
 
-    return this.tableBody.getChanged(withProps)
+    return this.tableBody.getChanged(withProps) as (T & TableData)[]
   }
 
   /**
    * @description Returning changed data with only changed fields of data
    * @returns {TableData[]}
    */
-  getChangedOnly(): TableData[] {
+  getChangedOnly<T>(): (T & TableData)[] {
     if (!this.tableBody) {
       throw new Error('tableBody is not exists')
     }
 
-    return this.tableBody.getChangedOnly()
+    return this.tableBody.getChangedOnly() as (T & TableData)[]
   }
 
   /**
@@ -107,12 +107,12 @@ export class M2Table extends AbstractM2TablePart {
    * @param withProps Whether __props__ of data is involved or not
    * @returns {TableData[]}
    */
-  getAppended(withProps: boolean = false): TableData[] {
+  getAppended<T>(withProps: boolean = false): (T & TableData)[] {
     if (!this.tableBody) {
       throw new Error('tableBody is not exists')
     }
 
-    return this.tableBody.getAppended(withProps)
+    return this.tableBody.getAppended(withProps) as (T & TableData)[]
   }
 
   /**
@@ -122,12 +122,12 @@ export class M2Table extends AbstractM2TablePart {
    * @param withProps Whether __props__ of data is involved or not
    * @returns {TableData[]}
    */
-  getDeleted(withProps: boolean = false): TableData[] {
+  getDeleted<T>(withProps: boolean = false): (T & TableData)[] {
     if (!this.tableBody) {
       throw new Error('tableBody is not exists')
     }
 
-    return this.tableBody.getDeleted(withProps)
+    return this.tableBody.getDeleted(withProps) as (T & TableData)[]
   }
 
   /**
