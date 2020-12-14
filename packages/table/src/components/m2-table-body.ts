@@ -395,28 +395,35 @@ export class M2TableBody extends AbstractM2TablePart {
    */
   onkeydownHandler(event: KeyboardEvent): void {
     const key: string = event.code
-    if (keyMapper(key, KeyActions.MOVE_FOCUSING) && !this._isEditing) {
-      if (this._focusedCell) this.moveFocusByKeycode(this._focusedCell, key)
-    }
+    if (keyMapper(key, KeyActions.MOVE_FOCUSING))
+      this.moveFocusingKeyHandler(key)
+    if (keyMapper(key, KeyActions.SELECT_ROW)) this.selectRowKeyHandler()
+    if (keyMapper(key, KeyActions.DELETE_ROW)) this.deleteRowKeyHandler()
+  }
 
-    if (keyMapper(key, KeyActions.SELECT_ROW) && !this._isEditing) {
-      if (this._focusedCell) {
-        const rowIdx: number = this._focusedCell.rowIdx
-        const isSelected: boolean =
-          this._data[rowIdx]?.__props__?.selected || false
-        if (isSelected) {
-          this.deselectRow(rowIdx)
-        } else {
-          this.selectRow(rowIdx)
-        }
+  private moveFocusingKeyHandler(key: string) {
+    if (this._focusedCell && !this._isEditing) {
+      this.moveFocusByKeycode(this._focusedCell, key)
+    }
+  }
+
+  private selectRowKeyHandler() {
+    if (this._focusedCell && this.selectable && !this._isEditing) {
+      const rowIdx: number = this._focusedCell.rowIdx
+      const isSelected: boolean =
+        this._data[rowIdx]?.__props__?.selected || false
+      if (isSelected) {
+        this.deselectRow(rowIdx)
+      } else {
+        this.selectRow(rowIdx)
       }
     }
+  }
 
-    if (keyMapper(key, KeyActions.DELETE_ROW) && !this._isEditing) {
-      if (this._focusedCell) {
-        const rowIdx: number = this._focusedCell.rowIdx
-        this.deleteRow(rowIdx)
-      }
+  private deleteRowKeyHandler() {
+    if (this._focusedCell && !this._isEditing) {
+      const rowIdx: number = this._focusedCell.rowIdx
+      this.deleteRow(rowIdx)
     }
   }
 
