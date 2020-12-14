@@ -61,9 +61,11 @@ export class M2TableBody extends AbstractM2TablePart {
               ${this.buttons.map((button: TableButton) =>
                 this.renderButton(button, record)
               )}
-              ${this.columns.map((column: ColumnConfig, columnIdx: number) =>
-                this.renderTableCell(column, record, rowIdx, columnIdx)
-              )}
+              ${this.columns
+                .filter((column: ColumnConfig) => !column.hidden)
+                .map((column: ColumnConfig, columnIdx: number) =>
+                  this.renderTableCell(column, record, rowIdx, columnIdx)
+                )}
             </tr>
           `
         )}
@@ -160,20 +162,19 @@ export class M2TableBody extends AbstractM2TablePart {
     rowIdx: number,
     columnIdx: number
   ): TemplateResult {
-    return html` <td
-      width="${column.width || '150px'}"
-      ?hidden="${column.hidden}"
-    >
-      <m2-table-cell
-        rowIdx="${rowIdx}"
-        columnIdx="${columnIdx}"
-        .type="${column.type}"
-        .config="${column}"
-        .value="${record[column.name]}"
-        @modeChange="${this.onModeChangeHandler}"
-        @focusChange="${this.onFocusChangeHandler}"
-      ></m2-table-cell>
-    </td>`
+    return html`
+      <td width="${column.width || '150px'}" ?hidden="${column.hidden}">
+        <m2-table-cell
+          rowIdx="${rowIdx}"
+          columnIdx="${columnIdx}"
+          .type="${column.type}"
+          .config="${column}"
+          .value="${record[column.name]}"
+          @modeChange="${this.onModeChangeHandler}"
+          @focusChange="${this.onFocusChangeHandler}"
+        ></m2-table-cell>
+      </td>
+    `
   }
 
   updated(changedProps: PropertyValues): void {
