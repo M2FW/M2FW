@@ -2,6 +2,7 @@ import {
   ColumnAlign,
   ColumnConfig,
   ColumnTypes,
+  M2Table,
   ObjectColumnConfig,
 } from '@m2fw/table/src'
 import {
@@ -12,6 +13,22 @@ import {
   property,
 } from 'lit-element'
 
+interface User {
+  id?: string
+  name?: string
+}
+
+interface Setting {
+  id?: string
+  name?: string
+  category?: string
+  description?: string
+  value?: string
+  createdAt?: string
+  creator?: User
+  updatedAt?: string
+  updater?: User
+}
 @customElement('table-demo')
 export class TableDemo extends LitElement {
   @property({ type: Array }) columns: ColumnConfig[] = [
@@ -75,7 +92,7 @@ export class TableDemo extends LitElement {
     },
   ]
 
-  @property({ type: Array }) data: Record<string, any>[] = [
+  @property({ type: Array }) data: Setting[] = [
     {
       id: 'c2d4e33c-7244-4d08-81d5-6395ac5fc90c',
       name: 'Test',
@@ -83,13 +100,20 @@ export class TableDemo extends LitElement {
       description: 'test',
       value: 'test',
       createdAt: '1607757950766',
-      creator: null,
+      creator: undefined,
       updatedAt: '1607757950766',
       updater: {
         name: 'Jay Lee',
       },
     },
   ]
+
+  get table(): M2Table {
+    const table: M2Table | null = this.renderRoot?.querySelector('m2-table')
+    if (!table) throw new Error('Failed to find table')
+
+    return table
+  }
 
   render(): TemplateResult {
     return html`
@@ -99,6 +123,7 @@ export class TableDemo extends LitElement {
         .data="${this.data}"
       ></m2-table>
       <button @click="${this.refreshData}">Refresh</button>
+      <button @click="${this.getParams}">Get Params</button>
     `
   }
 
@@ -106,5 +131,12 @@ export class TableDemo extends LitElement {
     const tempData: Record<string, any>[] = this.data.splice(0)
     this.data = []
     this.data = tempData
+  }
+
+  getParams(): void {
+    console.log('Appended', this.table?.getAppended<Setting>())
+    console.log('Changed Only', this.table?.getChangedOnly<Setting>())
+    console.log('Changed', this.table?.getChanged<Setting>())
+    console.log('Deleted', this.table?.getDeleted<Setting>())
   }
 }
