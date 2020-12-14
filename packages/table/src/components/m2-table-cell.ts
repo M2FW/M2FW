@@ -123,11 +123,12 @@ export class M2TableCell extends LitElement {
   }
 
   get cell(): any {
-    if (!this.type) throw new Error('cell type is not defined')
+    if (!this.type)
+      throw new Error(`'${this.config.name}' field doesn't have column 'type'`)
     const tag: string = this.TAG_MAPPER[this.type]
     if (!tag) {
       throw new Error(
-        `Failed to find cell by '${this.type}' type, the type may not be supported`
+        `Failed to find cell by '${this.type}', which is defined in '${this.config.name}' column, the type may not be supported`
       )
     }
 

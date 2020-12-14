@@ -73,6 +73,14 @@ export class TableDemo extends LitElement {
       align: ColumnAlign.Left,
     },
     {
+      name: 'hidden',
+      header: '숨김',
+      type: ColumnTypes.Boolean,
+      width: 60,
+      align: ColumnAlign.Center,
+      editable: true,
+    },
+    {
       name: 'updatedAt',
       header: '수정일시',
       width: 180,
@@ -121,6 +129,7 @@ export class TableDemo extends LitElement {
         .selectable="${true}"
         .columns="${this.columns}"
         .data="${this.data}"
+        .addable="${false}"
       ></m2-table>
       <button @click="${this.refreshData}">Refresh</button>
       <button @click="${this.getParams}">Get Params</button>

@@ -6,7 +6,7 @@ import {
   html,
   property,
 } from 'lit-element'
-import { CellEvents, Events } from '../enums'
+import { CellEvents, ColumnTypes, Events } from '../enums'
 import { KeyActions, keyMapper } from '../utils/key-mapper'
 
 import { ColumnConfig } from '../interfaces'
@@ -157,8 +157,11 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
    * @description set value if value is changed and dispatch valueChange custom event.
    */
   private setValue(): void {
+    const valueAccessKey: string =
+      this.config.type === ColumnTypes.Boolean ? 'checked' : 'value'
+
     const oldValue: any = this.parseValue(this.value)
-    const newValue: any = this.parseValue((this.editor as any).value)
+    const newValue: any = this.parseValue((this.editor as any)[valueAccessKey])
 
     if (oldValue != newValue) {
       this.value = newValue
