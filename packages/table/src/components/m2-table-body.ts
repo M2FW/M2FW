@@ -278,7 +278,10 @@ export class M2TableBody extends AbstractM2TablePart {
    */
   getDataByStatus(status: DataStatus, withProps: boolean = false): TableData[] {
     let filteredData: TableData[] = this._data
-      .filter((record: TableData) => record?.__props__?.[status])
+      .filter(
+        (record: TableData) =>
+          record?.__props__?.[status] && Object.keys(record).length
+      )
       .map((record: TableData) => {
         const keys: string[] = Object.keys(record)
         keys.forEach((key: string) => {
