@@ -23,18 +23,19 @@ export function addPages(pages: PageDetail | PageDetail[]): void {
 /**
  * @description Dispatch action to update current state for indicating current title, route and element of page.
  *
- * @param target
+ * @param targetURL
  */
-export async function navigate(target: PageDetail | string): Promise<void> {
+export async function navigate(targetURL: string): Promise<void> {
   const state: any = store.getState()
   if (!state) return
-  let route: PageDetail = state.route?.pages?.find(
-    (page: PageDetail) => page.route === target
+
+  let route: PageDetail = state.route?.pages?.find((page: PageDetail) =>
+    checkURLMatching(page, targetURL)
   )
 
   if (!route) {
     console.warn(
-      `Couldn't find target route (${target}), move back to home route`
+      `Couldn't find page properly by passed target URL (${targetURL}), move back to home route`
     )
     navigateToHome()
     return
@@ -58,4 +59,21 @@ export function navigateToHome(): void {
 
 export function switchToImported(route: string): void {
   store.dispatch({ type: SWITCH_TO_IMPORTED, route })
+}
+
+function checkURLMatching({ route }: PageDetail, targetURL: string): boolean {
+  const splitRoute: string[] = route.split('/')
+  const splitTargetURL: string[] = targetURL.split('/')
+
+  if (splitRoute.length !== splitTargetURL.length) return false
+
+  let staticPartIndexes: number[] = []
+  splitRoute.forEach((route: string, idx: number) => {
+    if (!/^:/.test(route)) staticPartIndexes.push(idx)
+  })
+
+  return staticPartIndexes.every(
+    (staticPartIdx: number) =>
+      splitRoute[staticPartIdx] === splitTargetURL[staticPartIdx]
+  )
 }
