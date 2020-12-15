@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/playground-cli",
-  "version": "0.1.0-alpha.10",
+  "version": "0.1.0-alpha.11",
   "description": "playground-cli powered by M2 Framework",
   "main": "index.js",
   "repository": "https://github.com/m2fw/playground-cli",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@m2fw/redux-manager": "^0.1.0-alpha.3",
-    "@m2fw/router": "^0.1.0-alpha.10",
+    "@m2fw/router": "^0.1.0-alpha.11",
     "@m2fw/table": "^0.1.0-alpha.10",
     "lit-element": "^2.4.0",
     "redux": "^4.0.5",
