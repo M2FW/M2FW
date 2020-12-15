@@ -46,7 +46,7 @@ export async function navigate(targetURL: string): Promise<void> {
     switchToImported(route.route)
   }
 
-  store.dispatch({ type: NAVIGATE, ...route })
+  store.dispatch({ type: NAVIGATE, ...route, route: targetURL })
 }
 
 export function navigateToHome(): void {
