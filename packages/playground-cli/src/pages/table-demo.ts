@@ -1,10 +1,4 @@
-import {
-  ColumnAlign,
-  ColumnConfig,
-  ColumnTypes,
-  M2Table,
-  ObjectColumnConfig,
-} from '@m2fw/table/src'
+import { ColumnAlign, ColumnConfig, ColumnTypes, M2Table } from '@m2fw/table'
 import {
   LitElement,
   TemplateResult,
@@ -12,6 +6,8 @@ import {
   html,
   property,
 } from 'lit-element'
+
+import { navigate } from '@m2fw/router'
 
 interface User {
   id?: string
@@ -133,6 +129,8 @@ export class TableDemo extends LitElement {
       ></m2-table>
       <button @click="${this.refreshData}">Refresh</button>
       <button @click="${this.getParams}">Get Params</button>
+
+      <button @click="${this.navigateToDetailView}">Go to Detail</button>
     `
   }
 
@@ -147,5 +145,10 @@ export class TableDemo extends LitElement {
     console.log('Changed Only', this.table?.getChangedOnly<Setting>())
     console.log('Changed', this.table?.getChanged<Setting>())
     console.log('Deleted', this.table?.getDeleted<Setting>())
+  }
+
+  navigateToDetailView(): void {
+    const randomId: string = String(Date.now())
+    navigate(`menus/${randomId}`)
   }
 }

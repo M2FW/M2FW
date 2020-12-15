@@ -1,15 +1,14 @@
 import './m2-table-boolean-cell'
+import './m2-table-datetime-cell'
 import './m2-table-float-cell'
 import './m2-table-integer-cell'
 import './m2-table-object-cell'
 import './m2-table-select-cell'
 import './m2-table-string-cell'
-import './m2-table-datetime-cell'
 
 import {
   CSSResult,
   LitElement,
-  PropertyValues,
   TemplateResult,
   css,
   customElement,

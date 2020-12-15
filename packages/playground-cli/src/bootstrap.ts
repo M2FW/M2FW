@@ -13,6 +13,12 @@ const pages = [
     route: 'menus',
     importer: async () => console.log('sample'),
   },
+  {
+    title: 'Menu Manager Detail',
+    tagName: 'menu-management-detail',
+    route: 'menus/:id',
+    importer: async () => console.log('detail loaded'),
+  },
 ]
 addPages(pages)
 
