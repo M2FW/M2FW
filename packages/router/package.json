@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/router",
-  "version": "0.1.0-alpha.4",
+  "version": "0.1.0-alpha.10",
   "description": "M2 framework router for client side",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/router",
