@@ -29,6 +29,8 @@ export async function navigate(targetURL: string): Promise<void> {
   const state: any = store.getState()
   if (!state) return
 
+  targetURL = targetURL.replace(/(^\/|\/$)/g, '')
+
   let route: PageDetail = state.route?.pages?.find((page: PageDetail) =>
     checkURLMatching(page, targetURL)
   )

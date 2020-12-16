@@ -70,7 +70,12 @@ function extractValidPages(
     (page: PageDetail) => page.route
   )
 
-  return newPages.filter(
-    (page: PageDetail) => currentPageRouters.indexOf(page.route) === -1
-  )
+  return newPages
+    .filter((page: PageDetail) => currentPageRouters.indexOf(page.route) === -1)
+    .map((page: PageDetail) => {
+      return {
+        ...page,
+        route: page.route.replace(/(^\/|\/$)/g, ''),
+      }
+    })
 }
