@@ -752,7 +752,7 @@ export class M2TableBody extends AbstractM2TablePart {
     if (typeof value === 'string' && value === '') {
       return null
     } else {
-      value
+      return value
     }
   }
 }
