@@ -1,4 +1,4 @@
-import { addPages, route } from '@m2fw/router'
+import { addPages, route } from '@m2fw/router/src'
 
 import { store } from '@m2fw/redux-manager'
 
@@ -8,15 +8,9 @@ store.addReducers({
 
 const pages = [
   {
-    title: 'Menu Manager',
-    tagName: 'menu-management',
-    route: 'menus',
-    importer: async () => console.log('sample'),
-  },
-  {
-    title: 'Menu Manager Detail',
-    tagName: 'menu-management-detail',
-    route: 'menus/:id',
+    title: 'Demo Page',
+    tagName: 'demo-page',
+    route: 'demos/',
     importer: async () => console.log('detail loaded'),
   },
 ]

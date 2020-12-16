@@ -1,13 +1,16 @@
 import { ColumnAlign, ColumnConfig, ColumnTypes, M2Table } from '@m2fw/table'
 import {
   LitElement,
+  PropertyValues,
   TemplateResult,
   customElement,
   html,
   property,
 } from 'lit-element'
 
-import { navigate } from '@m2fw/router'
+import { connect } from 'pwa-helpers/connect-mixin'
+import { navigate } from '@m2fw/router/src'
+import { store } from '@m2fw/redux-manager'
 
 interface User {
   id?: string
@@ -26,7 +29,7 @@ interface Setting {
   updater?: User
 }
 @customElement('table-demo')
-export class TableDemo extends LitElement {
+export class TableDemo extends connect(store)(LitElement) {
   @property({ type: Array }) columns: ColumnConfig[] = [
     {
       name: 'name',
@@ -112,6 +115,11 @@ export class TableDemo extends LitElement {
     },
   ]
 
+  @property({ type: String }) route: string = location.pathname.replace(
+    /^\//,
+    ''
+  )
+
   get table(): M2Table {
     const table: M2Table | null = this.renderRoot?.querySelector('m2-table')
     if (!table) throw new Error('Failed to find table')
@@ -134,6 +142,14 @@ export class TableDemo extends LitElement {
     `
   }
 
+  updated(changedProps: PropertyValues): void {
+    if (changedProps.has('route')) {
+      if (this.route !== location.pathname.replace(/^\//, '')) {
+        window.history.pushState('', '', this.route)
+      }
+    }
+  }
+
   refreshData(): void {
     const tempData: Record<string, any>[] = this.data.splice(0)
     this.data = []
@@ -149,6 +165,10 @@ export class TableDemo extends LitElement {
 
   navigateToDetailView(): void {
     const randomId: string = String(Date.now())
-    navigate(`menus/${randomId}`)
+    navigate(`test/`)
+  }
+
+  stateChanged(state: any) {
+    this.route = state.route?.route
   }
 }

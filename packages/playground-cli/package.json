@@ -17,6 +17,7 @@
     "@m2fw/router": "^0.1.0-alpha.11",
     "@m2fw/table": "^0.1.0-alpha.10",
     "lit-element": "^2.4.0",
+    "pwa-helpers": "^0.9.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0"
   },
