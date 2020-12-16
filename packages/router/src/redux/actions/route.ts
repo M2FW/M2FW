@@ -56,7 +56,7 @@ export function navigateToHome(): void {
   const homeRoute: PageDetail = state.route.pages.find(
     (page: PageDetail) => page.route === state.route.homeRoute
   )
-  store.dispatch({ type: NAVIGATE, ...homeRoute })
+  navigate(homeRoute.route)
 }
 
 export function switchToImported(route: string): void {
