@@ -1,1 +1,1 @@
-export * from './table-demo'
+export * from './sample'

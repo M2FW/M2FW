@@ -1,9 +1,11 @@
 import { addPages, route } from '@m2fw/router/src'
 
+import { dialog } from '@m2fw/dialog/src'
 import { store } from '@m2fw/redux-manager'
 
 store.addReducers({
   route: route as any,
+  dialog: dialog as any,
 })
 
 const pages = [

@@ -19,7 +19,7 @@ export class PlaygroundApp extends LitElement {
       </header>
       <nav></nav>
       <main>
-        <table-demo></table-demo>
+        <sample-page></sample-page>
       </main>
       <aside></aside>
       <footer></footer>

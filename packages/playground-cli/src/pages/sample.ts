@@ -1,4 +1,11 @@
-import { ColumnAlign, ColumnConfig, ColumnTypes, M2Table } from '@m2fw/table'
+import '@m2fw/dialog/src'
+
+import {
+  ColumnAlign,
+  ColumnConfig,
+  ColumnTypes,
+  M2Table,
+} from '@m2fw/table/src'
 import {
   LitElement,
   PropertyValues,
@@ -10,6 +17,7 @@ import {
 
 import { connect } from 'pwa-helpers/connect-mixin'
 import { navigate } from '@m2fw/router/src'
+import { openDialog } from '@m2fw/dialog/src'
 import { store } from '@m2fw/redux-manager'
 
 interface User {
@@ -28,8 +36,8 @@ interface Setting {
   updatedAt?: string
   updater?: User
 }
-@customElement('table-demo')
-export class TableDemo extends connect(store)(LitElement) {
+@customElement('sample-page')
+export class Sample extends connect(store)(LitElement) {
   @property({ type: Array }) columns: ColumnConfig[] = [
     {
       name: 'name',
@@ -139,6 +147,9 @@ export class TableDemo extends connect(store)(LitElement) {
       <button @click="${this.getParams}">Get Params</button>
 
       <button @click="${this.navigateToDetailView}">Go to Detail</button>
+      <button @click="${this.openRandomDialog}">Open Random Dialog</button>
+
+      <m2-dialog></m2-dialog>
     `
   }
 
@@ -166,6 +177,23 @@ export class TableDemo extends connect(store)(LitElement) {
   navigateToDetailView(): void {
     const randomId: string = String(Date.now())
     navigate(`test/`)
+  }
+
+  openRandomDialog() {
+    openDialog({
+      template: {
+        content: html` <div
+          style="border: 1px solid black; border-radius: 0 0 5px 5px; flex: 1;"
+        >
+          <input />
+        </div>`,
+        header: html`<div
+          style="border: 1px solid black; border-radius: 5px 5px 0 0; border-bottom: 0px;"
+        >
+          Header
+        </div>`,
+      },
+    })
   }
 
   stateChanged(state: any) {
