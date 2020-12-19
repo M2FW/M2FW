@@ -16,9 +16,9 @@ import {
   ColumnTypes,
   M2Table,
 } from '@m2fw/table/src'
+import { Dialog, closeDialog, openDialog } from '@m2fw/dialog/src'
 
 import { connect } from 'pwa-helpers/connect-mixin'
-import { openDialog } from '@m2fw/dialog/src'
 import { store } from '@m2fw/redux-manager'
 
 interface User {
@@ -197,17 +197,13 @@ export class Sample extends connect(store)(LitElement) {
 
   openRandomDialog() {
     openDialog({
-      template: {
-        content: html` <div
-          style="border: 1px solid black; border-radius: 0 0 5px 5px; flex: 1;"
-        >
-          <input />
-        </div>`,
-        header: html`<div
-          style="border: 1px solid black; border-radius: 5px 5px 0 0; border-bottom: 0px;"
-        >
-          Header
-        </div>`,
+      templateRenderer: {
+        header: (dialog: Dialog) => {
+          return html`<button @click="${() => closeDialog(dialog)}">X</button>`
+        },
+        content: () => {
+          return html`<h2>Dialog Content</h2>`
+        },
       },
     })
   }

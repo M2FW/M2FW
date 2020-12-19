@@ -9,11 +9,6 @@ import {
 } from 'lit-element'
 import { Dialog, DialogState } from '../interfaces/dialog-state'
 
-<<<<<<< Updated upstream
-import { Dialog } from '../interfaces/dialog-state'
-=======
-import { closeDialog } from '../redux'
->>>>>>> Stashed changes
 import { connect } from 'pwa-helpers/connect-mixin'
 import { store } from '@m2fw/redux-manager'
 
@@ -166,11 +161,7 @@ export class M2Dialog extends connect(store)(LitElement) {
     this.clickY = currentY
   }
 
-<<<<<<< Updated upstream
-  calcPositionLeft(element: HTMLDivElement, diff: number): string {
-=======
   private calcPositionLeft(element: HTMLDivElement, diff: number): string {
->>>>>>> Stashed changes
     const currentLeft: number = element.getBoundingClientRect().left
     const left: number = currentLeft + diff * -1
     const rightEnd: number = left + element.clientWidth
@@ -184,11 +175,7 @@ export class M2Dialog extends connect(store)(LitElement) {
     }
   }
 
-<<<<<<< Updated upstream
-  calcPositionTop(element: HTMLDivElement, diff: number): string {
-=======
   private calcPositionTop(element: HTMLDivElement, diff: number): string {
->>>>>>> Stashed changes
     const currentTop: number = element.getBoundingClientRect().top
     const top: number = currentTop + diff * -1
     const bottomEnd: number = top + element.clientHeight
