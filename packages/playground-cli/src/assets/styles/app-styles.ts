@@ -18,7 +18,10 @@ export const layoutStyle = css`
   }
   main {
     grid-area: main;
-    overflow: auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
   aside {
     grid-area: aside;

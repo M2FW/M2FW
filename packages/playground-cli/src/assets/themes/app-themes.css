@@ -9,6 +9,6 @@ body {
 body {
   --app-grid-template-areas: 'header header header' 'nav main aside'
     'nav footer aside';
-  --app-grid-template-rows: 10vw 1fr 10vw;
-  --app-grid-template-columns: 10vh 1fr 5vh;
+  --app-grid-template-rows: auto 1fr 100px;
+  --app-grid-template-columns: 200px 1fr 100px;
 }

@@ -1,22 +1,23 @@
 import '@m2fw/dialog/src'
 
 import {
+  CSSResult,
+  LitElement,
+  PropertyValues,
+  TemplateResult,
+  css,
+  customElement,
+  html,
+  property,
+} from 'lit-element'
+import {
   ColumnAlign,
   ColumnConfig,
   ColumnTypes,
   M2Table,
 } from '@m2fw/table/src'
-import {
-  LitElement,
-  PropertyValues,
-  TemplateResult,
-  customElement,
-  html,
-  property,
-} from 'lit-element'
 
 import { connect } from 'pwa-helpers/connect-mixin'
-import { navigate } from '@m2fw/router/src'
 import { openDialog } from '@m2fw/dialog/src'
 import { store } from '@m2fw/redux-manager'
 
@@ -107,21 +108,25 @@ export class Sample extends connect(store)(LitElement) {
     },
   ]
 
-  @property({ type: Array }) data: Setting[] = [
-    {
-      id: 'c2d4e33c-7244-4d08-81d5-6395ac5fc90c',
-      name: 'Test',
-      category: 'SELLER_SETTING',
-      description: 'test',
-      value: 'test',
-      createdAt: '1607757950766',
-      creator: undefined,
-      updatedAt: '1607757950766',
-      updater: {
-        name: 'Jay Lee',
-      },
-    },
-  ]
+  @property({ type: Array }) data: Setting[] = new Array(50)
+    .fill('')
+    .map((item) => {
+      return {
+        id: 'c2d4e33c-7244-4d08-81d5-6395ac5fc90c',
+        name: 'Test',
+        category: 'SELLER_SETTING',
+        description: 'test',
+        value: 'test',
+        createdAt: '1607757950766',
+        creator: {
+          name: 'Jay Lee',
+        },
+        updatedAt: '1607757950766',
+        updater: {
+          name: 'Jay Lee',
+        },
+      }
+    })
 
   @property({ type: String }) route: string = location.pathname.replace(
     /^\//,
@@ -135,6 +140,21 @@ export class Sample extends connect(store)(LitElement) {
     return table
   }
 
+  static get styles(): CSSResult[] {
+    return [
+      css`
+        :host {
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        }
+        .button-container {
+          margin: 10px 0px 0px auto;
+        }
+      `,
+    ]
+  }
+
   render(): TemplateResult {
     return html`
       <m2-table
@@ -143,11 +163,12 @@ export class Sample extends connect(store)(LitElement) {
         .data="${this.data}"
         .addable="${false}"
       ></m2-table>
-      <button @click="${this.refreshData}">Refresh</button>
-      <button @click="${this.getParams}">Get Params</button>
 
-      <button @click="${this.navigateToDetailView}">Go to Detail</button>
-      <button @click="${this.openRandomDialog}">Open Random Dialog</button>
+      <div class="button-container">
+        <button @click="${this.refreshData}">Refresh</button>
+        <button @click="${this.getParams}">Get Params</button>
+        <button @click="${this.openRandomDialog}">Open Random Dialog</button>
+      </div>
 
       <m2-dialog></m2-dialog>
     `
@@ -172,11 +193,6 @@ export class Sample extends connect(store)(LitElement) {
     console.log('Changed Only', this.table?.getChangedOnly<Setting>())
     console.log('Changed', this.table?.getChanged<Setting>())
     console.log('Deleted', this.table?.getDeleted<Setting>())
-  }
-
-  navigateToDetailView(): void {
-    const randomId: string = String(Date.now())
-    navigate(`test/`)
   }
 
   openRandomDialog() {
