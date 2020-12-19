@@ -36,6 +36,7 @@ export class M2Dialog extends connect(store)(LitElement) {
             rgba(0, 0, 0, 0.3)
           );
           z-index: 9;
+          display: grid;
         }
         :host([removeBackdrop]) > #modal {
           width: 0;
@@ -44,21 +45,16 @@ export class M2Dialog extends connect(store)(LitElement) {
         .dialog {
           display: flex;
           flex-direction: column;
-          position: absolute;
+          position: relative;
           border: none;
           border-radius: none;
           background-color: transparent;
-          width: var(--m2-dialog-width, 60vw);
-          height: var(--m2-dialog-height, 40vh);
-          left: calc((100vw - var(--m2-dialog-width, 60vw)) / 2);
-          top: calc((100vh - var(--m2-dialog-height, 40vh)) / 2);
           resize: var(--m2-dialog-resize, both);
           overflow: auto;
           z-index: 10;
-          min-height: var(--m2-dialog-min-height, 200px);
-          min-width: var(--m2-dialog-min-width, 200px);
-          max-height: 100vh;
-          max-width: 100vw;
+          max-height: var(--m2-dialog-max-height, 80vh);
+          max-width: var(--m2-dialog-max-width, 80vw);
+          margin: auto;
         }
         #popup-header {
           cursor: move;
@@ -146,13 +142,14 @@ export class M2Dialog extends connect(store)(LitElement) {
       this.draggingDialog,
       diffY
     )
+    this.draggingDialog.style.position = 'absolute'
 
     this.clickX = currentX
     this.clickY = currentY
   }
 
   calcPositionLeft(element: HTMLDivElement, diff: number): string {
-    const currentLeft: number = element.offsetLeft
+    const currentLeft: number = element.getBoundingClientRect().left
     const left: number = currentLeft + diff * -1
     const rightEnd: number = left + element.clientWidth
 
@@ -161,13 +158,12 @@ export class M2Dialog extends connect(store)(LitElement) {
     } else if (window.innerWidth <= rightEnd) {
       return `${window.innerWidth - element.clientWidth}px`
     } else {
-      console.log(left)
       return `${left}px`
     }
   }
 
   calcPositionTop(element: HTMLDivElement, diff: number): string {
-    const currentTop: number = element.offsetHeight
+    const currentTop: number = element.getBoundingClientRect().top
     const top: number = currentTop + diff * -1
     const bottomEnd: number = top + element.clientHeight
 
