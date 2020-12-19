@@ -8,7 +8,7 @@
   </a>
 </p>
 
-> UI component for dialog popup
+> UI component for dialog
 
 ## Install
 
@@ -25,7 +25,7 @@ yarn build
 ## Build for development
 
 ```sh
-# Watching source chages to rebuild it
+# Watching source changes to rebuild it
 # You can `yarn link` to the place where you want to use it
 yarn build:dev
 ```
