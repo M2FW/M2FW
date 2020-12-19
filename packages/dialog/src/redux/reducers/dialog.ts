@@ -4,6 +4,7 @@ import { Dialog, DialogState } from '../../interfaces/dialog-state'
 import { v4 } from 'uuid'
 
 const INITIAL_STATE: DialogState = {
+  enableBackdrop: true,
   dialogs: [],
 }
 

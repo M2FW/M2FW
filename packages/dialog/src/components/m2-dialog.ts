@@ -7,8 +7,13 @@ import {
   html,
   property,
 } from 'lit-element'
+import { Dialog, DialogState } from '../interfaces/dialog-state'
 
+<<<<<<< Updated upstream
 import { Dialog } from '../interfaces/dialog-state'
+=======
+import { closeDialog } from '../redux'
+>>>>>>> Stashed changes
 import { connect } from 'pwa-helpers/connect-mixin'
 import { store } from '@m2fw/redux-manager'
 
@@ -74,6 +79,13 @@ export class M2Dialog extends connect(store)(LitElement) {
               ${dialogs.map((dialog: Dialog) => {
                 const dialogId: string | undefined = dialog.id
                 if (!dialogId) throw new Error('Dialog ID is not defined')
+                const headerRenderer:
+                  | ((dialog: Dialog) => TemplateResult)
+                  | TemplateResult
+                  | undefined = dialog.templateRenderer.header
+                const contentRenderer:
+                  | ((dialog: Dialog) => TemplateResult)
+                  | TemplateResult = dialog.templateRenderer.content
 
                 return html`
                   <div
@@ -86,9 +98,16 @@ export class M2Dialog extends connect(store)(LitElement) {
                       id="popup-header"
                       @mousedown="${this.onmousedownHandler.bind(this)}"
                     >
-                      ${dialog.template.header}
+                      ${headerRenderer && typeof headerRenderer === 'function'
+                        ? headerRenderer(dialog)
+                        : headerRenderer && headerRenderer !== undefined
+                        ? html`${headerRenderer}`
+                        : ''}
                     </div>
-                    ${dialog.template.content}
+
+                    ${contentRenderer && typeof contentRenderer === 'function'
+                      ? contentRenderer(dialog)
+                      : html`${contentRenderer}`}
                   </div>
                 `
               })}
@@ -104,7 +123,7 @@ export class M2Dialog extends connect(store)(LitElement) {
     return modal
   }
 
-  onmousedownHandler(e: MouseEvent) {
+  private onmousedownHandler(e: MouseEvent) {
     this.draggingDialog = (e.currentTarget as HTMLDivElement)
       .parentElement as HTMLDivElement
     this.reorderStack(this.draggingDialog)
@@ -113,14 +132,14 @@ export class M2Dialog extends connect(store)(LitElement) {
     this.onmousemove = this.onmousemoveHandler.bind(this)
   }
 
-  clearDragHandler(e: MouseEvent) {
+  private clearDragHandler(e: MouseEvent) {
     this.onmousemove = null
     this.draggingDialog = undefined
     this.clickX = undefined
     this.clickY = undefined
   }
 
-  onmousemoveHandler(e: MouseEvent) {
+  private onmousemoveHandler(e: MouseEvent) {
     const currentX: number = e.pageX
     const currentY: number = e.pageY
 
@@ -147,7 +166,11 @@ export class M2Dialog extends connect(store)(LitElement) {
     this.clickY = currentY
   }
 
+<<<<<<< Updated upstream
   calcPositionLeft(element: HTMLDivElement, diff: number): string {
+=======
+  private calcPositionLeft(element: HTMLDivElement, diff: number): string {
+>>>>>>> Stashed changes
     const currentLeft: number = element.getBoundingClientRect().left
     const left: number = currentLeft + diff * -1
     const rightEnd: number = left + element.clientWidth
@@ -161,7 +184,11 @@ export class M2Dialog extends connect(store)(LitElement) {
     }
   }
 
+<<<<<<< Updated upstream
   calcPositionTop(element: HTMLDivElement, diff: number): string {
+=======
+  private calcPositionTop(element: HTMLDivElement, diff: number): string {
+>>>>>>> Stashed changes
     const currentTop: number = element.getBoundingClientRect().top
     const top: number = currentTop + diff * -1
     const bottomEnd: number = top + element.clientHeight
@@ -201,7 +228,9 @@ export class M2Dialog extends connect(store)(LitElement) {
   }
 
   stateChanged(state: any) {
-    this.dialogs = state.dialog?.dialogs || this.dialogs
+    const { dialogs, enableBackdrop }: DialogState = state.dialog
+    this.dialogs = dialogs || this.dialogs
+    this.removeBackdrop = !enableBackdrop
     this.requestUpdate()
   }
 }
