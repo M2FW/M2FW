@@ -198,10 +198,10 @@ export class Sample extends connect(store)(LitElement) {
   openRandomDialog() {
     openDialog({
       templateRenderer: {
-        header: (dialog: Dialog) => {
+        header: (html: any, dialog: Dialog) => {
           return html`<button @click="${() => closeDialog(dialog)}">X</button>`
         },
-        content: () => {
+        content: (html: any) => {
           return html`<h2>Dialog Content</h2>`
         },
       },
