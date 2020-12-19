@@ -16,7 +16,7 @@ export const headerStyle: CSSResult = css`
     visibility: hidden;
     display: flex;
     padding: var(--m2-table-button-padding, 0px);
-    margin: var(--m2-tablebutton-margin, 0px);
+    margin: var(--m2-table-button-margin, 0px);
     width: var(--m2-table-button-width, 20px);
     height: var(--m2-table-button-height, 20px);
   }
@@ -42,7 +42,8 @@ export const bodyStyle: CSSResult = css`
     background-color: var(--m2-table-body-bg-color, lightgray);
   }
   :host > * {
-    color: var(--m2-table-font-color, black);
+    color: transparent;
+    text-shadow: 0 0 0 var(--m2-table-font-color, black);
     font-size: var(--m2-table-font-size, 11px);
   }
   :host .row-numbering {
@@ -92,7 +93,7 @@ export const bodyStyle: CSSResult = css`
   button {
     display: flex;
     padding: var(--m2-table-button-padding, 0px);
-    margin: var(--m2-tablebutton-margin, 0px);
+    margin: var(--m2-table-button-margin, 0px);
     width: var(--m2-table-button-width, 20px);
     height: var(--m2-table-button-height, 20px);
     background: var(--m2-table-button-bg-color, transparent);

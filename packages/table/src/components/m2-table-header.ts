@@ -67,7 +67,7 @@ export class M2TableHeader extends AbstractM2TablePart {
         <input
           id="select-all"
           type="checkbox"
-          @change="${this.onSelecterAllChangeHandler.bind(this)}"
+          @change="${this.onSelectorAllChangeHandler.bind(this)}"
         />
       </th>
     `
@@ -99,10 +99,10 @@ export class M2TableHeader extends AbstractM2TablePart {
 
   /**
    * @description Change event handler of select-all check box.
-   * It will distach custom event (select-all, deselect-all) based on the value of current checkbox.
+   * It will dispatch custom event (select-all, deselect-all) based on the value of current checkbox.
    * @param e
    */
-  onSelecterAllChangeHandler(e: InputEvent): void {
+  onSelectorAllChangeHandler(e: InputEvent): void {
     const checked: boolean = (e.currentTarget as HTMLInputElement).checked
     if (checked) {
       this.dispatchEvent(

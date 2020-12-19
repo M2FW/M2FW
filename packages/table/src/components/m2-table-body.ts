@@ -86,7 +86,7 @@ export class M2TableBody extends AbstractM2TablePart {
       <input
         rowIdx="${rowIdx}"
         type="checkbox"
-        @change="${this.onSelecterChangeHandler.bind(this)}"
+        @change="${this.onSelectorChangeHandler.bind(this)}"
         .checked="${record?.[this.propertyAccessKey]?.selected || false}"
       />
     </td>`
@@ -398,7 +398,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @description change handler of select input
    * @param e
    */
-  onSelecterChangeHandler(e: InputEvent): void {
+  onSelectorChangeHandler(e: InputEvent): void {
     const checkbox: HTMLInputElement = e.currentTarget as HTMLInputElement
     const rowIdx: number = Number(checkbox.getAttribute('rowIdx'))
     const checked: boolean = checkbox.checked

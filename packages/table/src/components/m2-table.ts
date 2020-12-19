@@ -28,7 +28,7 @@ export class M2Table extends AbstractM2TablePart {
           display: flex;
           flex: 1;
           flex-direction: column;
-          overflow: hidden;
+          overflow: auto hidden;
         }
       `,
     ]
