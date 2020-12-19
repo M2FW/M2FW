@@ -10,6 +10,7 @@ import {
 import { Dialog, DialogState } from '../interfaces/dialog-state'
 
 import { connect } from 'pwa-helpers/connect-mixin'
+import { render } from 'lit-html'
 import { store } from '@m2fw/redux-manager'
 
 @customElement('m2-dialog')
@@ -74,13 +75,12 @@ export class M2Dialog extends connect(store)(LitElement) {
               ${dialogs.map((dialog: Dialog) => {
                 const dialogId: string | undefined = dialog.id
                 if (!dialogId) throw new Error('Dialog ID is not defined')
-                const headerRenderer:
-                  | ((dialog: Dialog) => TemplateResult)
-                  | TemplateResult
-                  | undefined = dialog.templateRenderer.header
-                const contentRenderer:
-                  | ((dialog: Dialog) => TemplateResult)
-                  | TemplateResult = dialog.templateRenderer.content
+                const headerRenderer = dialog.templateRenderer.header
+                const contentRenderer = dialog.templateRenderer.content
+
+                if (!contentRenderer) {
+                  throw new Error('Content Renderer is not defined.')
+                }
 
                 return html`
                   <div
@@ -93,16 +93,10 @@ export class M2Dialog extends connect(store)(LitElement) {
                       id="popup-header"
                       @mousedown="${this.onmousedownHandler.bind(this)}"
                     >
-                      ${headerRenderer && typeof headerRenderer === 'function'
-                        ? headerRenderer(dialog)
-                        : headerRenderer && headerRenderer !== undefined
-                        ? html`${headerRenderer}`
-                        : ''}
+                      ${headerRenderer ? headerRenderer(html, dialog) : ''}
                     </div>
 
-                    ${contentRenderer && typeof contentRenderer === 'function'
-                      ? contentRenderer(dialog)
-                      : html`${contentRenderer}`}
+                    ${contentRenderer(html, dialog)}
                   </div>
                 `
               })}
