@@ -9,7 +9,6 @@ import {
 } from 'lit-element'
 
 import { Dialog } from '../interfaces/dialog-state'
-import { closeDialog } from '../redux'
 import { connect } from 'pwa-helpers/connect-mixin'
 import { store } from '@m2fw/redux-manager'
 
