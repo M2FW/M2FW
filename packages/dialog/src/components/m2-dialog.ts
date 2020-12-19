@@ -10,7 +10,6 @@ import {
 import { Dialog, DialogState } from '../interfaces/dialog-state'
 
 import { connect } from 'pwa-helpers/connect-mixin'
-import { render } from 'lit-html'
 import { store } from '@m2fw/redux-manager'
 
 @customElement('m2-dialog')
