@@ -51,8 +51,8 @@ export class M2Dialog extends connect(store)(LitElement) {
           resize: var(--m2-dialog-resize, both);
           overflow: auto;
           z-index: 10;
-          max-height: var(--m2-dialog-max-height, 80vh);
-          max-width: var(--m2-dialog-max-width, 80vw);
+          max-height: 80vh;
+          max-width: 80vw;
           margin: auto;
         }
         #popup-header {
