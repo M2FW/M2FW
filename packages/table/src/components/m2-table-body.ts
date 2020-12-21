@@ -497,7 +497,9 @@ export class M2TableBody extends AbstractM2TablePart {
     return (
       columnIdx >= 0 &&
       rowIdx >= 0 &&
-      columnIdx <= this.columns.length - 1 &&
+      columnIdx <=
+        this.columns.filter((column: ColumnConfig) => !column.hidden).length -
+          1 &&
       rowIdx <= this._data.length - 1
     )
   }
