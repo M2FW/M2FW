@@ -1,5 +1,14 @@
 import { CSSResult, css } from 'lit-element'
 
+export const commonStyle: CSSResult = css`
+  .selector {
+    width: var(--m2-table-selector-width, 30px);
+  }
+  .numbering {
+    width: var(--m2-table-numbering-width, 30px);
+  }
+`
+
 export const headerStyle: CSSResult = css`
   :host {
     display: table-header-group;

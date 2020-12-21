@@ -12,16 +12,17 @@ import {
 import {
   ColumnConfig,
   IconButtonOptions,
+  RowSelectorOption,
   TableButton,
   TableChangeValueProperties,
   TableData,
   TextButtonOptions,
 } from '../interfaces'
 import { KeyActions, keyMapper } from '../utils/key-mapper'
+import { bodyStyle, commonStyle } from '../assets/styles'
 
 import { AbstractM2TablePart } from '../abstracts'
 import { M2TableCell } from './m2-table-cell'
-import { bodyStyle } from '../assets/styles'
 
 @customElement('m2-table-body')
 export class M2TableBody extends AbstractM2TablePart {
@@ -32,7 +33,7 @@ export class M2TableBody extends AbstractM2TablePart {
   @property({ type: Object }) private _data: TableData = []
 
   static get styles(): CSSResult[] {
-    return [bodyStyle]
+    return [commonStyle, bodyStyle]
   }
 
   private propertyAccessKey: string = '__props__'
@@ -75,17 +76,26 @@ export class M2TableBody extends AbstractM2TablePart {
 
   private renderRowNumbering(rowIdx: number): TemplateResult {
     return html`
-      <td class="row-numbering" width="30">
+      <td class="row-numbering numbering">
         <span class="row-num">${rowIdx + 1}.</span>
       </td>
     `
   }
 
   private renderSelectInput(rowIdx: number, record: TableData): TemplateResult {
-    return html`<td>
+    let rowSelectorOption: RowSelectorOption = { exclusive: false }
+
+    if (typeof this.selectable !== 'boolean') {
+      rowSelectorOption = this.selectable
+    }
+    const { exclusive }: RowSelectorOption = rowSelectorOption
+
+    const type: 'radio' | 'checkbox' = exclusive ? 'radio' : 'checkbox'
+    return html`<td class="row-selector selector">
       <input
         rowIdx="${rowIdx}"
-        type="checkbox"
+        name="selector"
+        type="${type}"
         @change="${this.onSelectorChangeHandler.bind(this)}"
         .checked="${record?.[this.propertyAccessKey]?.selected || false}"
       />
@@ -189,6 +199,13 @@ export class M2TableBody extends AbstractM2TablePart {
         this.appendData()
       }
     }
+  }
+
+  getSelectedRowElements(): HTMLTableRowElement[] {
+    const selectedRowElements: HTMLTableRowElement[] = Array.from(
+      this.renderRoot?.querySelectorAll('tr[selected]')
+    )
+    return selectedRowElements
   }
 
   /**
@@ -425,6 +442,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param event
    */
   onkeydownHandler(event: KeyboardEvent): void {
+    event.preventDefault()
     const key: string = event.code
     if (keyMapper(key, KeyActions.MOVE_FOCUSING))
       this.moveFocusingKeyHandler(key)
@@ -586,6 +604,21 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param rowIdx
    */
   selectRow(rowIdx: number): void {
+    if (typeof this.selectable !== 'boolean') {
+      const { exclusive }: RowSelectorOption = this.selectable
+      if (exclusive) {
+        const selectedRowElements: HTMLTableRowElement[] = this.getSelectedRowElements()
+        if (selectedRowElements?.length) {
+          selectedRowElements.forEach((rowElement: HTMLTableRowElement) => {
+            const rowIdx: string | null = rowElement.getAttribute('rowidx')
+            if (rowIdx) {
+              this.deselectRow(Number(rowIdx))
+            }
+          })
+        }
+      }
+    }
+
     this._data[rowIdx] = {
       ...this._data[rowIdx],
       [this.propertyAccessKey]: {

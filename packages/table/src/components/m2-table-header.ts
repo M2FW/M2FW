@@ -3,17 +3,18 @@ import { CSSResult, TemplateResult, customElement, html } from 'lit-element'
 import {
   ColumnConfig,
   IconButtonOptions,
+  RowSelectorOption,
   TableButton,
   TextButtonOptions,
 } from '../interfaces'
+import { commonStyle, headerStyle } from '../assets/styles'
 
 import { AbstractM2TablePart } from '../abstracts'
-import { headerStyle } from '../assets/styles'
 
 @customElement('m2-table-header')
 export class M2TableHeader extends AbstractM2TablePart {
   static get styles(): CSSResult[] {
-    return [headerStyle]
+    return [commonStyle, headerStyle]
   }
 
   render(): TemplateResult {
@@ -34,7 +35,7 @@ export class M2TableHeader extends AbstractM2TablePart {
   }
 
   private renderRowNumbering(): TemplateResult {
-    return html` <th class="header-numbering" width="30">No.</th> `
+    return html` <th class="header-numbering numbering">No.</th> `
   }
 
   private renderButton(button: TableButton): TemplateResult | void {
@@ -62,13 +63,25 @@ export class M2TableHeader extends AbstractM2TablePart {
   }
 
   private renderSelectInput(): TemplateResult {
+    let rowSelectorOption: RowSelectorOption = { exclusive: false }
+
+    if (typeof this.selectable !== 'boolean') {
+      rowSelectorOption = this.selectable
+    }
+
+    const { exclusive }: RowSelectorOption = rowSelectorOption
+
     return html`
-      <th>
-        <input
-          id="select-all"
-          type="checkbox"
-          @change="${this.onSelectorAllChangeHandler.bind(this)}"
-        />
+      <th class="header-selector selector">
+        ${exclusive
+          ? ''
+          : html`
+              <input
+                id="select-all"
+                type="checkbox"
+                @change="${this.onSelectorAllChangeHandler.bind(this)}"
+              />
+            `}
       </th>
     `
   }
