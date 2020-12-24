@@ -442,7 +442,6 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param event
    */
   onkeydownHandler(event: KeyboardEvent): void {
-    event.preventDefault()
     const key: string = event.code
     if (keyMapper(key, KeyActions.MOVE_FOCUSING))
       this.moveFocusingKeyHandler(key)
