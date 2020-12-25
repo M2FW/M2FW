@@ -1,24 +1,11 @@
 import '@m2fw/dialog/src'
 
-import {
-  CSSResult,
-  LitElement,
-  PropertyValues,
-  TemplateResult,
-  css,
-  customElement,
-  html,
-  property,
-} from 'lit-element'
-import {
-  ColumnAlign,
-  ColumnConfig,
-  ColumnTypes,
-  M2Table,
-} from '@m2fw/table/src'
+import { CSSResult, LitElement, PropertyValues, TemplateResult, css, customElement, html, property } from 'lit-element'
+import { ColumnAlign, ColumnConfig, ColumnTypes, M2Table } from '@m2fw/table/src'
 import { Dialog, closeDialog, openDialog } from '@m2fw/dialog/src'
 
 import { connect } from 'pwa-helpers/connect-mixin'
+import { navigate } from '@m2fw/router/src'
 import { store } from '@m2fw/redux-manager'
 
 interface User {
@@ -108,30 +95,25 @@ export class Sample extends connect(store)(LitElement) {
     },
   ]
 
-  @property({ type: Array }) data: Setting[] = new Array(50)
-    .fill('')
-    .map((item) => {
-      return {
-        id: 'c2d4e33c-7244-4d08-81d5-6395ac5fc90c',
-        name: 'Test',
-        category: 'SELLER_SETTING',
-        description: 'test',
-        value: 'test',
-        createdAt: '1607757950766',
-        creator: {
-          name: 'Jay Lee',
-        },
-        updatedAt: '1607757950766',
-        updater: {
-          name: 'Jay Lee',
-        },
-      }
-    })
+  @property({ type: Array }) data: Setting[] = new Array(50).fill('').map((item) => {
+    return {
+      id: 'c2d4e33c-7244-4d08-81d5-6395ac5fc90c',
+      name: 'Test',
+      category: 'SELLER_SETTING',
+      description: 'test',
+      value: 'test',
+      createdAt: '1607757950766',
+      creator: {
+        name: 'Jay Lee',
+      },
+      updatedAt: '1607757950766',
+      updater: {
+        name: 'Jay Lee',
+      },
+    }
+  })
 
-  @property({ type: String }) route: string = location.pathname.replace(
-    /^\//,
-    ''
-  )
+  @property({ type: String }) route: string = location.pathname.replace(/^\//, '')
 
   get table(): M2Table {
     const table: M2Table | null = this.renderRoot?.querySelector('m2-table')
@@ -157,17 +139,14 @@ export class Sample extends connect(store)(LitElement) {
 
   render(): TemplateResult {
     return html`
-      <m2-table
-        .selectable="${true}"
-        .columns="${this.columns}"
-        .data="${this.data}"
-        .addable="${false}"
-      ></m2-table>
+      <m2-table .selectable="${true}" .columns="${this.columns}" .data="${this.data}" .addable="${false}"></m2-table>
 
       <div class="button-container">
         <button @click="${this.refreshData}">Refresh</button>
         <button @click="${this.getParams}">Get Params</button>
         <button @click="${this.openRandomDialog}">Open Random Dialog</button>
+        <button @click="${() => navigate('demos')}">Navigate to Somewhere without query string</button>
+        <button @click="${() => navigate('demos?query-str=value')}">Navigate to Somewhere with query string</button>
       </div>
 
       <m2-dialog></m2-dialog>

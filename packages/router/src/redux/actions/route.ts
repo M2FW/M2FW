@@ -30,15 +30,12 @@ export async function navigate(targetURL: string): Promise<void> {
   if (!state) return
 
   targetURL = targetURL.replace(/(^\/|\/$)/g, '')
+  const [targetPath, search] = targetURL.split('?')
 
-  let route: PageDetail = state.route?.pages?.find((page: PageDetail) =>
-    checkURLMatching(page, targetURL)
-  )
+  let route: PageDetail = state.route?.pages?.find((page: PageDetail) => checkURLMatching(page, targetPath))
 
   if (!route) {
-    console.warn(
-      `Couldn't find page properly by passed target URL (${targetURL}), move back to home route`
-    )
+    console.warn(`Couldn't find page properly by passed target URL (${targetPath}), move back to home route`)
     navigateToHome()
     return
   }
@@ -53,9 +50,7 @@ export async function navigate(targetURL: string): Promise<void> {
 
 export function navigateToHome(): void {
   const state = store.getState() as Record<string, any>
-  const homeRoute: PageDetail = state.route.pages.find(
-    (page: PageDetail) => page.route === state.route.homeRoute
-  )
+  const homeRoute: PageDetail = state.route.pages.find((page: PageDetail) => page.route === state.route.homeRoute)
   navigate(homeRoute.route)
 }
 
@@ -74,8 +69,5 @@ function checkURLMatching({ route }: PageDetail, targetURL: string): boolean {
     if (!/^:/.test(route)) staticPartIndexes.push(idx)
   })
 
-  return staticPartIndexes.every(
-    (staticPartIdx: number) =>
-      splitRoute[staticPartIdx] === splitTargetURL[staticPartIdx]
-  )
+  return staticPartIndexes.every((staticPartIdx: number) => splitRoute[staticPartIdx] === splitTargetURL[staticPartIdx])
 }

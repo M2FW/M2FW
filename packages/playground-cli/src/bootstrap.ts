@@ -12,7 +12,7 @@ const pages = [
   {
     title: 'Demo Page',
     tagName: 'demo-page',
-    route: 'demos/',
+    route: 'demos',
     importer: async () => console.log('detail loaded'),
   },
 ]
