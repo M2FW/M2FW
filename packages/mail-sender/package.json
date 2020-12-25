@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/mail-sender",
-  "version": "0.1.0-alpha.21",
+  "version": "0.1.0-alpha.22",
   "description": "Mail sender by M2 Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/mail-sender",
