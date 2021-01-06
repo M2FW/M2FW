@@ -44,9 +44,9 @@ export async function navigate(targetURL: string): Promise<void> {
   }
 
   if (!route.imported) {
+    switchToImported(route.route)
     await route.importer()
     if (importedHandler) importedHandler(route)
-    switchToImported(route.route)
   }
 
   store.dispatch({ type: NAVIGATE, title: route.title, route: targetURL })
@@ -62,8 +62,8 @@ export function switchToImported(route: string): void {
   store.dispatch({ type: SWITCH_TO_IMPORTED, route })
 }
 
-export function setImportedHandler(handler: (page: PageDetail) => any): void {
-  store.dispatch({ type: SET_HOME_ROUTE, handler })
+export function setImportedHandler(importedHandler: (page: PageDetail) => any): void {
+  store.dispatch({ type: SET_IMPORTED_HANDLER, importedHandler })
 }
 
 function checkURLMatching({ route }: PageDetail, targetURL: string): boolean {
