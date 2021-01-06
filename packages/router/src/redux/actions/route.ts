@@ -1,7 +1,9 @@
-import { PageDetail } from '../../interfaces'
+import { PageDetail, RouteState } from '../../interfaces'
+
 import { store } from '@m2fw/redux-manager'
 
 export const SET_HOME_ROUTE: string = 'SET_HOME_ROUTE'
+export const SET_IMPORTED_HANDLER: string = 'SET_IMPORTED_HANDLER'
 export const ADD_PAGES: string = 'ADD_PAGES'
 export const NAVIGATE: string = 'NAVIGATE'
 export const SWITCH_TO_IMPORTED: string = 'SWITCH_TO_IMPORTED'
@@ -26,13 +28,14 @@ export function addPages(pages: PageDetail | PageDetail[]): void {
  * @param targetURL
  */
 export async function navigate(targetURL: string): Promise<void> {
-  const state: any = store.getState()
+  const state: { route: RouteState } = store.getState() as { route: RouteState }
   if (!state) return
 
   targetURL = targetURL.replace(/(^\/|\/$)/g, '')
   const [targetPath, search] = targetURL.split('?')
 
-  let route: PageDetail = state.route?.pages?.find((page: PageDetail) => checkURLMatching(page, targetPath))
+  let route: PageDetail | undefined = state.route?.pages?.find((page: PageDetail) => checkURLMatching(page, targetPath))
+  const importedHandler: ((route: PageDetail) => any) | undefined = state.route.importedHandler
 
   if (!route) {
     console.warn(`Couldn't find page properly by passed target URL (${targetPath}), move back to home route`)
@@ -42,10 +45,11 @@ export async function navigate(targetURL: string): Promise<void> {
 
   if (!route.imported) {
     await route.importer()
+    if (importedHandler) importedHandler(route)
     switchToImported(route.route)
   }
 
-  store.dispatch({ type: NAVIGATE, ...route, route: targetURL })
+  store.dispatch({ type: NAVIGATE, title: route.title, route: targetURL })
 }
 
 export function navigateToHome(): void {
@@ -56,6 +60,10 @@ export function navigateToHome(): void {
 
 export function switchToImported(route: string): void {
   store.dispatch({ type: SWITCH_TO_IMPORTED, route })
+}
+
+export function setImportedHandler(handler: (page: PageDetail) => any): void {
+  store.dispatch({ type: SET_HOME_ROUTE, handler })
 }
 
 function checkURLMatching({ route }: PageDetail, targetURL: string): boolean {

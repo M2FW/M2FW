@@ -1,22 +1,15 @@
-import {
-  ADD_PAGES,
-  NAVIGATE,
-  SET_HOME_ROUTE,
-  SWITCH_TO_IMPORTED,
-} from '../actions/route'
+import { ADD_PAGES, NAVIGATE, SET_HOME_ROUTE, SET_IMPORTED_HANDLER, SWITCH_TO_IMPORTED } from '../actions/route'
 import { PageDetail, RouteState } from '../../interfaces'
 
 const INITIAL_STATE: RouteState = {
   homeRoute: '',
   title: '',
   route: '',
+  importedHandler: undefined,
   pages: [],
 }
 
-export const route = (
-  state = INITIAL_STATE,
-  action: RouteState & { type: string }
-) => {
+export const route = (state = INITIAL_STATE, action: RouteState & { type: string }) => {
   switch (action.type) {
     case SET_HOME_ROUTE: {
       return {
@@ -28,10 +21,7 @@ export const route = (
     case ADD_PAGES:
       return {
         ...state,
-        pages: [
-          ...state.pages,
-          ...extractValidPages(state.pages, action.pages),
-        ],
+        pages: [...state.pages, ...extractValidPages(state.pages, action.pages)],
       }
 
     case NAVIGATE:
@@ -50,6 +40,14 @@ export const route = (
         }),
       }
 
+    case SET_IMPORTED_HANDLER:
+      if (typeof action.importedHandler !== 'function') throw new Error('Imported handler is not a function')
+
+      return {
+        ...state,
+        importedHandler: action.importedHandler,
+      }
+
     default:
       return state
   }
@@ -62,13 +60,8 @@ export const route = (
  * @param {PageDetail[]} newPages
  * @returns IPageDetail[]
  */
-function extractValidPages(
-  currentPages: PageDetail[],
-  newPages: PageDetail[] = []
-): PageDetail[] {
-  const currentPageRouters: string[] = currentPages.map(
-    (page: PageDetail) => page.route
-  )
+function extractValidPages(currentPages: PageDetail[], newPages: PageDetail[] = []): PageDetail[] {
+  const currentPageRouters: string[] = currentPages.map((page: PageDetail) => page.route)
 
   return newPages
     .filter((page: PageDetail) => currentPageRouters.indexOf(page.route) === -1)
