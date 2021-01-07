@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/dialog",
-  "version": "0.1.0-alpha.18",
+  "version": "0.1.0-alpha.25",
   "description": "Dialog powered by M2 Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/dialog",
