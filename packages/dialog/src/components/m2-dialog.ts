@@ -1,12 +1,4 @@
-import {
-  CSSResult,
-  LitElement,
-  TemplateResult,
-  css,
-  customElement,
-  html,
-  property,
-} from 'lit-element'
+import { CSSResult, LitElement, TemplateResult, css, customElement, html, property } from 'lit-element'
 import { Dialog, DialogState } from '../interfaces/dialog-state'
 
 import { connect } from 'pwa-helpers/connect-mixin'
@@ -30,10 +22,7 @@ export class M2Dialog extends connect(store)(LitElement) {
           right: 0;
           top: 0;
           bottom: 0;
-          background-color: var(
-            --m2-modal-background-color,
-            rgba(0, 0, 0, 0.3)
-          );
+          background-color: var(--m2-modal-background-color, rgba(0, 0, 0, 0.3));
           z-index: 9;
           display: grid;
         }
@@ -51,6 +40,8 @@ export class M2Dialog extends connect(store)(LitElement) {
           resize: var(--m2-dialog-resize, both);
           overflow: auto;
           z-index: 10;
+          min-width: fit-content;
+          min-height: fit-content;
           max-height: 80vh;
           max-width: 80vw;
           margin: auto;
@@ -85,13 +76,9 @@ export class M2Dialog extends connect(store)(LitElement) {
                   <div
                     id="${dialogId}"
                     class="dialog"
-                    @click="${(e: MouseEvent) =>
-                      this.reorderStack(e.currentTarget as HTMLDivElement)}"
+                    @click="${(e: MouseEvent) => this.reorderStack(e.currentTarget as HTMLDivElement)}"
                   >
-                    <div
-                      id="popup-header"
-                      @mousedown="${this.onmousedownHandler.bind(this)}"
-                    >
+                    <div id="popup-header" @mousedown="${this.onmousedownHandler.bind(this)}">
                       ${headerRenderer ? headerRenderer(html, dialog) : ''}
                     </div>
 
@@ -112,8 +99,7 @@ export class M2Dialog extends connect(store)(LitElement) {
   }
 
   private onmousedownHandler(e: MouseEvent) {
-    this.draggingDialog = (e.currentTarget as HTMLDivElement)
-      .parentElement as HTMLDivElement
+    this.draggingDialog = (e.currentTarget as HTMLDivElement).parentElement as HTMLDivElement
     this.reorderStack(this.draggingDialog)
     this.clickX = e.pageX
     this.clickY = e.pageY
@@ -140,14 +126,8 @@ export class M2Dialog extends connect(store)(LitElement) {
 
     if (!this.draggingDialog) throw new Error('dialog is not selected yet')
 
-    this.draggingDialog.style.left = this.calcPositionLeft(
-      this.draggingDialog,
-      diffX
-    )
-    this.draggingDialog.style.top = this.calcPositionTop(
-      this.draggingDialog,
-      diffY
-    )
+    this.draggingDialog.style.left = this.calcPositionLeft(this.draggingDialog, diffX)
+    this.draggingDialog.style.top = this.calcPositionTop(this.draggingDialog, diffY)
     this.draggingDialog.style.position = 'absolute'
 
     this.clickX = currentX
@@ -185,9 +165,7 @@ export class M2Dialog extends connect(store)(LitElement) {
   reorderStack(dialog: HTMLDivElement): void {
     const baseLayer: number = 10
 
-    let dialogs: HTMLDivElement[] = Array.from(
-      this.renderRoot.querySelectorAll('div.dialog')
-    ) as HTMLDivElement[]
+    let dialogs: HTMLDivElement[] = Array.from(this.renderRoot.querySelectorAll('div.dialog')) as HTMLDivElement[]
     const topLayer: number = baseLayer + dialogs.length - 1
 
     dialogs = dialogs
@@ -200,10 +178,7 @@ export class M2Dialog extends connect(store)(LitElement) {
         if (aZIndex < bZIndex) return 1
         return 0
       })
-    dialogs.forEach(
-      (d: HTMLDivElement, idx: number) =>
-        (d.style.zIndex = String(topLayer - 1 - idx))
-    )
+    dialogs.forEach((d: HTMLDivElement, idx: number) => (d.style.zIndex = String(topLayer - 1 - idx)))
     dialog.style.zIndex = String(topLayer)
   }
 
