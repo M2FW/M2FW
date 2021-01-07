@@ -38,10 +38,9 @@ export class M2Dialog extends connect(store)(LitElement) {
           border-radius: none;
           background-color: transparent;
           resize: var(--m2-dialog-resize, both);
-          overflow: auto;
+          overflow: hidden;
           z-index: 10;
           min-width: fit-content;
-          min-height: fit-content;
           max-height: 80vh;
           max-width: 80vw;
           margin: auto;
