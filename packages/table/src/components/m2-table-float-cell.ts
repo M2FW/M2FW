@@ -10,29 +10,40 @@ export class M2TableFloatCell extends AbstractM2TableCell<HTMLInputElement> {
 
   @property({ type: Number }) value?: number
 
-  render(): TemplateResult {
-    const config: FloatColumnConfig = this.config
+  renderEditor(config: FloatColumnConfig): TemplateResult {
+    const { min, max, step = 0.01 }: FloatColumnConfig = config
 
     return html`
       ${this._isEditing
         ? html`
             <input
               type="number"
+              type="number"
               value="${ifDefined(this.value)}"
-              min="${ifDefined(config?.min)}"
-              max="${ifDefined(config?.max)}"
-              step="${ifDefined(config?.step)}"
+              min="${ifDefined(min)}"
+              max="${ifDefined(max)}"
+              step="${ifDefined(step)}"
             />
           `
         : html`${this.renderDisplay}`}
     `
   }
 
-  renderEditor(config: ColumnConfig): TemplateResult {
-    throw new Error('Method not implemented.')
-  }
   renderDisplay(config: ColumnConfig): TemplateResult {
-    throw new Error('Method not implemented.')
+    let { displayValue, step = 0.01 }: FloatColumnConfig = config
+
+    if (displayValue && typeof displayValue === 'string') {
+      return this.displayCellFactory(displayValue)
+    } else if (displayValue && typeof displayValue === 'function') {
+      return this.displayCellFactory(displayValue(this.value))
+    }
+
+    const valueStr: string = this.value?.toString() || ''
+    const stepStr: string = step.toString() || ''
+    const parsedValue: string = valueStr?.substr(0, valueStr.split('.')[0].length + 1 + stepStr.split('.')[1].length)
+    this.value = Number(parsedValue)
+
+    return this.displayCellFactory(this.value)
   }
 
   focusOnEditor(): void {
