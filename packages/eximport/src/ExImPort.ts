@@ -32,7 +32,7 @@ export class ExImport {
     XLSX.writeFile(wb, `${fileName}.xls`, { bookType: 'xls' })
   }
 
-  static async import(extensionTypes: SupportingExtensions[] = ['xlsx', 'xls']): Promise<Record<string, any>[]> {
+  static async import(extensionTypes: SupportingExtensions[] = ['xlsx', 'xls']): Promise<any> {
     return new Promise((resolve, reject) => {
       const input: HTMLInputElement = document.createElement('input')
       input.type = 'file'
