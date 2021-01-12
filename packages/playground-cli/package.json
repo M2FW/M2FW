@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@m2fw/dialog": "^0.1.0-alpha.26",
+    "@m2fw/eximport": "*",
     "@m2fw/redux-manager": "^0.1.0-alpha.3",
     "@m2fw/router": "^0.1.0-alpha.24",
     "@m2fw/table": "^0.1.0-alpha.27",

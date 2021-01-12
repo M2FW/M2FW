@@ -4,6 +4,7 @@ import { CSSResult, LitElement, PropertyValues, TemplateResult, css, customEleme
 import { ColumnAlign, ColumnConfig, ColumnTypes, M2Table } from '@m2fw/table/src'
 import { Dialog, closeDialog, openDialog } from '@m2fw/dialog/src'
 
+import { ExImport } from '@m2fw/eximport/src'
 import { connect } from 'pwa-helpers/connect-mixin'
 import { navigate } from '@m2fw/router/src'
 import { store } from '@m2fw/redux-manager'
@@ -131,7 +132,9 @@ export class Sample extends connect(store)(LitElement) {
           overflow: hidden;
         }
         .button-container {
-          margin: 10px 0px 0px auto;
+          display: grid;
+          grid-gap: 10px;
+          grid-template-columns: repeat(4, 1fr);
         }
       `,
     ]
@@ -147,6 +150,15 @@ export class Sample extends connect(store)(LitElement) {
         <button @click="${this.openRandomDialog}">Open Random Dialog</button>
         <button @click="${() => navigate('demos')}">Navigate to Somewhere without query string</button>
         <button @click="${() => navigate('demos?query-str=value')}">Navigate to Somewhere with query string</button>
+        <button @click="${() => ExImport.export('sample', this.data, 'xlsx')}">Export</button>
+        <button
+          @click="${async () => {
+            const result: Record<string, any> = await ExImport.import(['xls', 'xlsx'])
+            console.log(result)
+          }}"
+        >
+          Import
+        </button>
       </div>
 
       <m2-dialog></m2-dialog>
