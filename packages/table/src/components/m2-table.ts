@@ -67,6 +67,14 @@ export class M2Table extends AbstractM2TablePart {
     return this.renderRoot?.querySelector('m2-table-body')
   }
 
+  selectAll(): void {
+    this.tableBody?.selectAll()
+  }
+
+  selectRow(rowIdx: number): void {
+    this.tableBody?.selectRow(rowIdx)
+  }
+
   /**
    * @description Returning selected data
    * @param withProps Whether __props__ of data is involved or not

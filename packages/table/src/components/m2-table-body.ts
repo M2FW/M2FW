@@ -1,14 +1,7 @@
 import './m2-table-cell'
 
 import { ButtonType, DataStatus, Events } from '../enums'
-import {
-  CSSResult,
-  PropertyValues,
-  TemplateResult,
-  customElement,
-  html,
-  property,
-} from 'lit-element'
+import { CSSResult, PropertyValues, TemplateResult, customElement, html, property } from 'lit-element'
 import {
   ColumnConfig,
   IconButtonOptions,
@@ -45,6 +38,8 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   render(): TemplateResult {
+    if (!this._data?.length) return html` <div>Data is Empty</div> `
+
     return html`
       <tbody>
         ${this._data.map(
@@ -59,9 +54,7 @@ export class M2TableBody extends AbstractM2TablePart {
             >
               ${this.selectable ? this.renderSelectInput(rowIdx, record) : ''}
               ${this.numbering ? this.renderRowNumbering(rowIdx) : ''}
-              ${this.buttons.map((button: TableButton) =>
-                this.renderButton(button, record)
-              )}
+              ${this.buttons.map((button: TableButton) => this.renderButton(button, record))}
               ${this.columns
                 .filter((column: ColumnConfig) => !column.hidden)
                 .map((column: ColumnConfig, columnIdx: number) =>
@@ -83,29 +76,18 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   private renderSelectInput(rowIdx: number, record: TableData): TemplateResult {
-    let rowSelectorOption: RowSelectorOption = { exclusive: false }
-
-    if (typeof this.selectable !== 'boolean') {
-      rowSelectorOption = this.selectable
-    }
-    const { exclusive }: RowSelectorOption = rowSelectorOption
-
-    const type: 'radio' | 'checkbox' = exclusive ? 'radio' : 'checkbox'
     return html`<td class="row-selector selector">
       <input
         rowIdx="${rowIdx}"
         name="selector"
-        type="${type}"
+        type="checkbox"
         @change="${this.onSelectorChangeHandler.bind(this)}"
         .checked="${record?.[this.propertyAccessKey]?.selected || false}"
       />
     </td>`
   }
 
-  private renderButton(
-    button: TableButton,
-    record: TableData
-  ): TemplateResult | void {
+  private renderButton(button: TableButton, record: TableData): TemplateResult | void {
     if (button.type === ButtonType.Icon) {
       let icon: any
       const buttonOptions: IconButtonOptions = button.options as IconButtonOptions
@@ -166,12 +148,7 @@ export class M2TableBody extends AbstractM2TablePart {
     }
   }
 
-  private renderTableCell(
-    column: ColumnConfig,
-    record: TableData,
-    rowIdx: number,
-    columnIdx: number
-  ): TemplateResult {
+  private renderTableCell(column: ColumnConfig, record: TableData, rowIdx: number, columnIdx: number): TemplateResult {
     return html`
       <td width="${column.width || '150px'}" ?hidden="${column.hidden}">
         <m2-table-cell
@@ -189,7 +166,6 @@ export class M2TableBody extends AbstractM2TablePart {
 
   updated(changedProps: PropertyValues): void {
     if (changedProps.has('data') || changedProps.has('addable')) {
-      this._data = []
       this._data = this.data.map((record: TableData) => {
         let cloned: TableData = Object.assign({}, record)
         delete cloned[this.propertyAccessKey]
@@ -202,9 +178,7 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   getSelectedRowElements(): HTMLTableRowElement[] {
-    const selectedRowElements: HTMLTableRowElement[] = Array.from(
-      this.renderRoot?.querySelectorAll('tr[selected]')
-    )
+    const selectedRowElements: HTMLTableRowElement[] = Array.from(this.renderRoot?.querySelectorAll('tr[selected]'))
     return selectedRowElements
   }
 
@@ -214,9 +188,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @returns {TableData[]} selected data list
    */
   getSelected(withProps: boolean = false): TableData[] {
-    let selectedData: TableData[] = this._data.filter(
-      (record: TableData) => record?.[this.propertyAccessKey]?.selected
-    )
+    let selectedData: TableData[] = this._data.filter((record: TableData) => record?.[this.propertyAccessKey]?.selected)
 
     if (!withProps) {
       selectedData = selectedData.map((record: TableData) => {
@@ -244,14 +216,10 @@ export class M2TableBody extends AbstractM2TablePart {
    * @returns {TableData[]}
    */
   getChanged(withProps: boolean = false): TableData[] {
-    let changedData: TableData[] = this.getDataByStatus(
-      DataStatus.Changed,
-      true
-    )
+    let changedData: TableData[] = this.getDataByStatus(DataStatus.Changed, true)
     return changedData.map((record: TableData) => {
       let clone: TableData = Object.assign({}, record)
-      const changedValues: TableChangeValueProperties[] | undefined =
-        clone[this.propertyAccessKey]?.changedValues
+      const changedValues: TableChangeValueProperties[] | undefined = clone[this.propertyAccessKey]?.changedValues
       if (changedValues?.length) {
         changedValues.forEach((changedValue: TableChangeValueProperties) => {
           clone[changedValue.field] = changedValue.changes
@@ -267,18 +235,10 @@ export class M2TableBody extends AbstractM2TablePart {
    * @returns {TableData[]}
    */
   getChangedOnly(): TableData[] {
-    const changedData: TableData = this.getDataByStatus(
-      DataStatus.Changed,
-      true
-    )
+    const changedData: TableData = this.getDataByStatus(DataStatus.Changed, true)
     return changedData.map((record: TableData) => {
-      let extractedRecord = record?.[
-        this.propertyAccessKey
-      ]?.changedValues?.reduce(
-        (
-          changedData: TableData,
-          changedValue: TableChangeValueProperties
-        ): TableData => {
+      let extractedRecord = record?.[this.propertyAccessKey]?.changedValues?.reduce(
+        (changedData: TableData, changedValue: TableChangeValueProperties): TableData => {
           changedData[changedValue.field] = changedValue.changes
           return changedData
         },
@@ -293,7 +253,7 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   /**
-   * @description Returning appeneded data (Newly added)
+   * @description Returning appended data (Newly added)
    * @param withProps Whether this.propertyAccessKey of data is involved or not
    * @returns {TableData[]}
    */
@@ -303,8 +263,8 @@ export class M2TableBody extends AbstractM2TablePart {
 
   /**
    * @description Returning deleted data
-   * (Appeneded data will be deleted automatically when user press delete button (If key map is configured  as default)
-   * but the deleting target data is not appeneded one, it will change the status of data and user can get those data by this function
+   * (Appended data will be deleted automatically when user press delete button (If key map is configured  as default)
+   * but the deleting target data is not appended one, it will change the status of data and user can get those data by this function
    * @param withProps Whether this.propertyAccessKey of data is involved or not
    * @returns {TableData[]}
    */
@@ -323,9 +283,7 @@ export class M2TableBody extends AbstractM2TablePart {
       .filter(
         (record: TableData) =>
           record?.[this.propertyAccessKey]?.[status] &&
-          Object.keys(record).filter(
-            (key: string) => key !== this.propertyAccessKey
-          ).length
+          Object.keys(record).filter((key: string) => key !== this.propertyAccessKey).length
       )
       .map((record: TableData) => {
         const cloned: TableData = Object.assign({}, record)
@@ -351,9 +309,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @returns {TableData}
    */
   private getPrimaryField(record: TableData): TableData {
-    const primaryColumn: ColumnConfig | undefined = this.columns.find(
-      (column: ColumnConfig) => column.primary
-    )
+    const primaryColumn: ColumnConfig | undefined = this.columns.find((column: ColumnConfig) => column.primary)
     if (primaryColumn) {
       return { [primaryColumn.name]: record[primaryColumn.name] }
     } else {
@@ -370,7 +326,7 @@ export class M2TableBody extends AbstractM2TablePart {
         return {
           ...record,
           [this.propertyAccessKey]: {
-            ...record[this.propertyAccessKey],
+            ...(record[this.propertyAccessKey] || {}),
             selected: true,
           },
         }
@@ -387,7 +343,7 @@ export class M2TableBody extends AbstractM2TablePart {
         return {
           ...record,
           [this.propertyAccessKey]: {
-            ...record[this.propertyAccessKey],
+            ...(record[this.propertyAccessKey] || {}),
             selected: false,
           },
         }
@@ -438,13 +394,12 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   /**
-   * @description keypress event handler to fire action by keypressing
+   * @description keypress event handler to fire action by key pressing
    * @param event
    */
   onkeydownHandler(event: KeyboardEvent): void {
     const key: string = event.code
-    if (keyMapper(key, KeyActions.MOVE_FOCUSING))
-      this.moveFocusingKeyHandler(key)
+    if (keyMapper(key, KeyActions.MOVE_FOCUSING)) this.moveFocusingKeyHandler(key)
     if (keyMapper(key, KeyActions.SELECT_ROW)) this.selectRowKeyHandler()
     if (keyMapper(key, KeyActions.DELETE_ROW)) this.deleteRowKeyHandler()
   }
@@ -458,8 +413,7 @@ export class M2TableBody extends AbstractM2TablePart {
   private selectRowKeyHandler() {
     if (this._focusedCell && this.selectable && !this._isEditing) {
       const rowIdx: number = this._focusedCell.rowIdx
-      const isSelected: boolean =
-        this._data[rowIdx]?.[this.propertyAccessKey]?.selected || false
+      const isSelected: boolean = this._data[rowIdx]?.[this.propertyAccessKey]?.selected || false
       if (isSelected) {
         this.deselectRow(rowIdx)
       } else {
@@ -506,7 +460,7 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   /**
-   * @description Checing whether there's more movable row/column or not
+   * @description Checking whether there's more movable row/column or not
    * @param rowIdx
    * @param columnIdx
    */
@@ -514,9 +468,7 @@ export class M2TableBody extends AbstractM2TablePart {
     return (
       columnIdx >= 0 &&
       rowIdx >= 0 &&
-      columnIdx <=
-        this.columns.filter((column: ColumnConfig) => !column.hidden).length -
-          1 &&
+      columnIdx <= this.columns.filter((column: ColumnConfig) => !column.hidden).length - 1 &&
       rowIdx <= this._data.length - 1
     )
   }
@@ -535,7 +487,7 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   /**
-   * @description Move focussing from current to riught
+   * @description Move focussing from current to right
    * @param focusedCell
    */
   moveFocusRight(focusedCell: M2TableCell): void {
@@ -549,7 +501,7 @@ export class M2TableBody extends AbstractM2TablePart {
 
   /**
    * @description Move focussing from current to down
-   * If there's no more data downside, check the table is appendable and if it can create new data row
+   * If there's no more data downside, check the table is addable and if it can create new data row
    * @param focusedCell
    */
   async moveFocusDown(focusedCell: M2TableCell): Promise<void> {
@@ -574,16 +526,13 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   /**
-   * @description Delete row by row index if this.deletable = true
+   * @description Delete row by row index if this.removable = true
    * If target row is appended => delete it
    * If target row is not appended one => flag up to be able to user knows (Soft delete)
    * @param rowIdx
    */
   async deleteRow(rowIdx: number): Promise<void> {
-    if (
-      this._data[rowIdx]?.[this.propertyAccessKey]?.appended &&
-      this._data?.length > 1
-    ) {
+    if (this._data[rowIdx]?.[this.propertyAccessKey]?.appended && this._data?.length > 1) {
       this._data.splice(rowIdx, 1)
 
       if (rowIdx === this._data.length && this._focusedCell) {
@@ -609,7 +558,7 @@ export class M2TableBody extends AbstractM2TablePart {
         const selectedRowElements: HTMLTableRowElement[] = this.getSelectedRowElements()
         if (selectedRowElements?.length) {
           selectedRowElements.forEach((rowElement: HTMLTableRowElement) => {
-            const rowIdx: string | null = rowElement.getAttribute('rowidx')
+            const rowIdx: string | null = rowElement.getAttribute('rowIdx')
             if (rowIdx) {
               this.deselectRow(Number(rowIdx))
             }
@@ -621,7 +570,7 @@ export class M2TableBody extends AbstractM2TablePart {
     this._data[rowIdx] = {
       ...this._data[rowIdx],
       [this.propertyAccessKey]: {
-        ...this._data[rowIdx][this.propertyAccessKey],
+        ...(this._data[rowIdx]?.[this.propertyAccessKey] || {}),
         selected: true,
       },
     }
@@ -637,7 +586,7 @@ export class M2TableBody extends AbstractM2TablePart {
     this._data[rowIdx] = {
       ...this._data[rowIdx],
       [this.propertyAccessKey]: {
-        ...this._data[rowIdx][this.propertyAccessKey],
+        ...(this._data[rowIdx]?.[this.propertyAccessKey] || {}),
         selected: false,
       },
     }
@@ -657,50 +606,29 @@ export class M2TableBody extends AbstractM2TablePart {
       const newValue: any = event.detail.newValue
 
       if (!this._data[rowIdx]?.[this.propertyAccessKey]?.appended) {
-        this._data[rowIdx] = this.getAdjustedChanges(
-          this._data[rowIdx],
-          field,
-          newValue
-        )
+        this._data[rowIdx] = this.getAdjustedChanges(this._data[rowIdx], field, newValue)
       } else {
-        this._data[rowIdx] = this.getAdjustedAppend(
-          this._data[rowIdx],
-          field,
-          newValue
-        )
+        this._data[rowIdx] = this.getAdjustedAppend(this._data[rowIdx], field, newValue)
       }
     }
   }
 
   /**
-   * @description Checking new valus is changed from origin value
+   * @description Checking new values is changed from origin value
    * And it is changed, update status of record to changed.
    * @param record
    * @param field
    * @param newValue
    */
-  getAdjustedChanges(
-    record: TableData,
-    field: string,
-    newValue: any
-  ): TableData {
+  getAdjustedChanges(record: TableData, field: string, newValue: any): TableData {
     newValue = this.convertEmptyStringToNull(newValue)
 
-    let changedValues: TableChangeValueProperties[] =
-      record?.[this.propertyAccessKey]?.changedValues || []
+    let changedValues: TableChangeValueProperties[] = record?.[this.propertyAccessKey]?.changedValues || []
 
-    if (
-      changedValues.find(
-        (changedValue: TableChangeValueProperties) =>
-          changedValue.field === field
-      )
-    ) {
+    if (changedValues.find((changedValue: TableChangeValueProperties) => changedValue.field === field)) {
       changedValues = changedValues
         .map((changedValue: TableChangeValueProperties) => {
-          if (
-            changedValue.field === field &&
-            changedValue.origin !== newValue
-          ) {
+          if (changedValue.field === field && changedValue.origin !== newValue) {
             changedValue.changes = newValue
 
             return changedValue
@@ -733,11 +661,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param field
    * @param appendedValue
    */
-  getAdjustedAppend(
-    record: TableData,
-    field: string,
-    appendedValue: any
-  ): TableData {
+  getAdjustedAppend(record: TableData, field: string, appendedValue: any): TableData {
     return {
       ...record,
       [field]: appendedValue,
@@ -777,9 +701,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param columnIdx
    */
   private getTableCellByIndex(rowIdx: number, columnIdx: number): any {
-    return this.renderRoot?.querySelector(
-      `m2-table-cell[rowIdx="${rowIdx}"][columnIdx="${columnIdx}"]`
-    ) as M2TableCell
+    return this.renderRoot?.querySelector(`m2-table-cell[rowIdx="${rowIdx}"][columnIdx="${columnIdx}"]`) as M2TableCell
   }
 
   private convertEmptyStringToNull(value: any): any {
