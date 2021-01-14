@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/table",
-  "version": "0.1.0-alpha.27",
+  "version": "0.1.0-alpha.30",
   "description": "table powered by M2 Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/m2fw",

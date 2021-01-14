@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/redux-manager",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0-alpha.30",
   "description": "M2 framework redux-manager for client",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/m2fw",
