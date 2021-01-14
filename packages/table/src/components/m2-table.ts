@@ -2,14 +2,7 @@ import './m2-table-body'
 import './m2-table-footer'
 import './m2-table-header'
 
-import {
-  CSSResult,
-  TemplateResult,
-  css,
-  customElement,
-  html,
-  property,
-} from 'lit-element'
+import { CSSResult, TemplateResult, css, customElement, html, property } from 'lit-element'
 
 import { AbstractM2TablePart } from '../abstracts'
 import { M2TableBody } from './m2-table-body'
@@ -73,6 +66,14 @@ export class M2Table extends AbstractM2TablePart {
 
   selectRow(rowIdx: number): void {
     this.tableBody?.selectRow(rowIdx)
+  }
+
+  deselectAll(): void {
+    this.tableBody?.deselectAll()
+  }
+
+  deselectRow(rowIdx: number): void {
+    this.tableBody?.deselectRow(rowIdx)
   }
 
   /**

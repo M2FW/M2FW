@@ -3,7 +3,7 @@
   "version": "0.1.0-alpha.3",
   "description": "M2 framework redux-manager for client",
   "main": "dist/index.js",
-  "repository": "https://github.com/m2fw/redux-manager",
+  "repository": "https://github.com/m2fw/m2fw",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
   "license": "MIT",
   "scripts": {

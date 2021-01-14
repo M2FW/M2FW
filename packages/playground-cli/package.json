@@ -3,7 +3,7 @@
   "version": "0.1.0-alpha.28",
   "description": "playground-cli powered by M2 Framework",
   "main": "index.js",
-  "repository": "https://github.com/m2fw/playground-cli",
+  "repository": "https://github.com/m2fw/m2fw",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
   "license": "MIT",
   "scripts": {
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@m2fw/dialog": "^0.1.0-alpha.26",
-    "@m2fw/eximport": "*",
+    "@m2fw/eximport": "^0.1.0-alpha.29",
     "@m2fw/redux-manager": "^0.1.0-alpha.3",
     "@m2fw/router": "^0.1.0-alpha.24",
     "@m2fw/table": "^0.1.0-alpha.27",

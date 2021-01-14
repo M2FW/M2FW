@@ -3,7 +3,7 @@
   "version": "0.1.0-alpha.27",
   "description": "table powered by M2 Framework",
   "main": "dist/index.js",
-  "repository": "https://github.com/m2fw/table",
+  "repository": "https://github.com/m2fw/m2fw",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
   "license": "MIT",
   "scripts": {

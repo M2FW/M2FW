@@ -3,7 +3,7 @@
   "version": "0.1.0-alpha.24",
   "description": "M2 framework router for client side",
   "main": "dist/index.js",
-  "repository": "https://github.com/m2fw/router",
+  "repository": "https://github.com/m2fw/m2fw",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
   "license": "MIT",
   "scripts": {
