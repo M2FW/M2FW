@@ -1,5 +1,3 @@
-import '@material/mwc-icon'
-
 import { CSSResult, LitElement, PropertyValues, TemplateResult, customElement, html, property } from 'lit-element'
 
 import { indicatorStyle } from '../assets/styles'
@@ -92,7 +90,13 @@ export class M2TablePageIndicator extends LitElement {
           ${this.limitationOptions.map(
             (option: number) =>
               html`
-                <button ?disabled="${this.limit === option}" @click="${() => (this.limit = option)}">
+                <button
+                  ?disabled="${this.limit === option}"
+                  @click="${() => {
+                    this.limit = option
+                    this.dispatchChangeEvent()
+                  }}"
+                >
                   <span class="limit-option">${option}</span>
                 </button>
               `
@@ -120,7 +124,6 @@ export class M2TablePageIndicator extends LitElement {
   updated(changedProps: PropertyValues): void {
     if (changedProps.has('limit') || changedProps.has('total')) {
       this.computeTotalPage(this.limit, this.total)
-      this.dispatchChangeEvent()
     }
   }
 

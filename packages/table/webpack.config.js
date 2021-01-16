@@ -6,9 +6,6 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts'],
   },
-  externals: {
-    '@material/mwc-icon': '@material/mwc-icon',
-  },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.js',
