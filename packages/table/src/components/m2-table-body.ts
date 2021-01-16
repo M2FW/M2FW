@@ -24,6 +24,7 @@ export class M2TableBody extends AbstractM2TablePart {
   @property({ type: Boolean }) _isEditing: boolean = false
   @property({ type: Object }) _focusedCell?: M2TableCell
   @property({ type: Object }) private _data: TableData = []
+  @property({ type: Number }) startRowNumber: number = 1
 
   static get styles(): CSSResult[] {
     return [commonStyle, bodyStyle]
@@ -70,7 +71,7 @@ export class M2TableBody extends AbstractM2TablePart {
   private renderRowNumbering(rowIdx: number): TemplateResult {
     return html`
       <td class="row-numbering numbering">
-        <span class="row-num">${rowIdx + 1}.</span>
+        <span class="row-num">${this.startRowNumber + rowIdx + 1}</span>
       </td>
     `
   }

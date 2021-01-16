@@ -1,12 +1,5 @@
-import {
-  CSSResult,
-  LitElement,
-  PropertyValues,
-  TemplateResult,
-  html,
-  property,
-} from 'lit-element'
-import { CellEvents, ColumnTypes, Events } from '../enums'
+import { CSSResult, LitElement, PropertyValues, TemplateResult, html, property } from 'lit-element'
+import { CellEvents, ColumnTypes } from '../enums'
 import { KeyActions, keyMapper } from '../utils/key-mapper'
 
 import { ColumnConfig } from '../interfaces'
@@ -40,9 +33,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   abstract focusOnEditor(): void
 
   get editor(): T {
-    const editor: T | null = this.renderRoot?.querySelector(
-      this.editorAccessor
-    ) as any
+    const editor: T | null = this.renderRoot?.querySelector(this.editorAccessor) as any
     if (!editor) {
       throw new Error(`Failed to find editor by (${this.editorAccessor})`)
     }
@@ -52,11 +43,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
 
   render(): TemplateResult {
     if (!this.config) return html``
-    return html`
-      ${this._isEditing
-        ? this.renderEditor(this.config)
-        : this.renderDisplay(this.config)}
-    `
+    return html` ${this._isEditing ? this.renderEditor(this.config) : this.renderDisplay(this.config)} `
   }
 
   updated(changedProps: PropertyValues) {
@@ -67,7 +54,6 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
 
   /**
    * @description focus event handler
-   * @param _e nonused
    */
   onfocusHandler(): void {
     this._isFocused = true
@@ -157,8 +143,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
    * @description set value if value is changed and dispatch valueChange custom event.
    */
   private setValue(): void {
-    const valueAccessKey: string =
-      this.config.type === ColumnTypes.Boolean ? 'checked' : 'value'
+    const valueAccessKey: string = this.config.type === ColumnTypes.Boolean ? 'checked' : 'value'
 
     const oldValue: any = this.parseValue(this.value)
     const newValue: any = this.parseValue((this.editor as any)[valueAccessKey])
@@ -173,9 +158,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
     return value
   }
 
-  displayCellFactory(
-    innerText: string | number | TemplateResult | undefined
-  ): TemplateResult {
+  displayCellFactory(innerText: string | number | TemplateResult | undefined): TemplateResult {
     if (innerText === undefined) {
       innerText = ''
     }

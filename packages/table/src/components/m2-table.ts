@@ -1,6 +1,7 @@
 import './m2-table-body'
 import './m2-table-footer'
 import './m2-table-header'
+import './m2-table-page-indicator'
 
 import { CSSResult, TemplateResult, css, customElement, html, property } from 'lit-element'
 
@@ -9,10 +10,20 @@ import { M2TableBody } from './m2-table-body'
 import { M2TableHeader } from './m2-table-header'
 import { TableData } from '../interfaces'
 
+export type M2TableFetchResult = {
+  data: any[]
+  total: number
+}
+
 @customElement('m2-table')
 export class M2Table extends AbstractM2TablePart {
   @property({ type: Array }) data: any[] = []
+  @property({ type: Number }) total?: number
   @property({ type: Number }) scrollSpeedLevel: number = 1
+
+  private page: number = 1
+  private limit: number = 50
+  @property({ type: Object }) fetchHandler?: (page: number, limit: number) => Promise<M2TableFetchResult>
 
   static get styles(): CSSResult[] {
     return [
@@ -20,6 +31,11 @@ export class M2Table extends AbstractM2TablePart {
         :host {
           display: flex;
           flex: 1;
+          flex-direction: column;
+          overflow: hidden;
+        }
+        #table-container {
+          display: flex;
           flex-direction: column;
           overflow: auto hidden;
         }
@@ -29,27 +45,66 @@ export class M2Table extends AbstractM2TablePart {
 
   render(): TemplateResult {
     return html`
-      <m2-table-header
-        .columns="${this.columns}"
-        .buttons="${this.buttons}"
-        .selectable="${this.selectable}"
-        .scrollSpeedLevel="${this.scrollSpeedLevel}"
-        @selectAll="${this.onSelectAllHandler.bind(this)}"
-        @deselectAll="${this.onDeselectAllHandler.bind(this)}"
-        @wheel="${this.onHeaderWheelHandler}"
-      ></m2-table-header>
+      <div id="table-container">
+        <m2-table-header
+          .columns="${this.columns}"
+          .buttons="${this.buttons}"
+          .selectable="${this.selectable}"
+          .scrollSpeedLevel="${this.scrollSpeedLevel}"
+          @selectAll="${this.onSelectAllHandler.bind(this)}"
+          @deselectAll="${this.onDeselectAllHandler.bind(this)}"
+          @wheel="${this.onHeaderWheelHandler}"
+        ></m2-table-header>
 
-      <m2-table-body
-        .selectable="${this.selectable}"
-        .addable="${this.addable}"
-        .removable="${this.removable}"
-        .columns="${this.columns}"
-        .buttons="${this.buttons}"
-        .data="${this.data}"
-      ></m2-table-body>
+        <m2-table-body
+          .selectable="${this.selectable}"
+          .addable="${this.addable}"
+          .removable="${this.removable}"
+          .columns="${this.columns}"
+          .buttons="${this.buttons}"
+          .startRowNumber="${(this.page - 1) * this.limit}"
+          .data="${this.data}"
+          @keypress="${(e: KeyboardEvent) => e.preventDefault()}"
+        ></m2-table-body>
+      </div>
 
-      <m2-table-footer></m2-table-footer>
+      <m2-table-footer>
+        ${this.total
+          ? html`
+              <m2-table-page-indicator
+                .total="${this.total}"
+                @pageChanged="${(e: CustomEvent) => {
+                  this.page = e.detail.page
+                  this.limit = e.detail.limit
+                  if (this.fetchHandler) this.refreshData()
+                }}"
+              ></m2-table-page-indicator>
+            `
+          : ''}
+      </m2-table-footer>
     `
+  }
+
+  async firstUpdated(): Promise<void> {
+    if (this.fetchHandler) {
+      this.refreshData()
+    }
+  }
+
+  async refreshData(): Promise<void> {
+    if (this.fetchHandler) {
+      const { data, total } = await this.fetchHandler(this.page, this.limit)
+      this.data = data
+      this.total = total
+    } else {
+      throw new Error('Fetch handler is not defined')
+    }
+  }
+
+  get tableContainer(): HTMLDivElement {
+    const tableContainer: HTMLDivElement | null = this.renderRoot.querySelector<HTMLDivElement>('#table-container')
+    if (!tableContainer) throw new Error('Failed to find table container')
+    return tableContainer
   }
 
   get tableHeader(): M2TableHeader | null {
@@ -160,6 +215,6 @@ export class M2Table extends AbstractM2TablePart {
    * @param e Wheel Event
    */
   onHeaderWheelHandler(e: WheelEvent) {
-    this.scrollLeft += e.deltaY / this.scrollSpeedLevel
+    this.tableContainer.scrollLeft += e.deltaY / this.scrollSpeedLevel
   }
 }

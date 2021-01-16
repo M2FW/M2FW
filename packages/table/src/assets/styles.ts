@@ -2,6 +2,7 @@ import { CSSResult, css } from 'lit-element'
 
 export const commonStyle: CSSResult = css`
   .selector {
+    text-align: center;
     width: var(--m2-table-selector-width, 30px);
   }
   .numbering {
@@ -56,7 +57,7 @@ export const bodyStyle: CSSResult = css`
     font-size: var(--m2-table-font-size, 11px);
   }
   :host .row-numbering {
-    text-align: center;
+    text-align: var(--m2-table-row-number-align, right);
     width: var(--m2-table-row-number-width, 30px);
   }
   :host::-webkit-scrollbar {
@@ -79,10 +80,7 @@ export const bodyStyle: CSSResult = css`
   }
   tr[deleted] {
     background-color: var(--m2-table-deleted-row-bg-color, indianRed);
-    text-decoration-line: var(
-      --m2-table-deleted-row-text-decoration,
-      line-through
-    );
+    text-decoration-line: var(--m2-table-deleted-row-text-decoration, line-through);
   }
   tr[selected] {
     background-color: var(--m2-table-selected-row-bg-color, yellow);
@@ -134,7 +132,6 @@ export const cellStyle: CSSResult = css`
     outline: none;
     border: none;
     background-color: transparent;
-    font-family: inherit;
   }
   :host(.align-left) .dsp-cell > span {
     margin: auto auto auto 0px;
@@ -156,5 +153,62 @@ export const cellStyle: CSSResult = css`
   }
   .dsp-cell {
     width: inherit;
+  }
+`
+
+export const indicatorStyle = css`
+  #page-indicator {
+    margin: var(--m2-table-page-indicator-margin);
+    padding: var(--m2-table-page-indicator-padding, 5px);
+    font-size: var(--m2-table-page-indicator-font-size, medium);
+    display: flex;
+    background-color: var(--m2-table-page-indicator-bg-color, gray);
+  }
+  #page-controller {
+    display: flex;
+    padding: var(--m2-table-section-padding, 5px);
+    background-color: var(--m2-table-page-controller-bg-color, lightgray);
+    border-radius: var(--m2-table-section-border-radius, 5px);
+  }
+  .move-button {
+    margin: var(--m2-table-move-button-margin);
+  }
+  .move-button > mwc-icon {
+    font-size: inherit;
+    margin: auto;
+  }
+  #limit-controller {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 5px;
+    margin: auto 0px auto auto;
+    padding: var(--m2-table-section-padding, 5px);
+    background-color: var(--m2-table-limit-controller-bg-color, lightgray);
+    border-radius: var(--m2-table-section-border-radius, 5px);
+  }
+  #page-info {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 5px;
+    margin: auto 0px auto 10px;
+    padding: var(--m2-table-section-padding, 5px);
+    background-color: var(--m2-table-page-info-bg-color, lightgray);
+    border-radius: var(--m2-table-section-border-radius, 5px);
+  }
+  input {
+    outline: none;
+    border: none;
+    padding: 0px;
+    font-size: inherit;
+    background-color: transparent;
+    width: 30px;
+  }
+  button {
+    padding: 0px;
+    display: flex;
+    outline: none;
+    font-size: inherit;
+    background-color: var(--m2-table-indicator-button-bg-color, transparent);
+    border: var(--m2-table-indicator-button-border, none);
   }
 `

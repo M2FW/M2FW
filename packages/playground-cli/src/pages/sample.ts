@@ -1,7 +1,7 @@
 import '@m2fw/dialog/src'
 
 import { CSSResult, LitElement, PropertyValues, TemplateResult, css, customElement, html, property } from 'lit-element'
-import { ColumnAlign, ColumnConfig, ColumnTypes, M2Table } from '@m2fw/table/src'
+import { ColumnAlign, ColumnConfig, ColumnTypes, M2Table, M2TableFetchResult } from '@m2fw/table/src'
 import { Dialog, closeDialog, openDialog } from '@m2fw/dialog/src'
 
 import { ExImport } from '@m2fw/eximport/src'
@@ -96,23 +96,7 @@ export class Sample extends connect(store)(LitElement) {
     },
   ]
 
-  @property({ type: Array }) data: Setting[] = new Array(50).fill('').map((item) => {
-    return {
-      id: 'c2d4e33c-7244-4d08-81d5-6395ac5fc90c',
-      name: 'Test',
-      category: 'SELLER_SETTING',
-      description: 'test',
-      value: 'test',
-      createdAt: '1607757950766',
-      creator: {
-        name: 'Jay Lee',
-      },
-      updatedAt: '1607757950766',
-      updater: {
-        name: 'Jay Lee',
-      },
-    }
-  })
+  @property({ type: Array }) data: Setting[] = []
 
   @property({ type: String }) route: string = location.pathname.replace(/^\//, '')
 
@@ -142,7 +126,14 @@ export class Sample extends connect(store)(LitElement) {
 
   render(): TemplateResult {
     return html`
-      <m2-table .selectable="${true}" .columns="${this.columns}" .data="${this.data}" .addable="${false}"></m2-table>
+      <m2-table
+        .selectable="${true}"
+        .columns="${this.columns}"
+        .data="${this.data}"
+        .total="${5000}"
+        .addable="${false}"
+        .fetchHandler="${this.generateRandomData as any}"
+      ></m2-table>
 
       <div class="button-container">
         <button @click="${this.refreshData}">Refresh</button>
@@ -171,6 +162,20 @@ export class Sample extends connect(store)(LitElement) {
         window.history.pushState('', '', this.route)
       }
     }
+  }
+
+  generateRandomData(page: number = 1, limit: number = 50): M2TableFetchResult {
+    const settings: Setting[] = new Array(limit).fill('').map((_: void, idx: number) => {
+      return {
+        name: 'Setting ' + ((page - 1) * limit + idx + 1),
+        description: 'Setting description ' + ((page - 1) * limit + idx + 1),
+        value: 'Setting value ' + ((page - 1) * limit + idx + 1),
+        updatedAt: Date.now().toString(),
+        updater: { name: 'Setting Updater' },
+      }
+    })
+
+    return { data: settings, total: 5000 }
   }
 
   refreshData(): void {
