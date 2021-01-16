@@ -1,6 +1,6 @@
 import '@material/mwc-icon'
 
-import { CSSResult, LitElement, PropertyValues, TemplateResult, css, customElement, html, property } from 'lit-element'
+import { CSSResult, LitElement, PropertyValues, TemplateResult, customElement, html, property } from 'lit-element'
 
 import { indicatorStyle } from '../assets/styles'
 
