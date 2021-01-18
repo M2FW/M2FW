@@ -160,7 +160,7 @@ export const indicatorStyle = css`
   #page-indicator {
     margin: var(--m2-table-page-indicator-margin);
     padding: var(--m2-table-page-indicator-padding, 5px);
-    font-size: var(--m2-table-page-indicator-font-size, medium);
+    font-size: var(--m2-table-page-indicator-font-size, 11px);
     display: flex;
     background-color: var(--m2-table-page-indicator-bg-color, gray);
   }
