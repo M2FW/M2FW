@@ -39,7 +39,6 @@ export class Intime {
   }
 
   register(): void {
-    const rule: RecurrenceRule | Date = this.buildRule()
     if (this.job.type === JobTypes.Recurrence) {
       const rule: RecurrenceRule = this.buildRecurrenceRule()
       schedule.scheduleJob(this.job.name, rule, this.job.handler)
