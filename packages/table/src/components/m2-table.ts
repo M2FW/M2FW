@@ -65,7 +65,6 @@ export class M2Table extends AbstractM2TablePart {
           .buttons="${this.buttons}"
           .startRowNumber="${(this.page - 1) * this.limit}"
           .data="${this.data}"
-          @keypress="${(e: KeyboardEvent) => e.preventDefault()}"
         ></m2-table-body>
       </div>
 
