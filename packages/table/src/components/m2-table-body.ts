@@ -39,8 +39,6 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   render(): TemplateResult {
-    if (!this._data?.length) return html` <div>Data is Empty</div> `
-
     return html`
       <tbody>
         ${this._data.map(
