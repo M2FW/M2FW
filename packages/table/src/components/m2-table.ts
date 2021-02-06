@@ -69,7 +69,7 @@ export class M2Table extends AbstractM2TablePart {
       </div>
 
       <m2-table-footer>
-        ${this.total
+        ${this.total !== undefined
           ? html`
               <m2-table-page-indicator
                 .total="${this.total}"

@@ -104,8 +104,8 @@ export class M2TablePageIndicator extends LitElement {
         </div>
 
         <div id="page-info">
-          <span
-            >${(this.page - 1) * this.limit + 1} -
+          <span>
+            ${this.total === 0 ? '0' : (this.page - 1) * this.limit + 1} -
             ${this.page * this.limit < this.total ? this.page * this.limit : this.total}
           </span>
           <span>of</span>
