@@ -26,6 +26,8 @@ export class M2TableBody extends AbstractM2TablePart {
   @property({ type: Object }) private _data: TableData = []
   @property({ type: Number }) startRowNumber: number = 1
 
+  public selectedItems: TableData[] = []
+
   static get styles(): CSSResult[] {
     return [commonStyle, bodyStyle]
   }
@@ -168,6 +170,14 @@ export class M2TableBody extends AbstractM2TablePart {
       this._data = this.data.map((record: TableData) => {
         let cloned: TableData = Object.assign({}, record)
         delete cloned[this.propertyAccessKey]
+        if (this.selectedItems.find((item: TableData) => item.id === cloned.id)) {
+          Object.assign(cloned, {
+            [this.propertyAccessKey]: {
+              selected: true,
+            },
+          })
+        }
+
         return cloned
       })
       if (this.data?.length === 0 && this.addable) {
@@ -331,6 +341,7 @@ export class M2TableBody extends AbstractM2TablePart {
         }
       }
     )
+    this.selectedItems = this.selectedItems.concat(this._data)
   }
 
   /**
@@ -348,6 +359,9 @@ export class M2TableBody extends AbstractM2TablePart {
         }
       }
     )
+
+    const ids: string[] = this._data.map((item: TableData) => item.id)
+    this.selectedItems = this.selectedItems.filter((item: TableData) => ids.indexOf(item.id) < 0)
   }
 
   /**
@@ -574,6 +588,15 @@ export class M2TableBody extends AbstractM2TablePart {
       },
     }
 
+    this.dispatchEvent(
+      new CustomEvent(Events.RowSelected, {
+        detail: this._data[rowIdx],
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      })
+    )
+    this.selectedItems.push(this._data[rowIdx])
     this.requestUpdate()
   }
 
@@ -590,6 +613,15 @@ export class M2TableBody extends AbstractM2TablePart {
       },
     }
 
+    this.dispatchEvent(
+      new CustomEvent(Events.RowDeselected, {
+        detail: this._data[rowIdx],
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      })
+    )
+    this.selectedItems = this.selectedItems.filter((item: TableData) => item.id !== this._data[rowIdx].id)
     this.requestUpdate()
   }
 

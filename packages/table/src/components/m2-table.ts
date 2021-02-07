@@ -20,9 +20,10 @@ export class M2Table extends AbstractM2TablePart {
   @property({ type: Array }) data: any[] = []
   @property({ type: Number }) total?: number
   @property({ type: Number }) scrollSpeedLevel: number = 1
+  @property({ type: Number }) limit: number = 50
 
   private page: number = 1
-  private limit: number = 50
+
   @property({ type: Object }) fetchHandler?: (page: number, limit: number) => Promise<M2TableFetchResult>
 
   static get styles(): CSSResult[] {
@@ -73,6 +74,7 @@ export class M2Table extends AbstractM2TablePart {
           ? html`
               <m2-table-page-indicator
                 .total="${this.total}"
+                .limit="${this.limit}"
                 @pageChanged="${(e: CustomEvent) => {
                   this.page = e.detail.page
                   this.limit = e.detail.limit
