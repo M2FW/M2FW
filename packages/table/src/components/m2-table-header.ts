@@ -1,12 +1,6 @@
 import { ButtonType, Events } from '../enums'
 import { CSSResult, TemplateResult, customElement, html } from 'lit-element'
-import {
-  ColumnConfig,
-  IconButtonOptions,
-  RowSelectorOption,
-  TableButton,
-  TextButtonOptions,
-} from '../interfaces'
+import { ColumnConfig, IconButtonOptions, RowSelectorOption, TableButton, TextButtonOptions } from '../interfaces'
 import { commonStyle, headerStyle } from '../assets/styles'
 
 import { AbstractM2TablePart } from '../abstracts'
@@ -21,14 +15,9 @@ export class M2TableHeader extends AbstractM2TablePart {
     return html`
       <thead>
         <tr>
-          ${this.selectable ? this.renderSelectInput() : ''}
-          ${this.numbering ? this.renderRowNumbering() : ''}
-          ${this.buttons.map((button: TableButton) =>
-            this.renderButton(button)
-          )}
-          ${this.columns.map((column: ColumnConfig) =>
-            this.renderTableCell(column)
-          )}
+          ${this.selectable ? this.renderSelectInput() : ''} ${this.numbering ? this.renderRowNumbering() : ''}
+          ${this.buttons.map((button: TableButton) => this.renderButton(button))}
+          ${this.columns.map((column: ColumnConfig) => this.renderTableCell(column))}
         </tr>
       </thead>
     `
@@ -63,35 +52,19 @@ export class M2TableHeader extends AbstractM2TablePart {
   }
 
   private renderSelectInput(): TemplateResult {
-    let rowSelectorOption: RowSelectorOption = { exclusive: false }
-
-    if (typeof this.selectable !== 'boolean') {
-      rowSelectorOption = this.selectable
-    }
-
-    const { exclusive }: RowSelectorOption = rowSelectorOption
+    const { exclusive }: RowSelectorOption = this.selectable
 
     return html`
       <th class="header-selector selector">
         ${exclusive
           ? ''
-          : html`
-              <input
-                id="select-all"
-                type="checkbox"
-                @change="${this.onSelectorAllChangeHandler.bind(this)}"
-              />
-            `}
+          : html` <input id="select-all" type="checkbox" @change="${this.onSelectorAllChangeHandler.bind(this)}" /> `}
       </th>
     `
   }
 
   private renderTableCell(column: ColumnConfig): TemplateResult {
-    return html`
-      <th width="${column.width || 150}" ?hidden="${column.hidden}">
-        ${this.displayHeader(column)}
-      </th>
-    `
+    return html` <th width="${column.width || 150}" ?hidden="${column.hidden}">${this.displayHeader(column)}</th> `
   }
 
   /**

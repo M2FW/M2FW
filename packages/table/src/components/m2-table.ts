@@ -21,6 +21,7 @@ export class M2Table extends AbstractM2TablePart {
   @property({ type: Number }) total?: number
   @property({ type: Number }) scrollSpeedLevel: number = 1
   @property({ type: Number }) limit: number = 50
+  @property({ type: Array }) selectedData: Record<string, any>[] = []
 
   private page: number = 1
 
@@ -66,6 +67,7 @@ export class M2Table extends AbstractM2TablePart {
           .buttons="${this.buttons}"
           .startRowNumber="${(this.page - 1) * this.limit}"
           .data="${this.data}"
+          .selectedData="${this.selectedData}"
         ></m2-table-body>
       </div>
 

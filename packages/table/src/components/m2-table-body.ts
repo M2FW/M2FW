@@ -23,10 +23,11 @@ export class M2TableBody extends AbstractM2TablePart {
   @property({ type: Object }) focusedCell?: HTMLElement
   @property({ type: Boolean }) _isEditing: boolean = false
   @property({ type: Object }) _focusedCell?: M2TableCell
-  @property({ type: Object }) private _data: TableData = []
+  @property({ type: Array }) private _data: TableData[] = []
   @property({ type: Number }) startRowNumber: number = 1
 
-  public selectedItems: TableData[] = []
+  @property({ type: Array }) selectedData: TableData[] = []
+  public selectedDataMap: Map<string, TableData> = new Map()
 
   static get styles(): CSSResult[] {
     return [commonStyle, bodyStyle]
@@ -165,17 +166,45 @@ export class M2TableBody extends AbstractM2TablePart {
     `
   }
 
+  private getRecordIdentifier(record: TableData): string {
+    let identifier: any
+    if (this.selectable) {
+      if (typeof this.selectable.fieldIdentifier === 'function') {
+        identifier = this.selectable.fieldIdentifier(record)
+      } else {
+        identifier = record[this.selectable.fieldIdentifier]
+      }
+    } else {
+      if ('id' in record) {
+        identifier = record['id']
+      } else {
+        identifier = record[Object.keys(record)[0]]
+      }
+    }
+
+    if (typeof identifier !== 'string') {
+      identifier = JSON.stringify(identifier)
+    }
+    return identifier
+  }
+
+  stampSelected(record: TableData, selected: boolean = true): TableData {
+    Object.assign(record, { [this.propertyAccessKey]: { selected } })
+    this.requestUpdate()
+    return record
+  }
+
   updated(changedProps: PropertyValues): void {
     if (changedProps.has('data') || changedProps.has('addable')) {
       this._data = this.data.map((record: TableData) => {
         let cloned: TableData = Object.assign({}, record)
         delete cloned[this.propertyAccessKey]
-        if (this.selectedItems.find((item: TableData) => item.id === cloned.id)) {
-          Object.assign(cloned, {
-            [this.propertyAccessKey]: {
-              selected: true,
-            },
-          })
+
+        if (this.selectable && this.selectable.stackSelection) {
+          const identifier: string = this.getRecordIdentifier(cloned)
+          if (this.selectedDataMap.has(identifier)) {
+            this.stampSelected(cloned)
+          }
         }
 
         return cloned
@@ -183,6 +212,17 @@ export class M2TableBody extends AbstractM2TablePart {
       if (this.data?.length === 0 && this.addable) {
         this.appendData()
       }
+    }
+
+    if (
+      this.selectable &&
+      this.selectedData.length &&
+      (changedProps.has('selectedData') || changedProps.has('selectable'))
+    ) {
+      this.selectedData.forEach((record: TableData) => {
+        const identifier: string = this.getRecordIdentifier(record)
+        this.selectedDataMap.set(identifier, record)
+      })
     }
   }
 
@@ -197,15 +237,12 @@ export class M2TableBody extends AbstractM2TablePart {
    * @returns {TableData[]} selected data list
    */
   getSelected(withProps: boolean = false): TableData[] {
-    let selectedData: TableData[] = this._data.filter((record: TableData) => record?.[this.propertyAccessKey]?.selected)
+    let selectedData: TableData[] = Array.from(this.selectedDataMap, ([_identifier, record]) => {
+      let cloned: TableData = Object.assign({}, record)
+      if (!withProps) delete cloned[this.propertyAccessKey]
 
-    if (!withProps) {
-      selectedData = selectedData.map((record: TableData) => {
-        let cloned: TableData = Object.assign({}, record)
-        delete cloned[this.propertyAccessKey]
-        return cloned
-      })
-    }
+      return cloned
+    })
 
     return selectedData
   }
@@ -330,38 +367,31 @@ export class M2TableBody extends AbstractM2TablePart {
    * @description select true for every current row of indicator.
    */
   selectAll(): void {
-    this._data = this._data.map(
-      (record: TableData): TableData => {
-        return {
-          ...record,
-          [this.propertyAccessKey]: {
-            ...(record[this.propertyAccessKey] || {}),
-            selected: true,
-          },
-        }
+    this._data = this._data.map((record: TableData) => {
+      record = this.stampSelected(record)
+      if (this.selectable) {
+        const identifier: string = this.getRecordIdentifier(record)
+        this.selectedDataMap.set(identifier, record)
       }
-    )
-    this.selectedItems = this.selectedItems.concat(this._data)
+
+      return record
+    })
   }
 
   /**
    * @description deselect to false for every current row of indicator
    */
   deselectAll(): void {
-    this._data = this._data.map(
-      (record: TableData): TableData => {
-        return {
-          ...record,
-          [this.propertyAccessKey]: {
-            ...(record[this.propertyAccessKey] || {}),
-            selected: false,
-          },
-        }
-      }
-    )
+    this._data = this._data.map((record: TableData) => {
+      record = this.stampSelected(record, false)
 
-    const ids: string[] = this._data.map((item: TableData) => item.id)
-    this.selectedItems = this.selectedItems.filter((item: TableData) => ids.indexOf(item.id) < 0)
+      if (this.selectable) {
+        const identifier: string = this.getRecordIdentifier(record)
+        this.selectedDataMap.delete(identifier)
+      }
+
+      return record
+    })
   }
 
   /**
@@ -565,39 +595,31 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param rowIdx
    */
   selectRow(rowIdx: number): void {
-    if (typeof this.selectable !== 'boolean') {
-      const { exclusive }: RowSelectorOption = this.selectable
-      if (exclusive) {
-        const selectedRowElements: HTMLTableRowElement[] = this.getSelectedRowElements()
-        if (selectedRowElements?.length) {
-          selectedRowElements.forEach((rowElement: HTMLTableRowElement) => {
-            const rowIdx: string | null = rowElement.getAttribute('rowIdx')
-            if (rowIdx) {
-              this.deselectRow(Number(rowIdx))
-            }
-          })
-        }
+    const { exclusive }: RowSelectorOption = this.selectable
+    if (exclusive) {
+      const selectedRowElements: HTMLTableRowElement[] = this.getSelectedRowElements()
+      if (selectedRowElements?.length) {
+        selectedRowElements.forEach((rowElement: HTMLTableRowElement) => {
+          const rowIdx: string | null = rowElement.getAttribute('rowIdx')
+          if (rowIdx) {
+            this.deselectRow(Number(rowIdx))
+          }
+        })
       }
     }
 
-    this._data[rowIdx] = {
-      ...this._data[rowIdx],
-      [this.propertyAccessKey]: {
-        ...(this._data[rowIdx]?.[this.propertyAccessKey] || {}),
-        selected: true,
-      },
-    }
+    const identifier: string = this.getRecordIdentifier(this._data[rowIdx])
+    this.selectedDataMap.set(identifier, this._data[rowIdx])
+    this._data[rowIdx] = this.stampSelected(this._data[rowIdx])
 
     this.dispatchEvent(
       new CustomEvent(Events.RowSelected, {
-        detail: this._data[rowIdx],
+        detail: { record: this._data[rowIdx] },
         bubbles: true,
         composed: true,
         cancelable: true,
       })
     )
-    this.selectedItems.push(this._data[rowIdx])
-    this.requestUpdate()
   }
 
   /**
@@ -605,13 +627,9 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param rowIdx
    */
   deselectRow(rowIdx: number): void {
-    this._data[rowIdx] = {
-      ...this._data[rowIdx],
-      [this.propertyAccessKey]: {
-        ...(this._data[rowIdx]?.[this.propertyAccessKey] || {}),
-        selected: false,
-      },
-    }
+    const identifier: string = this.getRecordIdentifier(this._data[rowIdx])
+    this.selectedDataMap.delete(identifier)
+    this._data[rowIdx] = this.stampSelected(this._data[rowIdx], false)
 
     this.dispatchEvent(
       new CustomEvent(Events.RowDeselected, {
@@ -621,8 +639,6 @@ export class M2TableBody extends AbstractM2TablePart {
         cancelable: true,
       })
     )
-    this.selectedItems = this.selectedItems.filter((item: TableData) => item.id !== this._data[rowIdx].id)
-    this.requestUpdate()
   }
 
   /**
