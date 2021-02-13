@@ -81,9 +81,9 @@ export class Sample extends connect(store)(LitElement) {
       header: '수정일시',
       width: 180,
       hidden: false,
-      type: ColumnTypes.DateTime,
+      type: ColumnTypes.Date,
       align: ColumnAlign.Center,
-      editable: false,
+      editable: true,
     },
     {
       name: 'updater',

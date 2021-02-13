@@ -1,4 +1,5 @@
 import './m2-table-boolean-cell'
+import './m2-table-date-cell'
 import './m2-table-datetime-cell'
 import './m2-table-float-cell'
 import './m2-table-integer-cell'
@@ -6,15 +7,7 @@ import './m2-table-object-cell'
 import './m2-table-select-cell'
 import './m2-table-string-cell'
 
-import {
-  CSSResult,
-  LitElement,
-  TemplateResult,
-  css,
-  customElement,
-  html,
-  property,
-} from 'lit-element'
+import { CSSResult, LitElement, TemplateResult, css, customElement, html, property } from 'lit-element'
 
 import { ColumnConfig } from '../interfaces'
 import { ColumnTypes } from '../enums'
@@ -34,6 +27,7 @@ export class M2TableCell extends LitElement {
     [ColumnTypes.Select]: 'm2-table-select-cell',
     [ColumnTypes.String]: 'm2-table-string-cell',
     [ColumnTypes.Object]: 'm2-table-object-cell',
+    [ColumnTypes.Date]: 'm2-table-date-cell',
     [ColumnTypes.DateTime]: 'm2-table-datetime-cell',
   }
 
@@ -104,6 +98,12 @@ export class M2TableCell extends LitElement {
             >
             </m2-table-object-cell>
           `
+        : this.type === ColumnTypes.Date
+        ? html`<m2-table-date-cell
+            class="${this._computeClasses(this.config)}"
+            .config="${this.config}"
+            .value="${Number(this.value)}"
+          ></m2-table-date-cell>`
         : this.type === ColumnTypes.DateTime
         ? html`
             <m2-table-datetime-cell
@@ -122,8 +122,7 @@ export class M2TableCell extends LitElement {
   }
 
   get cell(): any {
-    if (!this.type)
-      throw new Error(`'${this.config.name}' field doesn't have column 'type'`)
+    if (!this.type) throw new Error(`'${this.config.name}' field doesn't have column 'type'`)
     const tag: string = this.TAG_MAPPER[this.type]
     if (!tag) {
       throw new Error(

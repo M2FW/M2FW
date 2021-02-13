@@ -5,5 +5,6 @@ export enum ColumnTypes {
   Boolean = 'boolean',
   Select = 'select',
   Object = 'object',
+  Date = 'date',
   DateTime = 'date-time',
 }

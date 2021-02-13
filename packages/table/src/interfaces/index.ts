@@ -1,6 +1,7 @@
 export * from './BaseColumnConfig'
 export * from './BooleanColumnConfig'
 export * from './ColumnConfig'
+export * from './DateColumnConfig'
 export * from './DateTimeColumnConfig'
 export * from './HotKeyMapper'
 export * from './NumberColumnConfig'
