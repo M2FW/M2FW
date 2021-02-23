@@ -262,7 +262,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @returns {TableData[]}
    */
   getChanged(withProps: boolean = false): TableData[] {
-    let changedData: TableData[] = this.getDataByStatus(DataStatus.Changed, true)
+    let changedData: TableData[] = this.getDataByStatus(DataStatus.Changed, withProps)
     return changedData.map((record: TableData) => {
       let clone: TableData = Object.assign({}, record)
       const changedValues: TableChangeValueProperties[] | undefined = clone[this.propertyAccessKey]?.changedValues

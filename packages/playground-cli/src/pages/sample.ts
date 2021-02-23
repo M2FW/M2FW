@@ -1,7 +1,7 @@
 import '@m2fw/dialog/src'
 
 import { CSSResult, LitElement, PropertyValues, TemplateResult, css, customElement, html, property } from 'lit-element'
-import { ColumnAlign, ColumnConfig, ColumnTypes, M2Table, M2TableFetchResult } from '@m2fw/table/src'
+import { ColumnAlign, ColumnConfig, ColumnTypes, M2Table, M2TableFetchResult, RowSelectorOption } from '@m2fw/table/src'
 import { Dialog, closeDialog, openDialog } from '@m2fw/dialog/src'
 
 import { ExImport } from '@m2fw/eximport/src'
@@ -127,7 +127,10 @@ export class Sample extends connect(store)(LitElement) {
   render(): TemplateResult {
     return html`
       <m2-table
-        .selectable="${true}"
+        .selectable="${{
+          exclusive: false,
+          handySelector: false,
+        } as RowSelectorOption}"
         .columns="${this.columns}"
         .data="${this.data}"
         .total="${5000}"

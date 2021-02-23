@@ -52,13 +52,20 @@ export class M2TableHeader extends AbstractM2TablePart {
   }
 
   private renderSelectInput(): TemplateResult {
-    const { exclusive }: RowSelectorOption = this.selectable
+    const { exclusive, handySelector = true }: RowSelectorOption = this.selectable
 
     return html`
       <th class="header-selector selector">
         ${exclusive
           ? ''
-          : html` <input id="select-all" type="checkbox" @change="${this.onSelectorAllChangeHandler.bind(this)}" /> `}
+          : html`
+              <input
+                id="select-all"
+                type="checkbox"
+                ?disabled="${!handySelector}"
+                @change="${this.onSelectorAllChangeHandler.bind(this)}"
+              />
+            `}
       </th>
     `
   }
