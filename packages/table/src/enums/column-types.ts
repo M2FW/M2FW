@@ -7,4 +7,5 @@ export enum ColumnTypes {
   Object = 'object',
   Date = 'date',
   DateTime = 'date-time',
+  Image = 'image',
 }

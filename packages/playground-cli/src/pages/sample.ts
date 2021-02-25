@@ -29,6 +29,16 @@ interface Setting {
 export class Sample extends connect(store)(LitElement) {
   @property({ type: Array }) columns: ColumnConfig[] = [
     {
+      name: 'img',
+      header: '이미지',
+      type: ColumnTypes.Image,
+      editable: true,
+      styles: {
+        margin: 'auto',
+      },
+      defaultSrc: 'https://avatars.githubusercontent.com/u/153960?s=52&v=4',
+    },
+    {
       name: 'name',
       header: '설정 이름',
       type: ColumnTypes.String,

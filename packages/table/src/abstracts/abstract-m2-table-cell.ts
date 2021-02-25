@@ -28,7 +28,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   }
 
   abstract editorAccessor: string
-  abstract renderEditor(config: ColumnConfig): void
+  abstract renderEditor(config: ColumnConfig): TemplateResult
   abstract renderDisplay(config: ColumnConfig): TemplateResult
   abstract focusOnEditor(): void
 

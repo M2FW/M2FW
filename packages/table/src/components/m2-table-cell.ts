@@ -2,6 +2,7 @@ import './m2-table-boolean-cell'
 import './m2-table-date-cell'
 import './m2-table-datetime-cell'
 import './m2-table-float-cell'
+import './m2-table-image-cell'
 import './m2-table-integer-cell'
 import './m2-table-object-cell'
 import './m2-table-select-cell'
@@ -29,6 +30,7 @@ export class M2TableCell extends LitElement {
     [ColumnTypes.Object]: 'm2-table-object-cell',
     [ColumnTypes.Date]: 'm2-table-date-cell',
     [ColumnTypes.DateTime]: 'm2-table-datetime-cell',
+    [ColumnTypes.Image]: 'm2-table-image-cell',
   }
 
   static get styles(): CSSResult {
@@ -110,8 +112,15 @@ export class M2TableCell extends LitElement {
               class="${this._computeClasses(this.config)}"
               .config="${this.config}"
               .value="${Number(this.value)}"
-            >
-            </m2-table-datetime-cell>
+            ></m2-table-datetime-cell>
+          `
+        : this.type === ColumnTypes.Image
+        ? html`
+            <m2-table-image-cell
+              class="${this._computeClasses(this.config)}"
+              .config="${this.config}"
+              .value="${String(this.value)}"
+            ></m2-table-image-cell>
           `
         : html` <m2-table-string-cell
             class="${this._computeClasses(this.config)}"

@@ -6,10 +6,9 @@ export enum Events {
   RowDeselected = 'rowDeselected',
 
   RowDblClick = 'rowDblClick',
-
-  /** Cell Events */
 }
 
+/** Cell Events */
 export enum CellEvents {
   ModeChange = 'modeChange',
   FocusChange = 'focusChange',
