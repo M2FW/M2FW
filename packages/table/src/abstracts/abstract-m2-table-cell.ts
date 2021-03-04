@@ -1,12 +1,13 @@
 import { CSSResult, LitElement, PropertyValues, TemplateResult, html, property } from 'lit-element'
 import { CellEvents, ColumnTypes } from '../enums'
+import { ColumnConfig, TableData } from '../interfaces'
 import { KeyActions, keyMapper } from '../utils/key-mapper'
 
-import { ColumnConfig } from '../interfaces'
 import { cellStyle } from '../assets/styles'
 
 export abstract class AbstractM2TableCell<T> extends LitElement {
   @property({ type: Object }) config: ColumnConfig
+  @property({ type: Object }) record?: TableData
   @property({ type: String }) value?: any
   @property({ type: Boolean }) _isEditing: boolean = false
   @property({ type: Boolean }) _isFocused: boolean = false
@@ -104,7 +105,16 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
    * @description double click event handler
    */
   async ondblclickHandler(): Promise<void> {
-    const editable: boolean = Boolean(this.config?.editable)
+    let editable: boolean = true
+
+    if (this.config?.editable) {
+      if (typeof this.config.editable === 'function') {
+        editable = this.config.editable(this.record)
+      } else {
+        editable = Boolean(this.config?.editable)
+      }
+    }
+
     if (!editable) return
 
     this._isEditing = true

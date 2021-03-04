@@ -159,6 +159,7 @@ export class M2TableBody extends AbstractM2TablePart {
           .type="${column.type}"
           .config="${column}"
           .value="${record[column.name]}"
+          .record="${record}"
           @modeChange="${this.onModeChangeHandler}"
           @focusChange="${this.onFocusChangeHandler}"
         ></m2-table-cell>

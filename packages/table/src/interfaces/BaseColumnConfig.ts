@@ -1,5 +1,7 @@
 import { ColumnAlign, ColumnTypes } from '../enums'
 
+import { TableData } from './TableData'
+
 export interface BaseColumnConfig {
   name: string
   primary?: boolean
@@ -10,5 +12,5 @@ export interface BaseColumnConfig {
   validator?: RegExp | Function
   hidden?: boolean
   align?: ColumnAlign
-  editable?: boolean
+  editable?: boolean | ((record?: TableData) => boolean)
 }

@@ -9,14 +9,15 @@ import './m2-table-select-cell'
 import './m2-table-string-cell'
 
 import { CSSResult, LitElement, TemplateResult, css, customElement, html, property } from 'lit-element'
+import { ColumnConfig, TableData } from '../interfaces'
 
-import { ColumnConfig } from '../interfaces'
 import { ColumnTypes } from '../enums'
 
 @customElement('m2-table-cell')
 export class M2TableCell extends LitElement {
   @property({ type: String }) type?: ColumnTypes
   @property({ type: Object }) config: ColumnConfig
+  @property({ type: Object }) record?: TableData
   @property() value: any
   @property({ type: Boolean }) _isFocused: boolean = false
   @property({ type: Number }) rowIdx: number = -1
@@ -56,6 +57,7 @@ export class M2TableCell extends LitElement {
             <m2-table-string-cell
               class="${this._computeClasses(this.config)}"
               .config="${this.config}"
+              .record="${this.record}"
               .value="${String(this.value)}"
             ></m2-table-string-cell>
           `
@@ -64,6 +66,7 @@ export class M2TableCell extends LitElement {
             <m2-table-boolean-cell
               class="${this._computeClasses(this.config)}"
               .config="${this.config}"
+              .record="${this.record}"
               .value="${Boolean(this.value)}"
             ></m2-table-boolean-cell>
           `
@@ -72,6 +75,7 @@ export class M2TableCell extends LitElement {
             <m2-table-float-cell
               class="${this._computeClasses(this.config)}"
               .config="${this.config}"
+              .record="${this.record}"
               .value="${Number(this.value)}"
             ></m2-table-float-cell>
           `
@@ -80,6 +84,7 @@ export class M2TableCell extends LitElement {
             <m2-table-integer-cell
               class="${this._computeClasses(this.config)}"
               .config="${this.config}"
+              .record="${this.record}"
               .value="${Number(this.value)}"
             ></m2-table-integer-cell>
           `
@@ -88,6 +93,7 @@ export class M2TableCell extends LitElement {
             <m2-table-select-cell
               class="${this._computeClasses(this.config)}"
               .config="${this.config}"
+              .record="${this.record}"
               .value="${this.value}"
             ></m2-table-select-cell>
           `
@@ -96,6 +102,7 @@ export class M2TableCell extends LitElement {
             <m2-table-object-cell
               class="${this._computeClasses(this.config)}"
               .config="${this.config}"
+              .record="${this.record}"
               .value="${this.value}"
             >
             </m2-table-object-cell>
@@ -104,6 +111,7 @@ export class M2TableCell extends LitElement {
         ? html`<m2-table-date-cell
             class="${this._computeClasses(this.config)}"
             .config="${this.config}"
+            .record="${this.record}"
             .value="${Number(this.value)}"
           ></m2-table-date-cell>`
         : this.type === ColumnTypes.DateTime
@@ -111,6 +119,7 @@ export class M2TableCell extends LitElement {
             <m2-table-datetime-cell
               class="${this._computeClasses(this.config)}"
               .config="${this.config}"
+              .record="${this.record}"
               .value="${Number(this.value)}"
             ></m2-table-datetime-cell>
           `
@@ -119,12 +128,14 @@ export class M2TableCell extends LitElement {
             <m2-table-image-cell
               class="${this._computeClasses(this.config)}"
               .config="${this.config}"
+              .record="${this.record}"
               .value="${String(this.value)}"
             ></m2-table-image-cell>
           `
         : html` <m2-table-string-cell
             class="${this._computeClasses(this.config)}"
             .config="${this.config}"
+            .record="${this.record}"
             .value="${String(this.value)}"
           ></m2-table-string-cell>`}
     `
