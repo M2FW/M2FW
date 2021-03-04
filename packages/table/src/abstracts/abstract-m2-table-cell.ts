@@ -109,7 +109,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
 
     if (this.config?.editable) {
       if (typeof this.config.editable === 'function') {
-        editable = this.config.editable(this.record)
+        editable = this.config.editable(this.record || {}, this.config)
       } else {
         editable = Boolean(this.config?.editable)
       }
