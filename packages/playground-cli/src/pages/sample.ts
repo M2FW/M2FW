@@ -1,7 +1,15 @@
 import '@m2fw/dialog/src'
 
 import { CSSResult, LitElement, PropertyValues, TemplateResult, css, customElement, html, property } from 'lit-element'
-import { ColumnAlign, ColumnConfig, ColumnTypes, M2Table, M2TableFetchResult, RowSelectorOption } from '@m2fw/table/src'
+import {
+  ColumnAlign,
+  ColumnConfig,
+  ColumnTypes,
+  M2Table,
+  M2TableFetchResult,
+  RowSelectorOption,
+  TableData,
+} from '@m2fw/table/src'
 import { Dialog, closeDialog, openDialog } from '@m2fw/dialog/src'
 
 import { ExImport } from '@m2fw/eximport/src'
@@ -68,6 +76,14 @@ export class Sample extends connect(store)(LitElement) {
       hidden: false,
       editable: true,
       align: ColumnAlign.Left,
+    },
+    {
+      name: 'dynamicEditable',
+      header: 'dynamic editable column',
+      type: ColumnTypes.String,
+      width: 200,
+      editable: (record: TableData, config: ColumnConfig): boolean =>
+        Number(record?.name.replace('Setting ', '')) % 2 === 0,
     },
     {
       name: 'value',
