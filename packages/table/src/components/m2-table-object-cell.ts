@@ -1,4 +1,4 @@
-import { TemplateResult, customElement } from 'lit-element'
+import { TemplateResult, customElement, html } from 'lit-element'
 
 import { AbstractM2TableCell } from '../abstracts/abstract-m2-table-cell'
 import { ObjectColumnConfig } from '../interfaces'
@@ -8,7 +8,9 @@ export class M2TableObjectCell extends AbstractM2TableCell<HTMLInputElement> {
   editorAccessor: string = ''
 
   renderEditor(config: ObjectColumnConfig): TemplateResult {
-    const { renderEditor }: ObjectColumnConfig = config
+    const { editable, renderEditor }: ObjectColumnConfig = config
+
+    if (!editable) return html``
 
     if (!renderEditor) {
       throw new Error('renderEditor is not implemented.')
