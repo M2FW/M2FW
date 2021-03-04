@@ -107,14 +107,16 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
    * @description double click event handler
    */
   async ondblclickHandler(): Promise<void> {
-    let editable: boolean = true
+    let editable: boolean
 
-    if (this.config?.editable) {
+    if (this.config?.editable !== undefined) {
       if (typeof this.config.editable === 'function') {
         editable = this.config.editable(this.record || {}, this.config)
       } else {
         editable = Boolean(this.config?.editable)
       }
+    } else {
+      editable = true
     }
 
     if (!editable) return
