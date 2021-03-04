@@ -44,7 +44,9 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
 
   render(): TemplateResult {
     if (!this.config) return html``
-    return html` ${this._isEditing ? this.renderEditor(this.config) : this.renderDisplay(this.config)} `
+    return html`
+      ${this._isEditing && this.config.editable ? this.renderEditor(this.config) : this.renderDisplay(this.config)}
+    `
   }
 
   updated(changedProps: PropertyValues) {
