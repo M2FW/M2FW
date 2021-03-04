@@ -10,7 +10,7 @@ export class M2TableObjectCell extends AbstractM2TableCell<HTMLInputElement> {
   renderEditor(config: ObjectColumnConfig): TemplateResult {
     const { editable, renderEditor }: ObjectColumnConfig = config
 
-    if (!editable) return html``
+    if (!editable) return this.renderDisplay(config)
 
     if (!renderEditor) {
       throw new Error('renderEditor is not implemented.')
