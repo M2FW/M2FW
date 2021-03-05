@@ -14,9 +14,9 @@ export class M2TableObjectCell extends AbstractM2TableCell<HTMLInputElement> {
       throw new Error('renderEditor is not implemented.')
     }
 
-    const result: TemplateResult | null | undefined = renderEditor(
+    const result: TemplateResult | void = renderEditor(
       config,
-      this.value,
+      this.record || {},
       (newValue: any) => {
         this._isEditing = false
 

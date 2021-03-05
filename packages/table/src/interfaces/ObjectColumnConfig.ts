@@ -6,8 +6,8 @@ export interface ObjectColumnConfig extends BaseColumnConfig {
   displayField?: string
   renderEditor?: (
     config: ObjectColumnConfig,
-    value: TableData,
+    record: TableData,
     setValueHandler: (value: any) => void,
     html: any
-  ) => TemplateResult | null | undefined
+  ) => TemplateResult | void
 }
