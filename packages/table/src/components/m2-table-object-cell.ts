@@ -14,15 +14,23 @@ export class M2TableObjectCell extends AbstractM2TableCell<HTMLInputElement> {
       throw new Error('renderEditor is not implemented.')
     }
 
-    return renderEditor(config, this.value, (newValue: any) => {
-      this._isEditing = false
+    const result: TemplateResult | null | undefined = renderEditor(
+      config,
+      this.value,
+      (newValue: any) => {
+        this._isEditing = false
 
-      const oldValue = this.value
-      if (oldValue != newValue) {
-        this.value = newValue
-        this.dispatchValueChangeEvent(oldValue, newValue)
-      }
-    })
+        const oldValue = this.value
+        if (oldValue != newValue) {
+          this.value = newValue
+          this.dispatchValueChangeEvent(oldValue, newValue)
+        }
+      },
+      html
+    )
+
+    if (result) return result
+    return html``
   }
 
   renderDisplay(config: ObjectColumnConfig): TemplateResult {

@@ -4,5 +4,10 @@ import { TemplateResult } from 'lit-html'
 
 export interface ObjectColumnConfig extends BaseColumnConfig {
   displayField?: string
-  renderEditor?: (config: ObjectColumnConfig, value: TableData, setValueHandler: (value: any) => void) => TemplateResult
+  renderEditor?: (
+    config: ObjectColumnConfig,
+    value: TableData,
+    setValueHandler: (value: any) => void,
+    html: any
+  ) => TemplateResult | null | undefined
 }
