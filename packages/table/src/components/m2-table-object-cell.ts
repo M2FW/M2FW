@@ -30,7 +30,7 @@ export class M2TableObjectCell extends AbstractM2TableCell<HTMLInputElement> {
     )
 
     if (result) return result
-    return html``
+    return this.renderDisplay(config)
   }
 
   renderDisplay(config: ObjectColumnConfig): TemplateResult {
