@@ -7,6 +7,7 @@ export interface ObjectColumnConfig extends BaseColumnConfig {
   renderEditor?: (
     config: ObjectColumnConfig,
     record: TableData,
+    value: any,
     setValueHandler: (value: any) => void,
     html: any
   ) => TemplateResult | void

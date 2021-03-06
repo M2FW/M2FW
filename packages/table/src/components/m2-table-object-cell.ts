@@ -17,6 +17,7 @@ export class M2TableObjectCell extends AbstractM2TableCell<HTMLInputElement> {
     const result: TemplateResult | void = renderEditor(
       config,
       this.record || {},
+      this.value,
       (newValue: any) => {
         this._isEditing = false
 
