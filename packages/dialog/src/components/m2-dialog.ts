@@ -60,7 +60,7 @@ export class M2Dialog extends connect(store)(LitElement) {
     return html`
       ${dialogs?.length
         ? html`
-            <div id="modal" @mouseup="${this.clearDragHandler.bind(this)}">
+            <div id="modal" tabindex="0" @mouseup="${this.clearDragHandler.bind(this)}">
               ${dialogs.map((dialog: Dialog) => {
                 const dialogId: string | undefined = dialog.id
                 if (!dialogId) throw new Error('Dialog ID is not defined')
@@ -181,10 +181,15 @@ export class M2Dialog extends connect(store)(LitElement) {
     dialog.style.zIndex = String(topLayer)
   }
 
-  stateChanged(state: any) {
+  async stateChanged(state: any): Promise<void> {
     const { dialogs, enableBackdrop }: DialogState = state.dialog
     this.dialogs = dialogs || this.dialogs
     this.removeBackdrop = !enableBackdrop
     this.requestUpdate()
+    await this.updateComplete
+
+    if (this.dialogs?.length) {
+      this.modal.focus()
+    }
   }
 }
