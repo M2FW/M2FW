@@ -14,9 +14,7 @@ export class M2TableBooleanCell extends AbstractM2TableCell<HTMLInputElement> {
   }
 
   renderDisplay(_config: ColumnConfig): TemplateResult {
-    return this.displayCellFactory(html`
-      <input type="checkbox" disabled ?checked="${this.value || false}" />
-    `)
+    return this.displayCellFactory(html` <input type="checkbox" disabled ?checked="${this.value || false}" /> `)
   }
 
   focusOnEditor(): void {
@@ -25,5 +23,9 @@ export class M2TableBooleanCell extends AbstractM2TableCell<HTMLInputElement> {
 
   parseValue(value: any): boolean {
     return Boolean(value)
+  }
+
+  checkValidity(): boolean {
+    return this.editor?.checkValidity()
   }
 }

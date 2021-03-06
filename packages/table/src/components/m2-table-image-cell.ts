@@ -45,4 +45,8 @@ export class M2TableImageCell extends AbstractM2TableCell<HTMLInputElement> {
 
     return imageElement
   }
+
+  checkValidity(): boolean {
+    return this.editor?.checkValidity()
+  }
 }

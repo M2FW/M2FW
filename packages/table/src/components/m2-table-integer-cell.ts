@@ -15,12 +15,7 @@ export class M2TableIntegerCell extends AbstractM2TableCell<HTMLInputElement> {
     const { min, max }: IntegerColumnConfig = config
 
     return html`
-      <input
-        type="number"
-        value="${ifDefined(this.value)}"
-        min="${ifDefined(min)}"
-        max="${ifDefined(max)}"
-      />
+      <input type="number" value="${ifDefined(this.value)}" min="${ifDefined(min)}" max="${ifDefined(max)}" />
     `
   }
 
@@ -42,5 +37,9 @@ export class M2TableIntegerCell extends AbstractM2TableCell<HTMLInputElement> {
 
   parseValue(value: any): number {
     return Number(value)
+  }
+
+  checkValidity(): boolean {
+    return this.editor?.checkValidity()
   }
 }

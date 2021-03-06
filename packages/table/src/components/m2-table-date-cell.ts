@@ -67,4 +67,8 @@ export class M2TableDateCell extends AbstractM2TableCell<HTMLInputElement> {
 
     return `${year}-${month}-${date}`
   }
+
+  checkValidity(): boolean {
+    return this.editor?.checkValidity()
+  }
 }

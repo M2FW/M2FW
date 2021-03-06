@@ -33,6 +33,8 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   abstract renderDisplay(config: ColumnConfig): TemplateResult
   abstract focusOnEditor(): void
 
+  abstract checkValidity(): boolean
+
   get editor(): T {
     const editor: T | null = this.renderRoot?.querySelector(this.editorAccessor) as any
     if (!editor) {
@@ -166,6 +168,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
    * @description set value if value is changed and dispatch valueChange custom event.
    */
   private setValue(): void {
+    this.checkValidity()
     const valueAccessKey: string = this.config.type === ColumnTypes.Boolean ? 'checked' : 'value'
 
     const oldValue: any = this.parseValue(this.value)

@@ -63,4 +63,8 @@ export class M2TableObjectCell extends AbstractM2TableCell<HTMLInputElement> {
   onblurHandler() {
     return
   }
+
+  checkValidity(): boolean {
+    return this.editor?.checkValidity()
+  }
 }

@@ -11,12 +11,7 @@ export class M2TableStringCell extends AbstractM2TableCell<HTMLInputElement> {
   @property({ type: String }) value?: string
 
   renderEditor(config: StringColumnConfig): TemplateResult {
-    return html`
-      <input
-        value="${ifDefined(this.value)}"
-        placeholder="${ifDefined(config?.placeholder)}"
-      />
-    `
+    return html` <input value="${ifDefined(this.value)}" placeholder="${ifDefined(config?.placeholder)}" /> `
   }
 
   renderDisplay(config: StringColumnConfig): TemplateResult {
@@ -33,5 +28,9 @@ export class M2TableStringCell extends AbstractM2TableCell<HTMLInputElement> {
 
   focusOnEditor(): void {
     this.editor?.select()
+  }
+
+  checkValidity(): boolean {
+    return this.editor?.checkValidity()
   }
 }

@@ -53,4 +53,8 @@ export class M2TableFloatCell extends AbstractM2TableCell<HTMLInputElement> {
   parseValue(value: any): number {
     return Number(value)
   }
+
+  checkValidity(): boolean {
+    return this.editor?.checkValidity()
+  }
 }

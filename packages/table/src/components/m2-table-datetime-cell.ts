@@ -83,4 +83,8 @@ export class M2TableDateTimeCell extends AbstractM2TableCell<HTMLInputElement> {
 
     return `${year}-${month}-${date}T${hours}:${minutes}:${seconds}`
   }
+
+  checkValidity(): boolean {
+    return this.editor?.checkValidity()
+  }
 }

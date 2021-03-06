@@ -16,15 +16,10 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
         ${((options as any) || []).map(
           (option: string | SelectOption): TemplateResult => {
             if (typeof option === 'string') {
-              return html`<option ?selected="${option === this.value}">
-                ${option}
-              </option>`
+              return html`<option ?selected="${option === this.value}">${option}</option>`
             } else {
               option = option as SelectOption
-              return html`<option
-                value="${option.value}"
-                ?selected="${option.value === this.value}"
-              >
+              return html`<option value="${option.value}" ?selected="${option.value === this.value}">
                 ${option.display}
               </option>`
             }
@@ -47,21 +42,16 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
       return this.displayCellFactory('')
     }
 
-    const selectedOption: string | SelectOption = (options as any).find(
-      (option: string | SelectOption) => {
-        if (typeof option === 'string') {
-          return option === this.value
-        } else {
-          return option.value === this.value
-        }
+    const selectedOption: string | SelectOption = (options as any).find((option: string | SelectOption) => {
+      if (typeof option === 'string') {
+        return option === this.value
+      } else {
+        return option.value === this.value
       }
-    )
+    })
 
     if (selectedOption) {
-      const displayValue: string =
-        typeof selectedOption === 'string'
-          ? selectedOption
-          : selectedOption.display
+      const displayValue: string = typeof selectedOption === 'string' ? selectedOption : selectedOption.display
       return this.displayCellFactory(displayValue)
     } else {
       return this.displayCellFactory('')
@@ -70,5 +60,9 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
 
   focusOnEditor(): void {
     this.editor?.focus()
+  }
+
+  checkValidity(): boolean {
+    return this.editor?.checkValidity()
   }
 }
