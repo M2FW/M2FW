@@ -13,5 +13,5 @@ export interface BaseColumnConfig {
   validator?: RegExp | Function
   hidden?: boolean
   align?: ColumnAlign
-  editable?: boolean | ((record: TableData, config: ColumnConfig) => boolean)
+  editable?: boolean | ((config: ColumnConfig, record: TableData, value: any) => boolean)
 }
