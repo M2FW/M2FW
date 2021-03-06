@@ -82,7 +82,7 @@ export class Sample extends connect(store)(LitElement) {
       header: 'dynamic editable column',
       type: ColumnTypes.String,
       width: 200,
-      editable: (record: TableData, config: ColumnConfig): boolean =>
+      editable: (config: ColumnConfig, record: TableData, value: any): boolean =>
         Number(record?.name.replace('Setting ', '')) % 2 === 0,
     },
     {
