@@ -132,7 +132,16 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
    */
   onkeydownHandler(event: KeyboardEvent): void {
     if (keyMapper(event.code, KeyActions.TOGGLE_EDITING)) {
-      const editable: boolean = Boolean(this.config?.editable)
+      let editable: boolean
+      if (this.config?.editable !== undefined) {
+        if (typeof this.config.editable === 'function') {
+          editable = this.config.editable(this.config, this.record || {}, this.value)
+        } else {
+          editable = Boolean(this.config?.editable)
+        }
+      } else {
+        editable = true
+      }
       if (!editable) return
       this.toggleEditing()
     }
