@@ -59,6 +59,8 @@ export class M2TableCell extends LitElement {
               .config="${this.config}"
               .record="${this.record}"
               .value="${String(this.value)}"
+              .rowIdx="${this.rowIdx}"
+              .columnIdx="${this.columnIdx}"
             ></m2-table-string-cell>
           `
         : this.type === ColumnTypes.Boolean
@@ -68,6 +70,8 @@ export class M2TableCell extends LitElement {
               .config="${this.config}"
               .record="${this.record}"
               .value="${Boolean(this.value)}"
+              .rowIdx="${this.rowIdx}"
+              .columnIdx="${this.columnIdx}"
             ></m2-table-boolean-cell>
           `
         : this.type === ColumnTypes.Float
@@ -77,6 +81,8 @@ export class M2TableCell extends LitElement {
               .config="${this.config}"
               .record="${this.record}"
               .value="${Number(this.value)}"
+              .rowIdx="${this.rowIdx}"
+              .columnIdx="${this.columnIdx}"
             ></m2-table-float-cell>
           `
         : this.type === ColumnTypes.Integer
@@ -86,6 +92,8 @@ export class M2TableCell extends LitElement {
               .config="${this.config}"
               .record="${this.record}"
               .value="${Number(this.value)}"
+              .rowIdx="${this.rowIdx}"
+              .columnIdx="${this.columnIdx}"
             ></m2-table-integer-cell>
           `
         : this.type === ColumnTypes.Select
@@ -95,6 +103,8 @@ export class M2TableCell extends LitElement {
               .config="${this.config}"
               .record="${this.record}"
               .value="${this.value}"
+              .rowIdx="${this.rowIdx}"
+              .columnIdx="${this.columnIdx}"
             ></m2-table-select-cell>
           `
         : this.type === ColumnTypes.Object
@@ -104,6 +114,8 @@ export class M2TableCell extends LitElement {
               .config="${this.config}"
               .record="${this.record}"
               .value="${this.value}"
+              .rowIdx="${this.rowIdx}"
+              .columnIdx="${this.columnIdx}"
             >
             </m2-table-object-cell>
           `
@@ -113,6 +125,8 @@ export class M2TableCell extends LitElement {
             .config="${this.config}"
             .record="${this.record}"
             .value="${Number(this.value)}"
+            .rowIdx="${this.rowIdx}"
+            .columnIdx="${this.columnIdx}"
           ></m2-table-date-cell>`
         : this.type === ColumnTypes.DateTime
         ? html`
@@ -121,6 +135,8 @@ export class M2TableCell extends LitElement {
               .config="${this.config}"
               .record="${this.record}"
               .value="${Number(this.value)}"
+              .rowIdx="${this.rowIdx}"
+              .columnIdx="${this.columnIdx}"
             ></m2-table-datetime-cell>
           `
         : this.type === ColumnTypes.Image
@@ -130,6 +146,8 @@ export class M2TableCell extends LitElement {
               .config="${this.config}"
               .record="${this.record}"
               .value="${String(this.value)}"
+              .rowIdx="${this.rowIdx}"
+              .columnIdx="${this.columnIdx}"
             ></m2-table-image-cell>
           `
         : html` <m2-table-string-cell
@@ -137,6 +155,8 @@ export class M2TableCell extends LitElement {
             .config="${this.config}"
             .record="${this.record}"
             .value="${String(this.value)}"
+            .rowIdx="${this.rowIdx}"
+            .columnIdx="${this.columnIdx}"
           ></m2-table-string-cell>`}
     `
   }

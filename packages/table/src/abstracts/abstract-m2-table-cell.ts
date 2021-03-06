@@ -12,6 +12,9 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   @property({ type: Boolean }) _isEditing: boolean = false
   @property({ type: Boolean }) _isFocused: boolean = false
 
+  public rowIdx?: number
+  public columnIdx?: number
+
   constructor(config: ColumnConfig) {
     super()
     this.config = config
@@ -199,7 +202,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   dispatchValueChangeEvent(oldValue: any, newValue: any): void {
     this.dispatchEvent(
       new CustomEvent(CellEvents.CellValueChange, {
-        detail: { field: this.config?.name, oldValue, newValue },
+        detail: { field: this.config?.name, oldValue, newValue, rowIdx: this.rowIdx, columnIdx: this.columnIdx },
         bubbles: true,
         composed: true,
         cancelable: true,
