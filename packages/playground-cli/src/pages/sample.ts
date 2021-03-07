@@ -13,6 +13,7 @@ import {
 import { Dialog, closeDialog, openDialog } from '@m2fw/dialog/src'
 
 import { ExImport } from '@m2fw/eximport/src'
+import { M2TableStringCell } from '@m2fw/table/src/components/m2-table-string-cell'
 import { connect } from 'pwa-helpers/connect-mixin'
 import { navigate } from '@m2fw/router/src'
 import { store } from '@m2fw/redux-manager'
@@ -162,6 +163,14 @@ export class Sample extends connect(store)(LitElement) {
         .total="${5000}"
         .addable="${false}"
         .fetchHandler="${this.generateRandomData as any}"
+        @valueChange="${(e: CustomEvent) => {
+          console.log(e.detail)
+          if (e.detail.field === 'name' && !e.detail.newValue) {
+            this.table
+              .getCell<M2TableStringCell>(e.detail.rowIdx, 'description')
+              .setValue('Please type proper name on this row')
+          }
+        }}"
       ></m2-table>
 
       <div class="button-container">
