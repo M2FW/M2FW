@@ -12,8 +12,8 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   @property({ type: Boolean }) _isEditing: boolean = false
   @property({ type: Boolean }) _isFocused: boolean = false
 
-  public rowIdx?: number
-  public columnIdx?: number
+  @property({ type: Number, reflect: true }) rowIdx?: number
+  @property({ type: Number, reflect: true }) columnIdx?: number
 
   constructor(config: ColumnConfig) {
     super()
@@ -170,13 +170,15 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   /**
    * @description set value if value is changed and dispatch valueChange custom event.
    */
-  private setValue(): void {
-    this.checkValidity()
-    const valueAccessKey: string = this.config.type === ColumnTypes.Boolean ? 'checked' : 'value'
+  public setValue(newValue?: any): void {
+    if (newValue === undefined) {
+      this.checkValidity()
+      const valueAccessKey: string = this.config.type === ColumnTypes.Boolean ? 'checked' : 'value'
+
+      newValue = this.parseValue((this.editor as any)[valueAccessKey])
+    }
 
     const oldValue: any = this.parseValue(this.value)
-    const newValue: any = this.parseValue((this.editor as any)[valueAccessKey])
-
     if (oldValue != newValue) {
       this.value = newValue
       this.dispatchValueChangeEvent(oldValue, newValue)

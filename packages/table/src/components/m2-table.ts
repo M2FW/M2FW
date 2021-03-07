@@ -4,16 +4,36 @@ import './m2-table-header'
 import './m2-table-page-indicator'
 
 import { CSSResult, TemplateResult, css, customElement, html, property } from 'lit-element'
+import { ColumnConfig, TableData } from '../interfaces'
 
 import { AbstractM2TablePart } from '../abstracts'
 import { M2TableBody } from './m2-table-body'
+import { M2TableBooleanCell } from './m2-table-boolean-cell'
+import { M2TableDateCell } from './m2-table-date-cell'
+import { M2TableDateTimeCell } from './m2-table-datetime-cell'
+import { M2TableFloatCell } from './m2-table-float-cell'
 import { M2TableHeader } from './m2-table-header'
-import { TableData } from '../interfaces'
+import { M2TableImageCell } from './m2-table-image-cell'
+import { M2TableIntegerCell } from './m2-table-integer-cell'
+import { M2TableObjectCell } from './m2-table-object-cell'
+import { M2TableSelectCell } from './m2-table-select-cell'
+import { M2TableStringCell } from './m2-table-string-cell'
 
 export type M2TableFetchResult = {
   data: any[]
   total: number
 }
+
+export type M2TableCellTypes =
+  | M2TableBooleanCell
+  | M2TableDateCell
+  | M2TableDateTimeCell
+  | M2TableFloatCell
+  | M2TableImageCell
+  | M2TableIntegerCell
+  | M2TableObjectCell
+  | M2TableSelectCell
+  | M2TableStringCell
 
 @customElement('m2-table')
 export class M2Table extends AbstractM2TablePart {
@@ -198,6 +218,13 @@ export class M2Table extends AbstractM2TablePart {
     }
 
     return this.tableBody.getDeleted(withProps) as (T & TableData)[]
+  }
+
+  getCell<T>(rowIdx: number, columnName: string): T {
+    const columnIdx: number = this.columns.findIndex((column: ColumnConfig) => column.name === columnName)
+    if (columnIdx < 0) throw new Error('Failed to find column by name')
+    return this.tableBody?.getRow(rowIdx).querySelector(`m2-table-cell[columnidx="${columnIdx}"]`).renderRoot
+      .firstElementChild
   }
 
   /**

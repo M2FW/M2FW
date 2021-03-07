@@ -1,6 +1,6 @@
 import './m2-table-cell'
 
-import { ButtonType, DataStatus, Events } from '../enums'
+import { ButtonType, CellEvents, DataStatus, Events } from '../enums'
 import { CSSResult, PropertyValues, TemplateResult, customElement, html, property } from 'lit-element'
 import {
   ColumnConfig,
@@ -38,7 +38,7 @@ export class M2TableBody extends AbstractM2TablePart {
   constructor() {
     super()
     this.addEventListener('keydown', this.onkeydownHandler.bind(this))
-    this.addEventListener('valueChange', this.onValueChangeHandler.bind(this))
+    this.addEventListener(CellEvents.CellValueChange, this.onValueChangeHandler.bind(this))
   }
 
   render(): TemplateResult {
@@ -225,6 +225,10 @@ export class M2TableBody extends AbstractM2TablePart {
         this.selectedDataMap.set(identifier, record)
       })
     }
+  }
+
+  getRow(rowIdx: number): any {
+    return this.renderRoot?.querySelector(`tr[rowidx="${rowIdx}"]`)
   }
 
   getSelectedRowElements(): HTMLTableRowElement[] {
@@ -648,17 +652,17 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param event
    */
   onValueChangeHandler(event: any): void {
-    if (this._focusedCell) {
-      const rowIdx: number = this._focusedCell.rowIdx
-      const field: string = event.detail.field
-      const newValue: any = event.detail.newValue
+    const field: string = event.detail.field
+    const newValue: any = event.detail.newValue
+    const rowIdx: number = event.detail.rowIdx
 
-      if (!this._data[rowIdx]?.[this.propertyAccessKey]?.appended) {
-        this._data[rowIdx] = this.getAdjustedChanges(this._data[rowIdx], field, newValue)
-      } else {
-        this._data[rowIdx] = this.getAdjustedAppend(this._data[rowIdx], field, newValue)
-      }
+    if (!this._data[rowIdx]?.[this.propertyAccessKey]?.appended) {
+      this._data[rowIdx] = this.getAdjustedChanges(this._data[rowIdx], field, newValue)
+    } else {
+      this._data[rowIdx] = this.getAdjustedAppend(this._data[rowIdx], field, newValue)
     }
+
+    this.requestUpdate()
   }
 
   /**
