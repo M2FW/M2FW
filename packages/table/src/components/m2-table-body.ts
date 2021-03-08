@@ -243,21 +243,27 @@ export class M2TableBody extends AbstractM2TablePart {
    * @returns {TableData[]} selected data list
    */
   getSelected(withProps: boolean = false): TableData[] {
-    let selectedData: TableData[] = Array.from(this.selectedDataMap, ([_identifier, record]) => {
-      let clone: TableData = Object.assign({}, record)
-      const changedValues: TableChangeValueProperties[] | undefined = clone[this.propertyAccessKey]?.changedValues
-      if (changedValues?.length) {
-        changedValues.forEach((changedValue: TableChangeValueProperties) => {
-          clone[changedValue.field] = changedValue.changes
-        })
-      }
+    const selectedDataIds: string[] = Array.from(this.selectedDataMap.keys())
 
-      if (!withProps) delete clone[this.propertyAccessKey]
+    return this._data
+      .filter((record: TableData) => {
+        const id: string = this.getRecordIdentifier(record)
+        if (selectedDataIds.indexOf(id) >= 0) return true
+        return false
+      })
+      .map((record: TableData) => {
+        let clone: TableData = Object.assign({}, record)
+        const changedValues: TableChangeValueProperties[] | undefined = clone[this.propertyAccessKey]?.changedValues
+        if (changedValues?.length) {
+          changedValues.forEach((changedValue: TableChangeValueProperties) => {
+            clone[changedValue.field] = changedValue.changes
+          })
+        }
 
-      return clone
-    })
+        if (!withProps) delete clone[this.propertyAccessKey]
 
-    return selectedData
+        return clone
+      })
   }
 
   /**
