@@ -190,7 +190,7 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   stampSelected(record: TableData, selected: boolean = true): TableData {
-    Object.assign(record, { [this.propertyAccessKey]: { selected } })
+    Object.assign(record[this.propertyAccessKey], { selected })
     this.requestUpdate()
     return record
   }
@@ -243,10 +243,17 @@ export class M2TableBody extends AbstractM2TablePart {
    */
   getSelected(withProps: boolean = false): TableData[] {
     let selectedData: TableData[] = Array.from(this.selectedDataMap, ([_identifier, record]) => {
-      let cloned: TableData = Object.assign({}, record)
-      if (!withProps) delete cloned[this.propertyAccessKey]
+      let clone: TableData = Object.assign({}, record)
+      const changedValues: TableChangeValueProperties[] | undefined = clone[this.propertyAccessKey]?.changedValues
+      if (changedValues?.length) {
+        changedValues.forEach((changedValue: TableChangeValueProperties) => {
+          clone[changedValue.field] = changedValue.changes
+        })
+      }
 
-      return cloned
+      if (!withProps) delete clone[this.propertyAccessKey]
+
+      return clone
     })
 
     return selectedData
@@ -267,7 +274,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @returns {TableData[]}
    */
   getChanged(withProps: boolean = false): TableData[] {
-    let changedData: TableData[] = this.getDataByStatus(DataStatus.Changed, withProps)
+    let changedData: TableData[] = this.getDataByStatus(DataStatus.Changed, true)
     return changedData.map((record: TableData) => {
       let clone: TableData = Object.assign({}, record)
       const changedValues: TableChangeValueProperties[] | undefined = clone[this.propertyAccessKey]?.changedValues
@@ -277,6 +284,7 @@ export class M2TableBody extends AbstractM2TablePart {
         })
       }
 
+      if (!withProps) delete clone[this.propertyAccessKey]
       return clone
     })
   }
