@@ -118,7 +118,7 @@ export class M2Table extends AbstractM2TablePart {
   async refreshData(): Promise<void> {
     if (this.fetchHandler) {
       const { data, total } = await this.fetchHandler(this.page, this.limit)
-      this.data = data
+      this.data = Array.from(data)
       this.total = total
     } else {
       throw new Error('Fetch handler is not defined')
