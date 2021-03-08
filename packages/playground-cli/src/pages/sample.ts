@@ -156,7 +156,6 @@ export class Sample extends connect(store)(LitElement) {
       <m2-table
         .selectable="${{
           exclusive: false,
-          handySelector: false,
         } as RowSelectorOption}"
         .columns="${this.columns}"
         .data="${this.data}"

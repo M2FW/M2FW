@@ -169,7 +169,7 @@ export class M2TableBody extends AbstractM2TablePart {
 
   private getRecordIdentifier(record: TableData): string {
     let identifier: any
-    if (this.selectable) {
+    if (this.selectable.fieldIdentifier) {
       if (typeof this.selectable.fieldIdentifier === 'function') {
         identifier = this.selectable.fieldIdentifier(record)
       } else {
@@ -197,6 +197,8 @@ export class M2TableBody extends AbstractM2TablePart {
 
   updated(changedProps: PropertyValues): void {
     if (changedProps.has('data') || changedProps.has('addable')) {
+      if (!this.data?.length) return
+
       this._data = this.data.map((record: TableData) => {
         let cloned: TableData = Object.assign({}, record)
         delete cloned[this.propertyAccessKey]
@@ -373,8 +375,8 @@ export class M2TableBody extends AbstractM2TablePart {
    */
   selectAll(): void {
     this._data = this._data.map((record: TableData) => {
-      record = this.stampSelected(record)
       if (this.selectable) {
+        record = this.stampSelected(record)
         const identifier: string = this.getRecordIdentifier(record)
         this.selectedDataMap.set(identifier, record)
       }
