@@ -190,6 +190,7 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   stampSelected(record: TableData, selected: boolean = true): TableData {
+    if (!record[this.propertyAccessKey]) record[this.propertyAccessKey] = {}
     Object.assign(record[this.propertyAccessKey], { selected })
     this.requestUpdate()
     return record
