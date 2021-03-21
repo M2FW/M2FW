@@ -29,7 +29,6 @@ export class M2TableImageCell extends AbstractM2TableCell<HTMLInputElement> {
 
     if (!src && defaultSrc) src = defaultSrc
     imageElement.src = src
-    console.log(imageElement.src)
 
     if (alt) imageElement.alt = alt || ''
     if (notFoundSrc) imageElement.onerror = () => (imageElement.src = notFoundSrc)

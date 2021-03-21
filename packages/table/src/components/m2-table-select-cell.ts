@@ -8,11 +8,11 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
   editorAccessor: string = 'select'
 
   renderEditor(config: SelectColumnConfig): TemplateResult {
-    const { options }: SelectColumnConfig = config
+    const { includeEmpty = true, options }: SelectColumnConfig = config
 
     return html`
       <select>
-        <option></option>
+        ${includeEmpty ? html`<option></option>` : ''}
         ${((options as any) || []).map(
           (option: string | SelectOption): TemplateResult => {
             if (typeof option === 'string') {
@@ -56,6 +56,12 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
     } else {
       return this.displayCellFactory('')
     }
+  }
+
+  parseValue(value: any): boolean {
+    if (value === 'true') return true
+    if (value === 'false') return false
+    return value
   }
 
   focusOnEditor(): void {
