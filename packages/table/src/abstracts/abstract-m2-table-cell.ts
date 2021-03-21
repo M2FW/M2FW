@@ -1,6 +1,6 @@
 import { CSSResult, LitElement, PropertyValues, TemplateResult, html, property } from 'lit-element'
 import { CellEvents, ColumnTypes } from '../enums'
-import { ColumnConfig, TableData } from '../interfaces'
+import { ColumnConfig, TableChangeValueProperties, TableData } from '../interfaces'
 import { KeyActions, keyMapper } from '../utils/key-mapper'
 
 import { cellStyle } from '../assets/styles'
@@ -45,6 +45,17 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
     }
 
     return editor
+  }
+
+  get changedRecord(): TableData {
+    const changedRecord: TableData = { ...(this.record || {}) }
+    if (this.record?.__props__?.changed) {
+      this.record.__props__.changedValues?.forEach((changedValue: TableChangeValueProperties) => {
+        changedRecord[changedValue.field] = changedValue.changes
+      })
+    }
+
+    return changedRecord
   }
 
   render(): TemplateResult {
@@ -116,7 +127,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
 
     if (this.config?.editable !== undefined) {
       if (typeof this.config.editable === 'function') {
-        editable = this.config.editable(this.config, this.record || {}, this.value)
+        editable = this.config.editable(this.config, this.record || {}, this.value, this.changedRecord)
       } else {
         editable = Boolean(this.config?.editable)
       }
@@ -140,7 +151,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
       let editable: boolean
       if (this.config?.editable !== undefined) {
         if (typeof this.config.editable === 'function') {
-          editable = this.config.editable(this.config, this.record || {}, this.value)
+          editable = this.config.editable(this.config, this.record || {}, this.value, this.changedRecord)
         } else {
           editable = Boolean(this.config?.editable)
         }
