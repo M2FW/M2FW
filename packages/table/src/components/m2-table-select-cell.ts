@@ -32,7 +32,7 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
   renderDisplay(config: SelectColumnConfig): TemplateResult {
     const { options, displayValue }: SelectColumnConfig = config
 
-    if (displayValue && typeof displayValue === 'string') {
+    if (displayValue && typeof displayValue !== 'function') {
       return this.displayCellFactory(displayValue)
     } else if (displayValue && typeof displayValue === 'function') {
       return this.displayCellFactory(displayValue(this.value))
