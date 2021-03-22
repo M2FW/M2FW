@@ -54,17 +54,7 @@ export class M2TableFloatCell extends AbstractM2TableCell<HTMLInputElement> {
     return Number(value)
   }
 
-  async checkValidity(): Promise<boolean> {
-    let validity: boolean
-    if (!this._isEditing) {
-      this._isEditing = true
-      await this.updateComplete
-      validity = this.editor?.checkValidity()
-      this._isEditing = false
-    } else {
-      validity = this.editor?.checkValidity()
-    }
-
-    return validity
+  checkValidity(): boolean {
+    return this.editor?.checkValidity()
   }
 }

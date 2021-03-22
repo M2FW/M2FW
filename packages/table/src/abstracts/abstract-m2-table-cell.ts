@@ -37,7 +37,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   abstract renderDisplay(config: ColumnConfig): TemplateResult
   abstract focusOnEditor(): void
 
-  abstract checkValidity(): Promise<boolean>
+  abstract checkValidity(): boolean
 
   get editor(): T {
     const editor: T | null = this.renderRoot?.querySelector(this.editorAccessor) as any
@@ -162,7 +162,6 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
     }
 
     if (this._isEditing && keyMapper(event.code, KeyActions.CANCEL_EDITING)) {
-      console.log('Editing canceled')
       this.cancelEditing()
     }
   }
@@ -212,7 +211,10 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   }
 
   private doValidations(value: any): boolean {
-    if (!this.checkValidity()) return false
+    if (this._isEditing) {
+      if (!this.checkValidity()) return false
+    }
+
     const validator:
       | RegExp
       | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => boolean)

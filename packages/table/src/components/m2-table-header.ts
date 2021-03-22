@@ -135,15 +135,10 @@ export class M2TableHeader extends AbstractM2TablePart {
       .previousElementSibling as HTMLTableHeaderCellElement
 
     const padding: number = this.paddingDiff(cell)
-    console.log(padding)
     const columnWidth: number = cell.offsetWidth - padding
     const pageX: number = e.pageX
 
     const modifyCellWidth = (e: MouseEvent) => {
-      // // if (curCol) {
-      // //   var diffX = e.pageX - pageX
-      // //   curCol.style.width = curColWidth + diffX + 'px'
-      // // }
       const diffX = e.pageX - pageX
       const width: number = columnWidth + diffX
       cell.style.width = `${width}px`
