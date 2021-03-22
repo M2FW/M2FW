@@ -164,6 +164,7 @@ export class M2TableBody extends AbstractM2TablePart {
           @focusChange="${this.onFocusChangeHandler}"
         ></m2-table-cell>
       </td>
+      <!-- <div class="splitter"></div> -->
     `
   }
 

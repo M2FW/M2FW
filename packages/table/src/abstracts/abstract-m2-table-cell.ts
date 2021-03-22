@@ -37,7 +37,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   abstract renderDisplay(config: ColumnConfig): TemplateResult
   abstract focusOnEditor(): void
 
-  abstract checkValidity(): boolean
+  abstract checkValidity(): Promise<boolean>
 
   get editor(): T {
     const editor: T | null = this.renderRoot?.querySelector(this.editorAccessor) as any

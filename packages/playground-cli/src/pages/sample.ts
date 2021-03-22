@@ -42,9 +42,7 @@ export class Sample extends connect(store)(LitElement) {
       header: '이미지',
       type: ColumnTypes.Image,
       editable: true,
-      styles: {
-        margin: 'auto',
-      },
+      styles: { margin: 'auto' },
       defaultSrc: 'https://avatars.githubusercontent.com/u/153960?s=52&v=4',
     },
     {
@@ -68,6 +66,16 @@ export class Sample extends connect(store)(LitElement) {
       hidden: false,
       editable: true,
       align: ColumnAlign.Center,
+    },
+    {
+      name: 'Integer',
+      header: 'Integer',
+      type: ColumnTypes.Integer,
+      width: 150,
+      min: 10,
+      hidden: false,
+      editable: true,
+      align: ColumnAlign.Right,
     },
     {
       name: 'description',
@@ -165,6 +173,7 @@ export class Sample extends connect(store)(LitElement) {
         } as RowSelectorOption}"
         .columns="${this.columns}"
         .data="${this.data}"
+        .limit="${2}"
         .total="${5000}"
         .addable="${false}"
         .fetchHandler="${this.generateRandomData as any}"

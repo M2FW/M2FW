@@ -36,13 +36,15 @@ export const headerStyle: CSSResult = css`
   }
   th {
     padding: var(--m2-table-cell-padding, 5px);
-    border-width: var(--m2-table-cell-border-width, 0 1px 0 0);
-    border-style: var(--m2-table-header-cell-border-style, solid);
-    border-color: var(--m2-table-header-cell-border-color, gray);
   }
-  th.resizable {
+  .splitter {
     cursor: col-resize;
-    border-color: var(--m2-table-header-cell-resizable-border-color, lightgray);
+    height: var(--m2-table-header-row-height, 30px);
+    width: var(--m2-table-splitter-width, 2px);
+    background-color: var(--m2-table-header-splitter-color, lightgray);
+  }
+  .splitter:hover {
+    background-color: var(--m2-table-header-splitter-hover-color, lightgreen);
   }
 `
 
@@ -91,9 +93,9 @@ export const bodyStyle: CSSResult = css`
   }
   td {
     padding: var(--m2-table-cell-padding, 5px);
-    border-width: var(--m2-table-cell-border-width, 0 1px 0 0);
-    border-style: var(--m2-table-cell-border-style, solid);
-    border-color: var(--m2-table-cell-border-color, transparent);
+    border-right-width: var(--m2-table-splitter-width, 2px);
+    border-right-color: var(--m2-table-body-splitter-color, darkgray);
+    border-right-style: var(--m2-table-body-splitter-style, dotted);
   }
   td,
   span {
@@ -116,13 +118,22 @@ export const bodyStyle: CSSResult = css`
   }
 `
 
+export const tableCellStyle: CSSResult = css`
+  :host {
+    display: flex;
+    outline: none;
+    width: inherit;
+  }
+`
+
 export const cellStyle: CSSResult = css`
   :host {
     flex: 1;
     display: grid;
     outline: none;
-    border: 1px solid transparent;
+    border: 0px;
     width: inherit;
+    border: 1px solid transparent;
   }
   :host(:focus) {
     border: 1px dashed gray;
@@ -134,6 +145,9 @@ export const cellStyle: CSSResult = css`
     outline: none;
     border: none;
     background-color: transparent;
+  }
+  :host > img {
+    margin: auto;
   }
   :host([invalid]) {
     background-color: var(--m2-table-cell-invalid-bg-color, inherit);

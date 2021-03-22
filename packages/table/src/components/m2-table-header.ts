@@ -7,6 +7,8 @@ import { AbstractM2TablePart } from '../abstracts'
 
 @customElement('m2-table-header')
 export class M2TableHeader extends AbstractM2TablePart {
+  _lastAccVal?: number
+
   static get styles(): CSSResult[] {
     return [commonStyle, headerStyle]
   }
@@ -24,7 +26,8 @@ export class M2TableHeader extends AbstractM2TablePart {
   }
 
   private renderRowNumbering(): TemplateResult {
-    return html` <th class="header-numbering numbering">No.</th> `
+    return html` <th class="header-numbering numbering">No.</th>
+      <div class="splitter"></div>`
   }
 
   private renderButton(button: TableButton): TemplateResult | void {
@@ -40,14 +43,16 @@ export class M2TableHeader extends AbstractM2TablePart {
       }
 
       return html`<th>
-        <button>${icon}</button>
-      </th>`
+          <button>${icon}</button>
+        </th>
+        <div class="splitter"></div>`
     } else if (button.type === ButtonType.Text) {
       const buttonOptions: TextButtonOptions = button.options as TextButtonOptions
 
       return html` <th>
-        <button>${buttonOptions.text}</button>
-      </th>`
+          <button>${buttonOptions.text}</button>
+        </th>
+        <div class="splitter"></div>`
     }
   }
 
@@ -67,20 +72,16 @@ export class M2TableHeader extends AbstractM2TablePart {
               />
             `}
       </th>
+      <div class="splitter"></div>
     `
   }
 
   private renderTableCell(column: ColumnConfig, columnIdx: number): TemplateResult {
     return html`
-      <th
-        columnIdx="${columnIdx}"
-        style="width: ${column.width || 150}px"
-        ?hidden="${column.hidden}"
-        @mousemove="${this.onMouseMoveHandler.bind(this)}"
-        @mousedown="${this.onMouseDownHandler.bind(this)}"
-      >
+      <th columnIdx="${columnIdx}" style="width: ${column.width || 150}px" ?hidden="${column.hidden}">
         ${this.displayHeader(column)}
       </th>
+      <div class="splitter" @mousedown="${this.onMouseDownHandler.bind(this)}"></div>
     `
   }
 
@@ -126,37 +127,42 @@ export class M2TableHeader extends AbstractM2TablePart {
     }
   }
 
-  private onMouseMoveHandler(e: MouseEvent): void {
-    const boundary: number = 3
-    const cell: HTMLTableHeaderCellElement = e.currentTarget as HTMLTableHeaderCellElement
-
-    const cellWidth: number = cell.clientWidth
-    const offsetX: number = e.offsetX
-
-    if (offsetX >= cellWidth - boundary) {
-      cell.classList.add('resizable')
-    } else {
-      cell.classList.remove('resizable')
-    }
-  }
-
   private onMouseDownHandler(e: MouseEvent): void {
-    const cell: HTMLTableHeaderCellElement = e.currentTarget as HTMLTableHeaderCellElement
-    if (cell.classList.contains('resizable')) {
-      const modifyCellWidth = (e: MouseEvent) => {
-        const cellWidth: number = Number(cell.style.width.replace('px', ''))
-        const width: number = cellWidth + e.movementX
-        cell.style.width = width + 'px'
-        const columnIdx: number = Number(cell.getAttribute('columnIdx'))
+    e.preventDefault()
+    e.stopPropagation()
 
-        this.dispatchEvent(new CustomEvent(CellEvents.ColumnWidthChange, { detail: { columnIdx, width } }))
-      }
+    const cell: HTMLTableHeaderCellElement = (e.currentTarget as HTMLDivElement)
+      .previousElementSibling as HTMLTableHeaderCellElement
 
-      document.addEventListener('mousemove', modifyCellWidth)
-      document.addEventListener('mouseup', () => {
-        cell.classList.remove('resizable')
-        document.removeEventListener('mousemove', modifyCellWidth)
-      })
+    const padding: number = this.paddingDiff(cell)
+    console.log(padding)
+    const columnWidth: number = cell.offsetWidth - padding
+    const pageX: number = e.pageX
+
+    const modifyCellWidth = (e: MouseEvent) => {
+      // // if (curCol) {
+      // //   var diffX = e.pageX - pageX
+      // //   curCol.style.width = curColWidth + diffX + 'px'
+      // // }
+      const diffX = e.pageX - pageX
+      const width: number = columnWidth + diffX
+      cell.style.width = `${width}px`
+      const columnIdx: number = Number(cell.getAttribute('columnIdx'))
+
+      this.dispatchEvent(new CustomEvent(CellEvents.ColumnWidthChange, { detail: { columnIdx, width } }))
     }
+
+    document.addEventListener('mousemove', modifyCellWidth)
+    document.addEventListener('mouseup', () => document.removeEventListener('mousemove', modifyCellWidth))
   }
+
+  paddingDiff(cell: HTMLTableHeaderCellElement): number {
+    const padLeft: number = parseInt(window.getComputedStyle(cell, null).getPropertyValue('padding-left'))
+    const padRight: number = parseInt(window.getComputedStyle(cell, null).getPropertyValue('padding-right'))
+    return padLeft + padRight
+  }
+
+  //   var padLeft = getStyleVal(col,'padding-left');
+  // var padRight = getStyleVal(col,'padding-right');
+  // return (parseInt(padLeft) + parseInt(padRight));
 }

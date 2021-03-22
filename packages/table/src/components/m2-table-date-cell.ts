@@ -68,7 +68,17 @@ export class M2TableDateCell extends AbstractM2TableCell<HTMLInputElement> {
     return `${year}-${month}-${date}`
   }
 
-  checkValidity(): boolean {
-    return this.editor?.checkValidity()
+  async checkValidity(): Promise<boolean> {
+    let validity: boolean
+    if (!this._isEditing) {
+      this._isEditing = true
+      await this.updateComplete
+      validity = this.editor?.checkValidity()
+      this._isEditing = false
+    } else {
+      validity = this.editor?.checkValidity()
+    }
+
+    return validity
   }
 }

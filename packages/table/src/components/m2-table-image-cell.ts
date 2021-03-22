@@ -23,8 +23,8 @@ export class M2TableImageCell extends AbstractM2TableCell<HTMLInputElement> {
     this.editor?.select()
   }
 
-  private buildImageTag({ width, height, styles, alt, defaultSrc, notFoundSrc }: ImageColumnConfig): HTMLImageElement {
-    const imageElement: HTMLImageElement = new Image(width, height)
+  private buildImageTag({ styles, alt, defaultSrc, notFoundSrc }: ImageColumnConfig): HTMLImageElement {
+    const imageElement: HTMLImageElement = new Image()
     let src: string = String(this.value)
 
     if (!src && defaultSrc) src = defaultSrc
@@ -45,7 +45,17 @@ export class M2TableImageCell extends AbstractM2TableCell<HTMLInputElement> {
     return imageElement
   }
 
-  checkValidity(): boolean {
-    return this.editor?.checkValidity()
+  async checkValidity(): Promise<boolean> {
+    let validity: boolean
+    if (!this._isEditing) {
+      this._isEditing = true
+      await this.updateComplete
+      validity = this.editor?.checkValidity()
+      this._isEditing = false
+    } else {
+      validity = this.editor?.checkValidity()
+    }
+
+    return validity
   }
 }

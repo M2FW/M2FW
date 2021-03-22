@@ -10,6 +10,7 @@ import './m2-table-string-cell'
 
 import { CSSResult, LitElement, TemplateResult, css, customElement, html, property } from 'lit-element'
 import { ColumnConfig, TableData } from '../interfaces'
+import { commonStyle, tableCellStyle } from '../assets/styles'
 
 import { ColumnTypes } from '../enums'
 
@@ -34,14 +35,8 @@ export class M2TableCell extends LitElement {
     [ColumnTypes.Image]: 'm2-table-image-cell',
   }
 
-  static get styles(): CSSResult {
-    return css`
-      :host {
-        display: flex;
-        outline: none;
-        width: inherit;
-      }
-    `
+  static get styles(): CSSResult[] {
+    return [commonStyle, tableCellStyle]
   }
 
   constructor(config: ColumnConfig) {
