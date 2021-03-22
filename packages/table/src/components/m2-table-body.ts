@@ -152,7 +152,7 @@ export class M2TableBody extends AbstractM2TablePart {
 
   private renderTableCell(column: ColumnConfig, record: TableData, rowIdx: number, columnIdx: number): TemplateResult {
     return html`
-      <td width="${column.width || '150px'}" ?hidden="${column.hidden}">
+      <td columnIdx="${columnIdx}" style="width: ${column.width || 150}px;" ?hidden="${column.hidden}">
         <m2-table-cell
           rowIdx="${rowIdx}"
           columnIdx="${columnIdx}"

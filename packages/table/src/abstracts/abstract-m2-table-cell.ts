@@ -14,6 +14,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
 
   @property({ type: Number, reflect: true }) rowIdx?: number
   @property({ type: Number, reflect: true }) columnIdx?: number
+  @property({ type: Boolean, reflect: true }) invalid: boolean = false
 
   constructor(config: ColumnConfig) {
     super()
@@ -60,9 +61,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
 
   render(): TemplateResult {
     if (!this.config) return html``
-    return html`
-      ${this._isEditing && this.config.editable ? this.renderEditor(this.config) : this.renderDisplay(this.config)}
-    `
+    return html` ${this._isEditing ? this.renderEditor(this.config) : this.renderDisplay(this.config)} `
   }
 
   updated(changedProps: PropertyValues) {
@@ -161,6 +160,11 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
       if (!editable) return
       this.toggleEditing()
     }
+
+    if (this._isEditing && keyMapper(event.code, KeyActions.CANCEL_EDITING)) {
+      console.log('Editing canceled')
+      this.cancelEditing()
+    }
   }
 
   /**
@@ -178,21 +182,50 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
     }
   }
 
+  async cancelEditing(): Promise<void> {
+    this._isEditing = false
+    this.focus()
+  }
+
   /**
    * @description set value if value is changed and dispatch valueChange custom event.
    */
   public setValue(newValue?: any): void {
     if (newValue === undefined) {
-      this.checkValidity()
       const valueAccessKey: string = this.config.type === ColumnTypes.Boolean ? 'checked' : 'value'
 
       newValue = this.parseValue((this.editor as any)[valueAccessKey])
+    }
+
+    if (!this.doValidations(newValue)) {
+      this.invalid = true
+      return
+    } else {
+      this.invalid = false
     }
 
     const oldValue: any = this.parseValue(this.value)
     if (oldValue != newValue) {
       this.value = newValue
       this.dispatchValueChangeEvent(oldValue, newValue)
+    }
+  }
+
+  private doValidations(value: any): boolean {
+    if (!this.checkValidity()) return false
+    const validator:
+      | RegExp
+      | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => boolean)
+      | undefined = this.config.validator
+
+    if (validator) {
+      if (validator instanceof RegExp) {
+        return validator.test(value)
+      } else {
+        return validator(this.config, this.record || {}, value, this.changedRecord)
+      }
+    } else {
+      return true
     }
   }
 

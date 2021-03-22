@@ -1,5 +1,5 @@
-import { ButtonType, Events } from '../enums'
-import { CSSResult, TemplateResult, customElement, html } from 'lit-element'
+import { ButtonType, CellEvents, Events } from '../enums'
+import { CSSResult, TemplateResult, customElement, html, property } from 'lit-element'
 import { ColumnConfig, IconButtonOptions, RowSelectorOption, TableButton, TextButtonOptions } from '../interfaces'
 import { commonStyle, headerStyle } from '../assets/styles'
 
@@ -17,7 +17,7 @@ export class M2TableHeader extends AbstractM2TablePart {
         <tr>
           ${this.selectable ? this.renderSelectInput() : ''} ${this.numbering ? this.renderRowNumbering() : ''}
           ${this.buttons.map((button: TableButton) => this.renderButton(button))}
-          ${this.columns.map((column: ColumnConfig) => this.renderTableCell(column))}
+          ${this.columns.map((column: ColumnConfig, columnIdx: number) => this.renderTableCell(column, columnIdx))}
         </tr>
       </thead>
     `
@@ -70,8 +70,18 @@ export class M2TableHeader extends AbstractM2TablePart {
     `
   }
 
-  private renderTableCell(column: ColumnConfig): TemplateResult {
-    return html` <th width="${column.width || 150}" ?hidden="${column.hidden}">${this.displayHeader(column)}</th> `
+  private renderTableCell(column: ColumnConfig, columnIdx: number): TemplateResult {
+    return html`
+      <th
+        columnIdx="${columnIdx}"
+        style="width: ${column.width || 150}px"
+        ?hidden="${column.hidden}"
+        @mousemove="${this.onMouseMoveHandler.bind(this)}"
+        @mousedown="${this.onMouseDownHandler.bind(this)}"
+      >
+        ${this.displayHeader(column)}
+      </th>
+    `
   }
 
   /**
@@ -113,6 +123,40 @@ export class M2TableHeader extends AbstractM2TablePart {
           cancelable: true,
         })
       )
+    }
+  }
+
+  private onMouseMoveHandler(e: MouseEvent): void {
+    const boundary: number = 3
+    const cell: HTMLTableHeaderCellElement = e.currentTarget as HTMLTableHeaderCellElement
+
+    const cellWidth: number = cell.clientWidth
+    const offsetX: number = e.offsetX
+
+    if (offsetX >= cellWidth - boundary) {
+      cell.classList.add('resizable')
+    } else {
+      cell.classList.remove('resizable')
+    }
+  }
+
+  private onMouseDownHandler(e: MouseEvent): void {
+    const cell: HTMLTableHeaderCellElement = e.currentTarget as HTMLTableHeaderCellElement
+    if (cell.classList.contains('resizable')) {
+      const modifyCellWidth = (e: MouseEvent) => {
+        const cellWidth: number = Number(cell.style.width.replace('px', ''))
+        const width: number = cellWidth + e.movementX
+        cell.style.width = width + 'px'
+        const columnIdx: number = Number(cell.getAttribute('columnIdx'))
+
+        this.dispatchEvent(new CustomEvent(CellEvents.ColumnWidthChange, { detail: { columnIdx, width } }))
+      }
+
+      document.addEventListener('mousemove', modifyCellWidth)
+      document.addEventListener('mouseup', () => {
+        cell.classList.remove('resizable')
+        document.removeEventListener('mousemove', modifyCellWidth)
+      })
     }
   }
 }

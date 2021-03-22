@@ -1,5 +1,6 @@
 export interface HotKeyMapper {
   TOGGLE_EDITING: string[]
+  CANCEL_EDITING: string[]
 
   MOVE_FOCUSING: string[]
   MOVE_FOCUSING_UP: string[]

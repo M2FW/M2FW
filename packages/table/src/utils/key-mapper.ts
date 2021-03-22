@@ -5,6 +5,7 @@ import { HotKeyMapper } from '../interfaces'
  */
 const DEFAULT_KEY_MAP: HotKeyMapper = {
   TOGGLE_EDITING: ['Enter'],
+  CANCEL_EDITING: ['Escape'],
   MOVE_FOCUSING: ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'],
   MOVE_FOCUSING_UP: ['ArrowUp'],
   MOVE_FOCUSING_DOWN: ['ArrowDown'],
@@ -16,6 +17,7 @@ const DEFAULT_KEY_MAP: HotKeyMapper = {
 
 export enum KeyActions {
   TOGGLE_EDITING = 'TOGGLE_EDITING',
+  CANCEL_EDITING = 'CANCEL_EDITING',
   MOVE_FOCUSING = 'MOVE_FOCUSING',
   MOVE_FOCUSING_LEFT = 'MOVE_FOCUSING_LEFT',
   MOVE_FOCUSING_RIGHT = 'MOVE_FOCUSING_RIGHT',
@@ -34,10 +36,6 @@ export enum KeyActions {
  *
  * @returns {Boolean} Whether the key is involved in for the action by configured keyMap
  */
-export function keyMapper(
-  key: string,
-  action: KeyActions,
-  keyMap: HotKeyMapper = DEFAULT_KEY_MAP
-): boolean {
+export function keyMapper(key: string, action: KeyActions, keyMap: HotKeyMapper = DEFAULT_KEY_MAP): boolean {
   return Boolean(keyMap[action].indexOf(key) >= 0)
 }

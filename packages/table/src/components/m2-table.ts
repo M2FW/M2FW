@@ -77,6 +77,7 @@ export class M2Table extends AbstractM2TablePart {
           @selectAll="${this.onSelectAllHandler.bind(this)}"
           @deselectAll="${this.onDeselectAllHandler.bind(this)}"
           @wheel="${this.onHeaderWheelHandler}"
+          @columnWidthChange="${this.onColumnWidthChange.bind(this)}"
         ></m2-table-header>
 
         <m2-table-body
@@ -245,7 +246,18 @@ export class M2Table extends AbstractM2TablePart {
    * @description Event handler for wheel from m2-table-header, It scrolls table from left to right
    * @param e Wheel Event
    */
-  onHeaderWheelHandler(e: WheelEvent) {
+  onHeaderWheelHandler(e: WheelEvent): void {
     this.tableContainer.scrollLeft += e.deltaY / this.scrollSpeedLevel
+  }
+
+  onColumnWidthChange(e: CustomEvent): void {
+    const { columnIdx, width } = e.detail
+    this.columns = this.columns.map((column: ColumnConfig, idx: number) => {
+      if (idx === columnIdx) {
+        column.width = width
+      }
+
+      return column
+    })
   }
 }

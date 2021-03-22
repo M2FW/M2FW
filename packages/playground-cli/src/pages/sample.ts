@@ -87,6 +87,12 @@ export class Sample extends connect(store)(LitElement) {
         Number(record?.name.replace('Setting ', '')) % 2 === 0,
     },
     {
+      name: 'a-z only',
+      type: ColumnTypes.String,
+      width: 100,
+      validator: /^[a-z]+$/,
+    },
+    {
       name: 'value',
       header: '설정 값',
       type: ColumnTypes.String,

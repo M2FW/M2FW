@@ -36,10 +36,13 @@ export const headerStyle: CSSResult = css`
   }
   th {
     padding: var(--m2-table-cell-padding, 5px);
-    border-top: var(--m2-table-cell-border-top, none);
-    border-bottom: var(--m2-table-cell-border-bottom, none);
-    border-left: var(--m2-table-cell-border-left, none);
-    border-right: var(--m2-table-cell-border-right, none);
+    border-width: var(--m2-table-cell-border-width, 0 1px 0 0);
+    border-style: var(--m2-table-header-cell-border-style, solid);
+    border-color: var(--m2-table-header-cell-border-color, gray);
+  }
+  th.resizable {
+    cursor: col-resize;
+    border-color: var(--m2-table-header-cell-resizable-border-color, lightgray);
   }
 `
 
@@ -88,10 +91,9 @@ export const bodyStyle: CSSResult = css`
   }
   td {
     padding: var(--m2-table-cell-padding, 5px);
-    border-top: var(--m2-table-cell-border-top, none);
-    border-bottom: var(--m2-table-cell-border-bottom, none);
-    border-left: var(--m2-table-cell-border-left, none);
-    border-right: var(--m2-table-cell-border-right, none);
+    border-width: var(--m2-table-cell-border-width, 0 1px 0 0);
+    border-style: var(--m2-table-cell-border-style, solid);
+    border-color: var(--m2-table-cell-border-color, transparent);
   }
   td,
   span {
@@ -132,6 +134,12 @@ export const cellStyle: CSSResult = css`
     outline: none;
     border: none;
     background-color: transparent;
+  }
+  :host([invalid]) {
+    background-color: var(--m2-table-cell-invalid-bg-color, inherit);
+    border-width: var(--m2-table-cell-invalid-border-width, 0px 0px 1px 0px);
+    border-style: var(--m2-table-cell-invalid-border-style, dashed);
+    border-color: var(--m2-table-cell-invalid-border-color, tomato);
   }
   :host(.align-left) .dsp-cell > span {
     margin: auto auto auto 0px;
