@@ -2,6 +2,7 @@ import { TemplateResult, customElement, html, property } from 'lit-element'
 
 import { AbstractM2TableCell } from '../abstracts'
 import { ImageColumnConfig } from '../interfaces'
+import { ValidityErrors } from '../enums'
 
 @customElement('m2-table-image-cell')
 export class M2TableImageCell extends AbstractM2TableCell<HTMLInputElement> {
@@ -12,7 +13,7 @@ export class M2TableImageCell extends AbstractM2TableCell<HTMLInputElement> {
   renderEditor({ srcType = 'url' }: ImageColumnConfig): TemplateResult {
     const inputType: 'url' | 'text' = srcType === 'url' ? 'url' : 'text'
 
-    return html`<input type="${inputType}" value="${this.value || ''}" />`
+    return html`<input type="${inputType}" value="${this.value || ''}" ?required="${this.config.required}" />`
   }
 
   renderDisplay(imageColumnConfig: ImageColumnConfig): TemplateResult {
@@ -45,7 +46,7 @@ export class M2TableImageCell extends AbstractM2TableCell<HTMLInputElement> {
     return imageElement
   }
 
-  checkValidity(): boolean {
-    return this.editor?.checkValidity()
+  checkValidity(): void {
+    if (this.config.required && !this.value) throw new Error(ValidityErrors.VALUE_MISSING)
   }
 }

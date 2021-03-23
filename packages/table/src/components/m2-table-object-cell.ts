@@ -2,6 +2,7 @@ import { TemplateResult, customElement, html } from 'lit-element'
 
 import { AbstractM2TableCell } from '../abstracts/abstract-m2-table-cell'
 import { ObjectColumnConfig } from '../interfaces'
+import { ValidityErrors } from '../enums'
 
 @customElement('m2-table-object-cell')
 export class M2TableObjectCell extends AbstractM2TableCell<HTMLInputElement> {
@@ -64,7 +65,7 @@ export class M2TableObjectCell extends AbstractM2TableCell<HTMLInputElement> {
     return
   }
 
-  checkValidity(): boolean {
-    return this.editor?.checkValidity()
+  checkValidity(): void {
+    if (this.config.required && !this.value) throw new Error(ValidityErrors.VALUE_MISSING)
   }
 }

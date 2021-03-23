@@ -2,6 +2,7 @@ import { SelectColumnConfig, SelectOption } from '../interfaces'
 import { TemplateResult, customElement, html } from 'lit-element'
 
 import { AbstractM2TableCell } from '../abstracts/abstract-m2-table-cell'
+import { ValidityErrors } from '../enums'
 
 @customElement('m2-table-select-cell')
 export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
@@ -11,7 +12,7 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
     const { includeEmpty = true, options }: SelectColumnConfig = config
 
     return html`
-      <select>
+      <select ?required="${this.config.required}">
         ${includeEmpty ? html`<option></option>` : ''}
         ${((options as any) || []).map(
           (option: string | SelectOption): TemplateResult => {
@@ -68,7 +69,7 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
     this.editor?.focus()
   }
 
-  checkValidity(): boolean {
-    return this.editor?.checkValidity()
+  checkValidity(): void {
+    if (this.config.required && !this.value) throw new Error(ValidityErrors.VALUE_MISSING)
   }
 }

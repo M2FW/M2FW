@@ -2,6 +2,7 @@ import { BooleanColumnConfig, ColumnConfig } from '../interfaces'
 import { TemplateResult, customElement, html, property } from 'lit-element'
 
 import { AbstractM2TableCell } from '../abstracts/abstract-m2-table-cell'
+import { ValidityErrors } from '../enums'
 
 @customElement('m2-table-boolean-cell')
 export class M2TableBooleanCell extends AbstractM2TableCell<HTMLInputElement> {
@@ -10,7 +11,7 @@ export class M2TableBooleanCell extends AbstractM2TableCell<HTMLInputElement> {
   editorAccessor: string = 'input[type=checkbox]'
 
   renderEditor(_config: BooleanColumnConfig): TemplateResult {
-    return html` <input type="checkbox" .checked="${this.value || false}" /> `
+    return html` <input type="checkbox" .checked="${this.value || false}" ?required="${this.config.required}" /> `
   }
 
   renderDisplay(_config: ColumnConfig): TemplateResult {
@@ -25,7 +26,8 @@ export class M2TableBooleanCell extends AbstractM2TableCell<HTMLInputElement> {
     return Boolean(value)
   }
 
-  checkValidity(): boolean {
-    return this.editor?.checkValidity()
+  checkValidity(): void {
+    const { required }: BooleanColumnConfig = this.config
+    if (required && !(this.value === true || this.value === false)) throw new Error(ValidityErrors.VALUE_MISSING)
   }
 }

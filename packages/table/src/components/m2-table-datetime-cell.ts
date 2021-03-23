@@ -2,6 +2,7 @@ import { DateTimeColumnConfig, StringColumnConfig } from '../interfaces/'
 import { TemplateResult, customElement, html, property } from 'lit-element'
 
 import { AbstractM2TableCell } from '../abstracts/abstract-m2-table-cell'
+import { ValidityErrors } from '../enums'
 import { ifDefined } from 'lit-html/directives/if-defined'
 
 @customElement('m2-table-datetime-cell')
@@ -25,6 +26,7 @@ export class M2TableDateTimeCell extends AbstractM2TableCell<HTMLInputElement> {
         max="${ifDefined(max)}"
         min="${ifDefined(min)}"
         step="${ifDefined(step)}"
+        ?required="${this.config.required}"
         type="datetime-local"
       />
     `
@@ -84,7 +86,14 @@ export class M2TableDateTimeCell extends AbstractM2TableCell<HTMLInputElement> {
     return `${year}-${month}-${date}T${hours}:${minutes}:${seconds}`
   }
 
-  checkValidity(): boolean {
-    return this.editor?.checkValidity()
+  checkValidity(): void {
+    const { required, min, max }: DateTimeColumnConfig = this.config
+    if (required && (this.value === null || this.value === undefined || isNaN(this.value)))
+      throw new Error(ValidityErrors.VALUE_MISSING)
+
+    if (this.value) {
+      if (min !== undefined && min > this.value) throw new Error(ValidityErrors.RANGE_UNDERFLOW)
+      if (max !== undefined && max < this.value) throw new Error(ValidityErrors.RANGE_OVERFLOW)
+    }
   }
 }

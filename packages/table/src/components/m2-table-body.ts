@@ -164,7 +164,6 @@ export class M2TableBody extends AbstractM2TablePart {
           @focusChange="${this.onFocusChangeHandler}"
         ></m2-table-cell>
       </td>
-      <!-- <div class="splitter"></div> -->
     `
   }
 
@@ -519,7 +518,7 @@ export class M2TableBody extends AbstractM2TablePart {
     const columnIdx: number = focusedCell.columnIdx - 1
 
     if (this.isFocusMovable(rowIdx, columnIdx)) {
-      this.getTableCellByIndex(rowIdx, columnIdx).cell.focus()
+      this.getCellByIndex(rowIdx, columnIdx).cell.focus()
     }
   }
 
@@ -546,7 +545,7 @@ export class M2TableBody extends AbstractM2TablePart {
     const columnIdx: number = focusedCell.columnIdx
 
     if (this.isFocusMovable(rowIdx, columnIdx)) {
-      this.getTableCellByIndex(rowIdx, columnIdx).cell.focus()
+      this.getCellByIndex(rowIdx, columnIdx).cell.focus()
     }
   }
 
@@ -559,7 +558,7 @@ export class M2TableBody extends AbstractM2TablePart {
     const columnIdx: number = focusedCell.columnIdx + 1
 
     if (this.isFocusMovable(rowIdx, columnIdx)) {
-      this.getTableCellByIndex(rowIdx, columnIdx).cell.focus()
+      this.getCellByIndex(rowIdx, columnIdx).cell.focus()
     }
   }
 
@@ -577,7 +576,7 @@ export class M2TableBody extends AbstractM2TablePart {
     }
 
     if (this.isFocusMovable(rowIdx, columnIdx)) {
-      this.getTableCellByIndex(rowIdx, columnIdx).cell.focus()
+      this.getCellByIndex(rowIdx, columnIdx).cell.focus()
     }
   }
 
@@ -759,7 +758,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param rowIdx
    * @returns {HTMLTableRowElement}
    */
-  private getTableRowByIndex(rowIdx: number): HTMLTableRowElement | null {
+  private getRowByIndex(rowIdx: number): HTMLTableRowElement | null {
     return this.renderRoot?.querySelector(`tr[rowIdx="${rowIdx}"`)
   }
 
@@ -768,7 +767,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param rowIdx
    * @param columnIdx
    */
-  private getTableCellByIndex(rowIdx: number, columnIdx: number): any {
+  private getCellByIndex(rowIdx: number, columnIdx: number): any {
     return this.renderRoot?.querySelector(`m2-table-cell[rowIdx="${rowIdx}"][columnIdx="${columnIdx}"]`) as M2TableCell
   }
 
