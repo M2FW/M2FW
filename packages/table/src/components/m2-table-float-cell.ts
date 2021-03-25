@@ -35,7 +35,7 @@ export class M2TableFloatCell extends AbstractM2TableCell<HTMLInputElement> {
     if (displayValue && typeof displayValue === 'string') {
       return this.displayCellFactory(displayValue)
     } else if (displayValue && typeof displayValue === 'function') {
-      return this.displayCellFactory(displayValue(this.value))
+      return this.displayCellFactory(displayValue(this.config, this.record || {}, this.value, this.changedRecord))
     }
 
     const valueStr: string = this.value?.toString() || ''

@@ -26,6 +26,9 @@ export class M2TableImageCell extends AbstractM2TableCell<HTMLInputElement> {
   private buildImageTag({ styles, alt, defaultSrc, notFoundSrc }: ImageColumnConfig): HTMLImageElement {
     const imageElement: HTMLImageElement = new Image()
     let src: string = String(this.value)
+    if (typeof this.config.displayValue === 'function') {
+      src = this.config.displayValue(this.config, this.record || {}, this.value, this.changedRecord)
+    }
 
     if (!src && defaultSrc) src = defaultSrc
     imageElement.src = src

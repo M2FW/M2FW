@@ -14,7 +14,13 @@ export class M2TableBooleanCell extends AbstractM2TableCell<HTMLInputElement> {
   }
 
   renderDisplay(_config: ColumnConfig): TemplateResult {
-    return this.displayCellFactory(html` <input type="checkbox" disabled ?checked="${this.value || false}" /> `)
+    const { displayValue }: BooleanColumnConfig = this.config
+    let value: boolean = Boolean(this.value)
+    if (typeof displayValue === 'function') {
+      value = displayValue(this.config, this.record || {}, this.value, this.changedRecord)
+    }
+
+    return this.displayCellFactory(html` <input type="checkbox" disabled ?checked="${value || false}" /> `)
   }
 
   focusOnEditor(): void {

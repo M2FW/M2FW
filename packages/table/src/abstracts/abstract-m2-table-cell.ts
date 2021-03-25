@@ -6,7 +6,7 @@ import { KeyActions, keyMapper } from '../utils/key-mapper'
 import { cellStyle } from '../assets/styles'
 
 export abstract class AbstractM2TableCell<T> extends LitElement {
-  @property({ type: Object }) config: ColumnConfig
+  @property({ type: Object }) config: any
   @property({ type: Object }) record?: TableData
   @property({ type: String }) value?: any
   @property({ type: Boolean }) _isEditing: boolean = false

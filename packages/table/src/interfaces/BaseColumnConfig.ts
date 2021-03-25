@@ -7,7 +7,7 @@ export interface BaseColumnConfig {
   name: string
   primary?: boolean
   header?: string | ((...args: any) => string)
-  displayValue?: string | ((value: any) => string)
+  displayValue?: string | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => any)
   type?: ColumnTypes
   width?: number
   validator?: RegExp | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => boolean)

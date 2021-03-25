@@ -35,7 +35,7 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
     if (displayValue && typeof displayValue !== 'function') {
       return this.displayCellFactory(displayValue)
     } else if (displayValue && typeof displayValue === 'function') {
-      return this.displayCellFactory(displayValue(this.value))
+      return this.displayCellFactory(displayValue(this.config, this.record || {}, this.value, this.changedRecord))
     }
 
     if (!options?.length) {
