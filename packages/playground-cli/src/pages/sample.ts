@@ -66,6 +66,9 @@ export class Sample extends connect(store)(LitElement) {
       hidden: false,
       editable: true,
       align: ColumnAlign.Center,
+      displayValue: (config: ColumnConfig, record: TableData, value: string, changedRecord: TableData) => {
+        return `Category: ${value}`
+      },
     },
     {
       name: 'Integer',
@@ -177,7 +180,7 @@ export class Sample extends connect(store)(LitElement) {
         .fetchHandler="${this.generateRandomData as any}"
         @valueChange="${(e: CustomEvent) => {
           console.log(e.detail)
-          if (e.detail.field === 'name' && !e.detail.newValue) {
+          if (e.detail.field === 'name' && !e.detail.value) {
             this.table
               .getCell<M2TableStringCell>(e.detail.rowIdx, 'description')
               .setValue('Please type proper name on this row')
