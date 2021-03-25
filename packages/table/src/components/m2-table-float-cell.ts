@@ -2,6 +2,7 @@ import { ColumnConfig, FloatColumnConfig } from '../interfaces'
 import { TemplateResult, customElement, html, property } from 'lit-element'
 
 import { AbstractM2TableCell } from '../abstracts/abstract-m2-table-cell'
+import { ValidityErrors } from '../enums'
 import { ifDefined } from 'lit-html/directives/if-defined'
 
 @customElement('m2-table-float-cell')
@@ -23,6 +24,7 @@ export class M2TableFloatCell extends AbstractM2TableCell<HTMLInputElement> {
               min="${ifDefined(min)}"
               max="${ifDefined(max)}"
               step="${ifDefined(step)}"
+              ?required="${this.config.required}"
             />
           `
         : html`${this.renderDisplay}`}
@@ -54,7 +56,14 @@ export class M2TableFloatCell extends AbstractM2TableCell<HTMLInputElement> {
     return Number(value)
   }
 
-  checkValidity(): boolean {
-    return this.editor?.checkValidity()
+  checkValidity(): void {
+    const { required, min, max }: FloatColumnConfig = this.config
+    if (required && (this.value === null || this.value === undefined || isNaN(this.value)))
+      throw new Error(ValidityErrors.VALUE_MISSING)
+
+    if (this.value) {
+      if (min !== undefined && min > this.value) throw new Error(ValidityErrors.RANGE_UNDERFLOW)
+      if (max !== undefined && max < this.value) throw new Error(ValidityErrors.RANGE_OVERFLOW)
+    }
   }
 }

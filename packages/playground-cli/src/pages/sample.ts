@@ -102,11 +102,12 @@ export class Sample extends connect(store)(LitElement) {
     },
     {
       name: 'value',
-      header: '설정 값',
+      header: '필수 설정 값',
       type: ColumnTypes.String,
       width: 200,
       hidden: false,
       editable: true,
+      required: true,
       align: ColumnAlign.Left,
     },
     {
@@ -172,9 +173,6 @@ export class Sample extends connect(store)(LitElement) {
           exclusive: false,
         } as RowSelectorOption}"
         .columns="${this.columns}"
-        .data="${this.data}"
-        .limit="${2}"
-        .total="${5000}"
         .addable="${false}"
         .fetchHandler="${this.generateRandomData as any}"
         @valueChange="${(e: CustomEvent) => {
@@ -185,6 +183,7 @@ export class Sample extends connect(store)(LitElement) {
               .setValue('Please type proper name on this row')
           }
         }}"
+        @validationFailed="${(e: CustomEvent) => alert(e.detail.error)}"
       ></m2-table>
 
       <div class="button-container">
@@ -222,6 +221,7 @@ export class Sample extends connect(store)(LitElement) {
         name: 'Setting ' + ((page - 1) * limit + idx + 1),
         description: 'Setting description ' + ((page - 1) * limit + idx + 1),
         value: 'Setting value ' + ((page - 1) * limit + idx + 1),
+        'a-z only': '유효하지 않은 값',
         updatedAt: Date.now().toString(),
         updater: { name: 'Setting Updater' },
       }

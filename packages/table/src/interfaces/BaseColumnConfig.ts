@@ -10,8 +10,9 @@ export interface BaseColumnConfig {
   displayValue?: string | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => any)
   type?: ColumnTypes
   width?: number
-  validator?: RegExp | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => boolean)
+  validator?: RegExp | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => void)
   hidden?: boolean
   align?: ColumnAlign
   editable?: boolean | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => boolean)
+  required?: boolean
 }

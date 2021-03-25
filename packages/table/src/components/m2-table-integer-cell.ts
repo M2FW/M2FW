@@ -1,8 +1,8 @@
 import { TemplateResult, customElement, html, property } from 'lit-element'
 
 import { AbstractM2TableCell } from '../abstracts/abstract-m2-table-cell'
-import { Events } from '../enums'
 import { IntegerColumnConfig } from '../interfaces'
+import { ValidityErrors } from '../enums'
 import { ifDefined } from 'lit-html/directives/if-defined'
 
 @customElement('m2-table-integer-cell')
@@ -15,7 +15,13 @@ export class M2TableIntegerCell extends AbstractM2TableCell<HTMLInputElement> {
     const { min, max }: IntegerColumnConfig = config
 
     return html`
-      <input type="number" value="${ifDefined(this.value)}" min="${ifDefined(min)}" max="${ifDefined(max)}" />
+      <input
+        type="number"
+        value="${ifDefined(this.value)}"
+        min="${ifDefined(min)}"
+        max="${ifDefined(max)}"
+        ?required="${this.config.required}"
+      />
     `
   }
 
@@ -39,7 +45,14 @@ export class M2TableIntegerCell extends AbstractM2TableCell<HTMLInputElement> {
     return Number(value)
   }
 
-  checkValidity(): boolean {
-    return this.editor?.checkValidity()
+  checkValidity(): void {
+    const { required, min, max }: IntegerColumnConfig = this.config
+    if (required && (this.value === null || this.value === undefined || isNaN(this.value)))
+      throw new Error(ValidityErrors.VALUE_MISSING)
+
+    if (this.value) {
+      if (min !== undefined && min > this.value) throw new Error(ValidityErrors.RANGE_UNDERFLOW)
+      if (max !== undefined && max < this.value) throw new Error(ValidityErrors.RANGE_OVERFLOW)
+    }
   }
 }

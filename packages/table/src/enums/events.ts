@@ -14,4 +14,6 @@ export enum CellEvents {
   FocusChange = 'focusChange',
   CellValueChange = 'valueChange',
   ColumnWidthChange = 'columnWidthChange',
+
+  ValidationFailed = 'validationFailed',
 }

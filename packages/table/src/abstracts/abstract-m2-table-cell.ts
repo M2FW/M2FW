@@ -1,8 +1,9 @@
 import { CSSResult, LitElement, PropertyValues, TemplateResult, html, property } from 'lit-element'
-import { CellEvents, ColumnTypes } from '../enums'
-import { ColumnConfig, TableChangeValueProperties, TableData } from '../interfaces'
+import { CellEvents, ColumnTypes, Events, ValidityErrors } from '../enums'
+import { ColumnConfig, IntegerColumnConfig, TableChangeValueProperties, TableData } from '../interfaces'
 import { KeyActions, keyMapper } from '../utils/key-mapper'
 
+import { M2TableIntegerCell } from '../components/m2-table-integer-cell'
 import { cellStyle } from '../assets/styles'
 
 export abstract class AbstractM2TableCell<T> extends LitElement {
@@ -37,7 +38,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   abstract renderDisplay(config: ColumnConfig): TemplateResult
   abstract focusOnEditor(): void
 
-  abstract checkValidity(): boolean
+  abstract checkValidity(): void
 
   get editor(): T {
     const editor: T | null = this.renderRoot?.querySelector(this.editorAccessor) as any
@@ -189,45 +190,49 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   /**
    * @description set value if value is changed and dispatch valueChange custom event.
    */
-  public setValue(newValue?: any): void {
-    if (newValue === undefined) {
-      const valueAccessKey: string = this.config.type === ColumnTypes.Boolean ? 'checked' : 'value'
+  public async setValue(newValue?: any): Promise<void> {
+    try {
+      if (newValue === undefined) {
+        const valueAccessKey: string = this.config.type === ColumnTypes.Boolean ? 'checked' : 'value'
 
-      newValue = this.parseValue((this.editor as any)[valueAccessKey])
-    }
+        newValue = this.parseValue((this.editor as any)[valueAccessKey])
+      }
 
-    if (!this.doValidations(newValue)) {
-      this.invalid = true
-      return
-    } else {
+      this.doValidations(newValue)
       this.invalid = false
-    }
 
-    const oldValue: any = this.parseValue(this.value)
-    if (oldValue != newValue) {
-      this.value = newValue
-      this.dispatchValueChangeEvent(oldValue, newValue)
+      const oldValue: any = this.parseValue(this.value)
+      if (oldValue != newValue) {
+        this.value = newValue
+        this.dispatchValueChangeEvent(oldValue, newValue)
+      }
+    } catch (e) {
+      this.invalid = true
+      this.dispatchEvent(
+        new CustomEvent(CellEvents.ValidationFailed, {
+          detail: { config: this.config, value: this.value, record: this.record, error: e },
+          bubbles: true,
+          composed: true,
+          cancelable: true,
+        })
+      )
     }
   }
 
-  private doValidations(value: any): boolean {
-    if (this._isEditing) {
-      if (!this.checkValidity()) return false
-    }
+  public doValidations(value: any): void {
+    this.checkValidity()
 
     const validator:
       | RegExp
-      | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => boolean)
+      | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => void)
       | undefined = this.config.validator
 
     if (validator) {
       if (validator instanceof RegExp) {
-        return validator.test(value)
+        if (!validator.test(value)) throw new Error(ValidityErrors.PATTERN_MISMATCH)
       } else {
-        return validator(this.config, this.record || {}, value, this.changedRecord)
+        validator(this.config, this.record || {}, value, this.changedRecord)
       }
-    } else {
-      return true
     }
   }
 

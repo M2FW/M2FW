@@ -3,12 +3,13 @@ import './m2-table-footer'
 import './m2-table-header'
 import './m2-table-page-indicator'
 
+import { AbstractM2TableCell, AbstractM2TablePart } from '../abstracts'
 import { CSSResult, TemplateResult, css, customElement, html, property } from 'lit-element'
 import { ColumnConfig, TableData } from '../interfaces'
 
-import { AbstractM2TablePart } from '../abstracts'
 import { M2TableBody } from './m2-table-body'
 import { M2TableBooleanCell } from './m2-table-boolean-cell'
+import { M2TableCell } from './m2-table-cell'
 import { M2TableDateCell } from './m2-table-date-cell'
 import { M2TableDateTimeCell } from './m2-table-datetime-cell'
 import { M2TableFloatCell } from './m2-table-float-cell'
@@ -18,6 +19,7 @@ import { M2TableIntegerCell } from './m2-table-integer-cell'
 import { M2TableObjectCell } from './m2-table-object-cell'
 import { M2TableSelectCell } from './m2-table-select-cell'
 import { M2TableStringCell } from './m2-table-string-cell'
+import { cellStyle } from '../assets/styles'
 
 export type M2TableFetchResult = {
   data: any[]
@@ -259,5 +261,20 @@ export class M2Table extends AbstractM2TablePart {
 
       return column
     })
+  }
+
+  checkValidity(): void {
+    for (let rowIdx: number = 0; rowIdx < this.data.length; rowIdx++) {
+      for (let columnIdx: number = 0; columnIdx < this.columns.length; columnIdx++) {
+        const columnName: string = this.columns[columnIdx].name
+        const cell: AbstractM2TableCell<any> = this.getCell<AbstractM2TableCell<any>>(rowIdx, columnName)
+
+        try {
+          cell.doValidations(cell.value)
+        } catch (e) {
+          throw e
+        }
+      }
+    }
   }
 }
