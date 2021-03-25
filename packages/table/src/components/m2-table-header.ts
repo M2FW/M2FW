@@ -27,7 +27,7 @@ export class M2TableHeader extends AbstractM2TablePart {
 
   private renderRowNumbering(): TemplateResult {
     return html` <th class="header-numbering numbering">No.</th>
-      <div class="splitter"></div>`
+      <div class="splitter non-resizable"></div>`
   }
 
   private renderButton(button: TableButton): TemplateResult | void {
@@ -45,14 +45,14 @@ export class M2TableHeader extends AbstractM2TablePart {
       return html`<th>
           <button>${icon}</button>
         </th>
-        <div class="splitter"></div>`
+        <div class="splitter non-resizable"></div>`
     } else if (button.type === ButtonType.Text) {
       const buttonOptions: TextButtonOptions = button.options as TextButtonOptions
 
       return html` <th>
           <button>${buttonOptions.text}</button>
         </th>
-        <div class="splitter"></div>`
+        <div class="splitter non-resizable"></div>`
     }
   }
 
@@ -72,7 +72,7 @@ export class M2TableHeader extends AbstractM2TablePart {
               />
             `}
       </th>
-      <div class="splitter"></div>
+      <div class="splitter non-resizable"></div>
     `
   }
 
@@ -81,7 +81,8 @@ export class M2TableHeader extends AbstractM2TablePart {
       <th columnIdx="${columnIdx}" style="width: ${column.width || 150}px" ?hidden="${column.hidden}">
         ${this.displayHeader(column)}
       </th>
-      <div class="splitter" @mousedown="${this.onMouseDownHandler.bind(this)}"></div>
+
+      ${column.hidden ? '' : html`<div class="splitter" @mousedown="${this.onMouseDownHandler.bind(this)}"></div>`}
     `
   }
 
@@ -139,10 +140,14 @@ export class M2TableHeader extends AbstractM2TablePart {
     const pageX: number = e.pageX
 
     const modifyCellWidth = (e: MouseEvent) => {
-      const diffX = e.pageX - pageX
-      const width: number = columnWidth + diffX
-      cell.style.width = `${width}px`
       const columnIdx: number = Number(cell.getAttribute('columnIdx'))
+      const diffX = e.pageX - pageX
+
+      let width: number = columnWidth + diffX
+      if (width <= this.minColumnWidth) width = this.minColumnWidth
+      if (width >= this.maxColumnWidth) width = this.maxColumnWidth
+
+      cell.style.width = `${width}px`
 
       this.dispatchEvent(new CustomEvent(CellEvents.ColumnWidthChange, { detail: { columnIdx, width } }))
     }

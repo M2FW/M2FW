@@ -43,8 +43,14 @@ export const headerStyle: CSSResult = css`
     width: var(--m2-table-splitter-width, 2px);
     background-color: var(--m2-table-header-splitter-color, lightgray);
   }
+  .splitter.non-resizable {
+    cursor: initial;
+  }
   .splitter:hover {
     background-color: var(--m2-table-header-splitter-hover-color, lightgreen);
+  }
+  .splitter.non-resizable:hover {
+    background-color: var(--m2-table-header-splitter-color, lightgray);
   }
 `
 

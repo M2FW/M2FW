@@ -76,7 +76,7 @@ export class Sample extends connect(store)(LitElement) {
       type: ColumnTypes.Integer,
       width: 150,
       min: 10,
-      hidden: false,
+      hidden: true,
       editable: true,
       align: ColumnAlign.Right,
     },
@@ -172,6 +172,7 @@ export class Sample extends connect(store)(LitElement) {
   render(): TemplateResult {
     return html`
       <m2-table
+        .maxColumnWidth="${350}"
         .selectable="${{
           exclusive: false,
         } as RowSelectorOption}"

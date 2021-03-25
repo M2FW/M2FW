@@ -74,6 +74,8 @@ export class M2Table extends AbstractM2TablePart {
           .buttons="${this.buttons}"
           .selectable="${this.selectable}"
           .scrollSpeedLevel="${this.scrollSpeedLevel}"
+          .minColumnWidth="${this.minColumnWidth}"
+          .maxColumnWidth="${this.maxColumnWidth}"
           @selectAll="${this.onSelectAllHandler.bind(this)}"
           @deselectAll="${this.onDeselectAllHandler.bind(this)}"
           @wheel="${this.onHeaderWheelHandler}"
