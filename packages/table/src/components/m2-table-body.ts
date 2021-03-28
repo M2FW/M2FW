@@ -237,6 +237,22 @@ export class M2TableBody extends AbstractM2TablePart {
     return selectedRowElements
   }
 
+  getRecords(withProps: boolean = false): TableData[] {
+    return this._data.map((record: TableData) => {
+      let clone: TableData = Object.assign({}, record)
+      const changedValues: TableChangeValueProperties[] | undefined = clone[this.propertyAccessKey]?.changedValues
+      if (changedValues?.length) {
+        changedValues.forEach((changedValue: TableChangeValueProperties) => {
+          clone[changedValue.field] = changedValue.changes
+        })
+      }
+
+      if (!withProps) delete clone[this.propertyAccessKey]
+
+      return clone
+    })
+  }
+
   /**
    * @description Returning selected data rows
    * @param withProps Whether this.propertyAccessKey of data is involved or not

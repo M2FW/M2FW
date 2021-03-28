@@ -158,6 +158,14 @@ export class M2Table extends AbstractM2TablePart {
     this.tableBody?.deselectRow(rowIdx)
   }
 
+  getRecords<T>(withProps: boolean = false): (T & TableData)[] {
+    if (!this.tableBody) {
+      throw new Error('tableBody is not exists')
+    }
+
+    return this.tableBody.getRecords(withProps) as (T & TableData)[]
+  }
+
   /**
    * @description Returning selected data
    * @param withProps Whether __props__ of data is involved or not
