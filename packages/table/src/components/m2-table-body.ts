@@ -200,7 +200,6 @@ export class M2TableBody extends AbstractM2TablePart {
     if (changedProps.has('data') || changedProps.has('addable')) {
       this._data = (this.data || []).map((record: TableData) => {
         let cloned: TableData = Object.assign({}, record)
-        delete cloned[this.propertyAccessKey]
 
         if (this.selectable && this.selectable.stackSelection) {
           const identifier: string = this.getRecordIdentifier(cloned)
