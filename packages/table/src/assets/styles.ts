@@ -40,17 +40,15 @@ export const headerStyle: CSSResult = css`
   .splitter {
     cursor: col-resize;
     height: var(--m2-table-header-row-height, 30px);
-    width: var(--m2-table-splitter-width, 2px);
-    background-color: var(--m2-table-header-splitter-color, lightgray);
+    width: 5px;
+    background-color: transparent;
+    border-right: var(--m2-table-splitter-width, 2px) solid var(--m2-table-splitter-color, lightgray);
   }
   .splitter.non-resizable {
     cursor: initial;
   }
   .splitter:hover {
-    background-color: var(--m2-table-header-splitter-hover-color, lightgreen);
-  }
-  .splitter.non-resizable:hover {
-    background-color: var(--m2-table-header-splitter-color, lightgray);
+    border-right-color: var(--m2-table-splitter-hover-color, lightgreen);
   }
 `
 
@@ -99,6 +97,7 @@ export const bodyStyle: CSSResult = css`
   }
   td {
     padding: var(--m2-table-cell-padding, 5px);
+    padding-right: calc(var(--m2-table-cell-padding, 5px) + 5px);
     border-right-width: var(--m2-table-splitter-width, 2px);
     border-right-color: var(--m2-table-body-splitter-color, darkgray);
     border-right-style: var(--m2-table-body-splitter-style, dotted);

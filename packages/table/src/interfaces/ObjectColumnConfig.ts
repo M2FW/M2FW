@@ -10,5 +10,5 @@ export interface ObjectColumnConfig extends BaseColumnConfig {
     value: any,
     setValueHandler: (value: any) => void,
     html: any
-  ) => TemplateResult | void
+  ) => any
 }
