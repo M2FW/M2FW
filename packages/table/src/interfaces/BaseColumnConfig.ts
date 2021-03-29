@@ -15,4 +15,7 @@ export interface BaseColumnConfig {
   align?: ColumnAlign
   editable?: boolean | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => boolean)
   required?: boolean
+  handlers?: {
+    dblclick?: (config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => any
+  }
 }

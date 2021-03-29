@@ -1,13 +1,12 @@
 import { CSSResult, LitElement, PropertyValues, TemplateResult, html, property } from 'lit-element'
-import { CellEvents, ColumnTypes, Events, ValidityErrors } from '../enums'
-import { ColumnConfig, IntegerColumnConfig, TableChangeValueProperties, TableData } from '../interfaces'
+import { CellEvents, ColumnTypes, ValidityErrors } from '../enums'
+import { ColumnConfig, TableChangeValueProperties, TableData } from '../interfaces'
 import { KeyActions, keyMapper } from '../utils/key-mapper'
 
-import { M2TableIntegerCell } from '../components/m2-table-integer-cell'
 import { cellStyle } from '../assets/styles'
 
 export abstract class AbstractM2TableCell<T> extends LitElement {
-  @property({ type: Object }) config: any
+  @property({ type: Object }) config: ColumnConfig
   @property({ type: Object }) record?: TableData
   @property({ type: String }) value?: any
   @property({ type: Boolean }) _isEditing: boolean = false
@@ -124,6 +123,11 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
    */
   async ondblclickHandler(): Promise<void> {
     let editable: boolean
+
+    if (typeof this.config?.handlers?.dblclick === 'function') {
+      this.config.handlers.dblclick(this.config, this.record || {}, this.value, this.changedRecord)
+      return
+    }
 
     if (this.config?.editable !== undefined) {
       if (typeof this.config.editable === 'function') {
