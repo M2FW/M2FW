@@ -10,6 +10,7 @@ export abstract class AbstractM2TablePart extends LitElement {
     fieldIdentifier: 'id',
     stackSelection: true,
     handySelector: true,
+    oneClickSelect: false,
   }
   @property({ type: Boolean }) addable: boolean = true
   @property({ type: Boolean }) removable: boolean = true

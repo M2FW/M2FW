@@ -53,15 +53,14 @@ export class M2TableBody extends AbstractM2TablePart {
               ?deleted="${record?.[this.propertyAccessKey]?.deleted || false}"
               ?selected="${record?.[this.propertyAccessKey]?.selected || false}"
               @dblclick="${this.onDblClickHandler}"
+              @click="${this.onClickHandler}"
             >
               ${this.selectable ? this.renderSelectInput(rowIdx, record) : ''}
               ${this.numbering ? this.renderRowNumbering(rowIdx) : ''}
               ${this.buttons.map((button: TableButton) => this.renderButton(button, record))}
-              ${this.columns
-                .filter((column: ColumnConfig) => !column.hidden)
-                .map((column: ColumnConfig, columnIdx: number) =>
-                  this.renderTableCell(column, record, rowIdx, columnIdx)
-                )}
+              ${this.columns.map((column: ColumnConfig, columnIdx: number) =>
+                this.renderTableCell(column, record, rowIdx, columnIdx)
+              )}
             </tr>
           `
         )}
@@ -458,6 +457,25 @@ export class M2TableBody extends AbstractM2TablePart {
       this.selectRow(rowIdx)
     } else {
       this.deselectRow(rowIdx)
+    }
+  }
+
+  onClickHandler(e: MouseEvent) {
+    const doDefaultAction: boolean = this.dispatchEvent(
+      new CustomEvent(Events.RowClick, { bubbles: true, composed: true, cancelable: true })
+    )
+    if (!doDefaultAction) return
+
+    if (this.selectable.oneClickSelect) {
+      const tableRow: HTMLTableRowElement = e.currentTarget as HTMLTableRowElement
+      const isSelected: boolean = tableRow.hasAttribute('selected')
+      const rowIdx: number = Number((e.currentTarget as HTMLTableRowElement).getAttribute('rowIdx'))
+
+      if (isSelected) {
+        this.deselectRow(rowIdx)
+      } else {
+        this.selectRow(rowIdx)
+      }
     }
   }
 

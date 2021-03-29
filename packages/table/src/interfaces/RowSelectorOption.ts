@@ -5,4 +5,5 @@ export interface RowSelectorOption {
   stackSelection?: boolean
   fieldIdentifier: string | ((record: TableData) => any)
   handySelector?: boolean
+  oneClickSelect?: boolean
 }
