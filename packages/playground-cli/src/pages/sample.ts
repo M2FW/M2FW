@@ -43,7 +43,6 @@ export class Sample extends connect(store)(LitElement) {
       type: ColumnTypes.Image,
       editable: true,
       styles: { margin: 'auto' },
-      defaultSrc: 'https://avatars.githubusercontent.com/u/153960?s=52&v=4',
     },
     {
       name: 'name',
