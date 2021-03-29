@@ -124,10 +124,22 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   async ondblclickHandler(): Promise<void> {
     let editable: boolean
 
-    if (typeof this.config?.handlers?.dblclick === 'function') {
-      this.config.handlers.dblclick(this.config, this.record || {}, this.value, this.changedRecord)
-      return
-    }
+    const doDefaultAction: boolean = this.dispatchEvent(
+      new CustomEvent(CellEvents.CellDblclick, {
+        detail: {
+          config: this.config,
+          record: this.record,
+          value: this.value,
+          rowIdx: this.rowIdx,
+          columnIdx: this.columnIdx,
+        },
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      })
+    )
+
+    if (!doDefaultAction) return
 
     if (this.config?.editable !== undefined) {
       if (typeof this.config.editable === 'function') {
