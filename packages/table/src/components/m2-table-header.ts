@@ -43,7 +43,7 @@ export class M2TableHeader extends AbstractM2TablePart {
       }
 
       return html`<th>
-          <button>${icon}</button>
+          <button disabled></button>
         </th>
         <div class="splitter non-resizable"></div>`
     } else if (button.type === ButtonType.Text) {

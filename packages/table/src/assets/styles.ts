@@ -46,9 +46,13 @@ export const headerStyle: CSSResult = css`
   }
   .splitter.non-resizable {
     cursor: initial;
+    width: 0px;
   }
   .splitter:hover {
     border-right-color: var(--m2-table-splitter-hover-color, lightgreen);
+  }
+  .splitter.non-resizable:hover {
+    border-right-color: var(--m2-table-splitter-color, lightgray);
   }
 `
 
@@ -101,6 +105,11 @@ export const bodyStyle: CSSResult = css`
     border-right-width: var(--m2-table-splitter-width, 2px);
     border-right-color: var(--m2-table-body-splitter-color, darkgray);
     border-right-style: var(--m2-table-body-splitter-style, dotted);
+  }
+  td.selector,
+  td.button,
+  td.numbering {
+    padding: var(--m2-table-cell-padding, 5px);
   }
   td,
   span {

@@ -100,7 +100,7 @@ export class M2TableBody extends AbstractM2TablePart {
         icon.src = buttonOptions.icon
       }
 
-      return html`<td>
+      return html`<td class="button">
         <button
           @click="${() => {
             const handler: any = buttonOptions?.handlers?.click
