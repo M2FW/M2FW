@@ -466,7 +466,7 @@ export class M2TableBody extends AbstractM2TablePart {
     )
     if (!doDefaultAction) return
 
-    if (this.selectable.oneClickSelect) {
+    if (this.selectable?.oneClickSelect) {
       const tableRow: HTMLTableRowElement = e.currentTarget as HTMLTableRowElement
       const isSelected: boolean = tableRow.hasAttribute('selected')
       const rowIdx: number = Number((e.currentTarget as HTMLTableRowElement).getAttribute('rowIdx'))
