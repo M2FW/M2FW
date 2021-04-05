@@ -35,6 +35,8 @@ export async function navigate(targetURL: string): Promise<void> {
   const [targetPath, search] = targetURL.split('?')
 
   let route: PageDetail | undefined = state.route?.pages?.find((page: PageDetail) => checkURLMatching(page, targetPath))
+  if (route?.route === state.route.route && route.imported) return
+
   const importedHandler: ((route: PageDetail) => any) | undefined = state.route.importedHandler
 
   if (!route) {
