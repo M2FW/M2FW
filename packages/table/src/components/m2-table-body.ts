@@ -548,37 +548,17 @@ export class M2TableBody extends AbstractM2TablePart {
    */
   moveFocusLeft(focusedCell: M2TableCell): void {
     const rowIdx: number = focusedCell.rowIdx
-    const columnIdx: number = focusedCell.columnIdx - 1
+    let columnIdx: number = focusedCell.columnIdx - 1
 
-    if (this.isFocusMovable(rowIdx, columnIdx)) {
-      this.getCellByIndex(rowIdx, columnIdx).cell.focus()
-    }
-  }
+    let rightSideCell: M2TableCell | null = this.getCellByIndex(rowIdx, columnIdx)
 
-  /**
-   * @description Checking whether there's more movable row/column or not
-   * @param rowIdx
-   * @param columnIdx
-   */
-  private isFocusMovable(rowIdx: number, columnIdx: number): boolean {
-    return (
-      columnIdx >= 0 &&
-      rowIdx >= 0 &&
-      columnIdx <= this.columns.filter((column: ColumnConfig) => !column.hidden).length - 1 &&
-      rowIdx <= this._data.length - 1
-    )
-  }
+    while (rightSideCell) {
+      if (!rightSideCell.parentElement?.hidden) {
+        rightSideCell.cell.focus()
+        break
+      }
 
-  /**
-   * @description Move focussing from current to up
-   * @param focusedCell
-   */
-  moveFocusUp(focusedCell: M2TableCell): void {
-    const rowIdx: number = focusedCell.rowIdx - 1
-    const columnIdx: number = focusedCell.columnIdx
-
-    if (this.isFocusMovable(rowIdx, columnIdx)) {
-      this.getCellByIndex(rowIdx, columnIdx).cell.focus()
+      rightSideCell = this.getCellByIndex(rowIdx, columnIdx--)
     }
   }
 
@@ -588,10 +568,37 @@ export class M2TableBody extends AbstractM2TablePart {
    */
   moveFocusRight(focusedCell: M2TableCell): void {
     const rowIdx: number = focusedCell.rowIdx
-    const columnIdx: number = focusedCell.columnIdx + 1
+    let columnIdx: number = focusedCell.columnIdx + 1
 
-    if (this.isFocusMovable(rowIdx, columnIdx)) {
-      this.getCellByIndex(rowIdx, columnIdx).cell.focus()
+    let rightSideCell: M2TableCell | null = this.getCellByIndex(rowIdx, columnIdx)
+
+    while (rightSideCell) {
+      if (!rightSideCell.parentElement?.hidden) {
+        rightSideCell.cell.focus()
+        break
+      }
+
+      rightSideCell = this.getCellByIndex(rowIdx, columnIdx++)
+    }
+  }
+
+  /**
+   * @description Move focussing from current to up
+   * @param focusedCell
+   */
+  moveFocusUp(focusedCell: M2TableCell): void {
+    let rowIdx: number = focusedCell.rowIdx - 1
+    const columnIdx: number = focusedCell.columnIdx
+
+    let upperSideCell: M2TableCell | null = this.getCellByIndex(rowIdx, columnIdx)
+
+    while (upperSideCell) {
+      if (!upperSideCell.parentElement?.hidden) {
+        upperSideCell.cell.focus()
+        break
+      }
+
+      upperSideCell = this.getCellByIndex(rowIdx--, columnIdx)
     }
   }
 
@@ -601,15 +608,22 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param focusedCell
    */
   async moveFocusDown(focusedCell: M2TableCell): Promise<void> {
-    const rowIdx: number = focusedCell.rowIdx + 1
+    let rowIdx: number = focusedCell.rowIdx + 1
     const columnIdx: number = focusedCell.columnIdx
 
     if (rowIdx > this._data.length - 1 && this.addable) {
       await this.appendData()
     }
 
-    if (this.isFocusMovable(rowIdx, columnIdx)) {
-      this.getCellByIndex(rowIdx, columnIdx).cell.focus()
+    let upperSideCell: M2TableCell | null = this.getCellByIndex(rowIdx, columnIdx)
+
+    while (upperSideCell) {
+      if (!upperSideCell.parentElement?.hidden) {
+        upperSideCell.cell.focus()
+        break
+      }
+
+      upperSideCell = this.getCellByIndex(rowIdx++, columnIdx)
     }
   }
 

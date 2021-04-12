@@ -69,7 +69,7 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
     this.editor?.focus()
   }
 
-  checkValidity(): void {
-    if (this.config.required && !this.value) throw new Error(ValidityErrors.VALUE_MISSING)
+  checkValidity(value: any): void {
+    if (this.config.required && !value) throw new Error(ValidityErrors.VALUE_MISSING)
   }
 }

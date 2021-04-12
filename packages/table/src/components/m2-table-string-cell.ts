@@ -37,7 +37,7 @@ export class M2TableStringCell extends AbstractM2TableCell<HTMLInputElement> {
     this.editor?.select()
   }
 
-  checkValidity(): void {
-    if (this.config.required && !this.value) throw new Error(ValidityErrors.VALUE_MISSING)
+  checkValidity(value?: string): void {
+    if (this.config.required && !value) throw new Error(ValidityErrors.VALUE_MISSING)
   }
 }
