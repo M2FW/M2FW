@@ -1,5 +1,5 @@
 import { ColumnConfig, RowSelectorOption, TableButton } from '../interfaces'
-import { LitElement, property } from 'lit-element'
+import { LitElement, PropertyValues, property } from 'lit-element'
 
 export abstract class AbstractM2TablePart extends LitElement {
   @property({ type: Array }) columns: (ColumnConfig | any)[] = []
@@ -16,4 +16,40 @@ export abstract class AbstractM2TablePart extends LitElement {
   @property({ type: Boolean }) removable: boolean = true
   @property({ type: Number }) minColumnWidth: number = 60
   @property({ type: Number }) maxColumnWidth: number = Infinity
+  @property({ type: Number }) fixedColumnCount: number = 0
+
+  private setStickyColumnStyleTimeout?: NodeJS.Timeout
+
+  async setStickyColumnStyle(): Promise<void> {
+    if (this.setStickyColumnStyleTimeout) clearTimeout(this.setStickyColumnStyleTimeout)
+    this.setStickyColumnStyleTimeout = setTimeout(async () => {
+      console.log('set sticky column style')
+      await this.updateComplete
+
+      let fixedColumnCount: number = this.fixedColumnCount
+      if (fixedColumnCount <= 0) {
+        fixedColumnCount = 0
+      }
+
+      const standardCells: HTMLElement[] = Array.from(
+        this.renderRoot.querySelectorAll(`th[columnIdx='${fixedColumnCount}'], td[columnIdx='${fixedColumnCount}']`)
+      ) as HTMLElement[]
+
+      if (!standardCells?.length) return
+
+      standardCells.forEach((standardCell: HTMLElement) => {
+        let targetElement: HTMLElement = standardCell?.parentElement?.firstElementChild as HTMLElement
+
+        let leftPosition: number = 0
+
+        while (targetElement !== standardCell) {
+          targetElement.setAttribute('sticky', '')
+          targetElement.style.left = leftPosition + 'px'
+
+          leftPosition += targetElement.offsetWidth
+          targetElement = targetElement.nextElementSibling as HTMLElement
+        }
+      })
+    }, 100)
+  }
 }

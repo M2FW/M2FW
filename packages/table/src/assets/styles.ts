@@ -7,6 +7,11 @@ export const commonStyle: CSSResult = css`
   }
   .numbering {
     width: var(--m2-table-numbering-width, 30px);
+    position: sticky;
+  }
+
+  [sticky] {
+    position: sticky;
   }
 `
 
@@ -14,6 +19,9 @@ export const headerStyle: CSSResult = css`
   :host {
     display: table-header-group;
     width: max-content;
+    position: sticky;
+    top: 0px;
+    z-index: 5;
   }
   :host > * {
     font-size: var(--m2-table-header-font-size, 12px);
@@ -30,18 +38,23 @@ export const headerStyle: CSSResult = css`
     width: var(--m2-table-button-width, 20px);
     height: var(--m2-table-button-height, 20px);
   }
+  thead {
+    position: sticky;
+    top: var(--m2-table-header-row-height, 30px);
+  }
   tr {
     height: var(--m2-table-header-row-height, 30px);
     background-color: var(--m2-table-header-bg-color, darkgray);
   }
   th {
     padding: var(--m2-table-cell-padding, 5px);
+    background-color: inherit;
   }
   .splitter {
     cursor: col-resize;
     height: var(--m2-table-header-row-height, 30px);
     width: 5px;
-    background-color: transparent;
+    background-color: inherit;
     border-right: var(--m2-table-splitter-width, 2px) solid var(--m2-table-splitter-color, lightgray);
   }
   .splitter.non-resizable {
@@ -59,7 +72,6 @@ export const headerStyle: CSSResult = css`
 export const bodyStyle: CSSResult = css`
   :host {
     display: table-row-group;
-    overflow: auto;
     width: max-content;
     flex: 1;
     background-color: var(--m2-table-body-bg-color, lightgray);
@@ -105,6 +117,7 @@ export const bodyStyle: CSSResult = css`
     border-right-width: var(--m2-table-splitter-width, 2px);
     border-right-color: var(--m2-table-body-splitter-color, darkgray);
     border-right-style: var(--m2-table-body-splitter-style, dotted);
+    background-color: inherit;
   }
   td.selector,
   td.button,

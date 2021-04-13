@@ -14,9 +14,7 @@ export class PlaygroundApp extends LitElement {
 
   render() {
     return html`
-      <header>
-        <h1>${this.appName}</h1>
-      </header>
+      <header></header>
       <nav></nav>
       <main>
         <sample-page></sample-page>

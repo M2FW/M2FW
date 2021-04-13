@@ -61,7 +61,7 @@ export class M2Table extends AbstractM2TablePart {
           display: flex;
           flex: 1;
           flex-direction: column;
-          overflow: auto hidden;
+          overflow: auto;
         }
       `,
     ]
@@ -82,6 +82,7 @@ export class M2Table extends AbstractM2TablePart {
           @wheel="${this.onHeaderWheelHandler}"
           @columnWidthChange="${this.onColumnWidthChange.bind(this)}"
           @headerCellValueChange="${this.onHeaderCellValueChange.bind(this)}"
+          .fixedColumnCount="${this.fixedColumnCount}"
         ></m2-table-header>
 
         <m2-table-body
@@ -93,6 +94,7 @@ export class M2Table extends AbstractM2TablePart {
           .startRowNumber="${(this.page - 1) * this.limit}"
           .data="${this.data}"
           .selectedData="${this.selectedData}"
+          .fixedColumnCount="${this.fixedColumnCount}"
         ></m2-table-body>
       </div>
 
