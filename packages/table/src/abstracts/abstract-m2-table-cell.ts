@@ -164,16 +164,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
    */
   onkeydownHandler(event: KeyboardEvent): void {
     if (keyMapper(event.code, KeyActions.TOGGLE_EDITING)) {
-      let editable: boolean
-      if (this.config?.editable !== undefined) {
-        if (typeof this.config.editable === 'function') {
-          editable = this.config.editable(this.config, this.record || {}, this.value, this.changedRecord)
-        } else {
-          editable = Boolean(this.config?.editable)
-        }
-      } else {
-        editable = true
-      }
+      const editable: boolean = this.checkEditable()
       if (!editable) return
       this.toggleEditing()
     }
@@ -181,6 +172,21 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
     if (this._isEditing && keyMapper(event.code, KeyActions.CANCEL_EDITING)) {
       this.cancelEditing()
     }
+  }
+
+  checkEditable(): boolean {
+    let editable: boolean
+    if (this.config?.editable !== undefined) {
+      if (typeof this.config.editable === 'function') {
+        editable = this.config.editable(this.config, this.record || {}, this.value, this.changedRecord)
+      } else {
+        editable = Boolean(this.config?.editable)
+      }
+    } else {
+      editable = true
+    }
+
+    return editable
   }
 
   /**
@@ -206,8 +212,11 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   /**
    * @description set value if value is changed and dispatch valueChange custom event.
    */
-  public async setValue(newValue?: any): Promise<void> {
+  public async setValue(newValue?: any, ignoreEditable: boolean = true): Promise<void> {
     try {
+      const editable: boolean = this.checkEditable()
+      if (!ignoreEditable && !editable) return
+
       if (newValue === undefined) {
         const valueAccessKey: string = this.config.type === ColumnTypes.Boolean ? 'checked' : 'value'
 

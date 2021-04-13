@@ -1,5 +1,8 @@
+import './m2-table-cell'
+import '@material/mwc-icon'
+
 import { ButtonType, CellEvents, Events } from '../enums'
-import { CSSResult, TemplateResult, customElement, html, property } from 'lit-element'
+import { CSSResult, TemplateResult, customElement, html } from 'lit-element'
 import { ColumnConfig, IconButtonOptions, RowSelectorOption, TableButton, TextButtonOptions } from '../interfaces'
 import { commonStyle, headerStyle } from '../assets/styles'
 
@@ -79,18 +82,35 @@ export class M2TableHeader extends AbstractM2TablePart {
   private renderTableCell(column: ColumnConfig, columnIdx: number): TemplateResult {
     return html`
       <th columnIdx="${columnIdx}" style="width: ${column.width || 150}px" ?hidden="${column.hidden}">
-        ${this.displayHeader(column)}
+        ${typeof column.bulkEditable === 'function'
+          ? html`
+              ${column.bulkEditable(column) ? this.renderBulkEditor(column, columnIdx) : this.displayHeader(column)}
+            `
+          : column.bulkEditable
+          ? this.renderBulkEditor(column, columnIdx)
+          : this.displayHeader(column)}
       </th>
 
       ${column.hidden ? '' : html`<div class="splitter" @mousedown="${this.onMouseDownHandler.bind(this)}"></div>`}
     `
   }
 
-  /**
-   * @description This is the function to concrete how header looks like.
-   * @param config configuration for header
-   */
-  displayHeader(config: ColumnConfig): string {
+  renderBulkEditor(column: ColumnConfig, columnIdx: number): TemplateResult {
+    let cloned: ColumnConfig = Object.assign({}, column)
+
+    cloned.editable = true
+    cloned.displayValue = () =>
+      html`${this.getHeaderText(column)} ${html`<mwc-icon class="header-edit-icon">edit</mwc-icon>`}`
+
+    return html`<m2-table-cell
+      @valueChange="${this.dispatchHeaderCellValueChangeEvent.bind(this)}"
+      .columnIdx="${columnIdx}"
+      .config="${cloned}"
+      .type="${column.type}"
+    ></m2-table-cell>`
+  }
+
+  getHeaderText(config: ColumnConfig): string {
     if (config.header) {
       if (typeof config.header === 'function') {
         return config.header()
@@ -100,6 +120,15 @@ export class M2TableHeader extends AbstractM2TablePart {
     } else {
       return config.name
     }
+  }
+
+  /**
+   * @description This is the function to concrete how header looks like.
+   * @param config configuration for header
+   */
+  displayHeader(config: ColumnConfig): TemplateResult {
+    const headerText: string = this.getHeaderText(config)
+    return html`<span>${headerText}</span>`
   }
 
   /**
@@ -162,7 +191,12 @@ export class M2TableHeader extends AbstractM2TablePart {
     return padLeft + padRight
   }
 
-  //   var padLeft = getStyleVal(col,'padding-left');
-  // var padRight = getStyleVal(col,'padding-right');
-  // return (parseInt(padLeft) + parseInt(padRight));
+  private dispatchHeaderCellValueChangeEvent(event: CustomEvent): void {
+    event.stopPropagation()
+    this.dispatchEvent(
+      new CustomEvent(CellEvents.HeaderCellValueChange, {
+        detail: event.detail,
+      })
+    )
+  }
 }

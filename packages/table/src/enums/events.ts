@@ -19,4 +19,6 @@ export enum CellEvents {
   ColumnWidthChange = 'columnWidthChange',
 
   ValidationFailed = 'validationFailed',
+
+  HeaderCellValueChange = 'headerCellValueChange',
 }
