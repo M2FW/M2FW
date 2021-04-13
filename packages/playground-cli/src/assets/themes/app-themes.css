@@ -7,8 +7,7 @@ body {
 }
 
 body {
-  --app-grid-template-areas: 'header header header' 'nav main aside'
-    'nav footer aside';
-  --app-grid-template-rows: auto 1fr 100px;
-  --app-grid-template-columns: 200px 1fr 100px;
+  --app-grid-template-areas: 'main';
+  --app-grid-template-rows: 1fr;
+  --app-grid-template-columns: 1fr;
 }

@@ -68,7 +68,7 @@ export class Sample extends connect(store)(LitElement) {
       displayValue: (config: ColumnConfig, record: TableData, value: string, changedRecord: TableData) => {
         return `Category: ${value}`
       },
-      bulkEditable: true
+      bulkEditable: true,
     },
     {
       name: 'Integer',
@@ -96,7 +96,7 @@ export class Sample extends connect(store)(LitElement) {
       width: 30,
       editable: (config: ColumnConfig, record: TableData, value: any): boolean =>
         Number(record?.name.replace('Setting ', '')) % 2 === 0,
-      bulkEditable: true
+      bulkEditable: true,
     },
     {
       name: 'a-z only looooooong header',
@@ -161,6 +161,7 @@ export class Sample extends connect(store)(LitElement) {
           display: flex;
           flex-direction: column;
           overflow: hidden;
+          padding: 10px;
         }
         .button-container {
           display: grid;
@@ -191,6 +192,7 @@ export class Sample extends connect(store)(LitElement) {
         }}"
         @validationFailed="${(e: CustomEvent) => alert(e.detail.error)}"
         .enableBulkEdit="${true}"
+        .fixedColumnCount="${2}"
       ></m2-table>
 
       <div class="button-container">
@@ -222,7 +224,7 @@ export class Sample extends connect(store)(LitElement) {
     }
   }
 
-  generateRandomData(page: number = 1, limit: number = 50): M2TableFetchResult {
+  generateRandomData(page: number = 1, limit: number = 10): M2TableFetchResult {
     const settings: Setting[] = new Array(limit).fill('').map((_: void, idx: number) => {
       return {
         name: 'Setting ' + ((page - 1) * limit + idx + 1),

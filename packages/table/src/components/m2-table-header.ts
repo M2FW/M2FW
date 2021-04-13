@@ -2,7 +2,7 @@ import './m2-table-cell'
 import '@material/mwc-icon'
 
 import { ButtonType, CellEvents, Events } from '../enums'
-import { CSSResult, TemplateResult, customElement, html } from 'lit-element'
+import { CSSResult, PropertyValues, TemplateResult, customElement, html } from 'lit-element'
 import { ColumnConfig, IconButtonOptions, RowSelectorOption, TableButton, TextButtonOptions } from '../interfaces'
 import { commonStyle, headerStyle } from '../assets/styles'
 
@@ -25,6 +25,32 @@ export class M2TableHeader extends AbstractM2TablePart {
           ${this.columns.map((column: ColumnConfig, columnIdx: number) => this.renderTableCell(column, columnIdx))}
         </tr>
       </thead>
+    `
+  }
+
+  updated(changedProps: PropertyValues): void {
+    if (changedProps.has('columns') && this.columns?.length) {
+      this.setStickyColumnStyle()
+    }
+  }
+
+  private renderSelectInput(): TemplateResult {
+    const { exclusive, handySelector = true }: RowSelectorOption = this.selectable
+
+    return html`
+      <th class="header-selector selector">
+        ${exclusive
+          ? ''
+          : html`
+              <input
+                id="select-all"
+                type="checkbox"
+                ?disabled="${!handySelector}"
+                @change="${this.onSelectorAllChangeHandler.bind(this)}"
+              />
+            `}
+      </th>
+      <div class="splitter non-resizable"></div>
     `
   }
 
@@ -57,26 +83,6 @@ export class M2TableHeader extends AbstractM2TablePart {
         </th>
         <div class="splitter non-resizable"></div>`
     }
-  }
-
-  private renderSelectInput(): TemplateResult {
-    const { exclusive, handySelector = true }: RowSelectorOption = this.selectable
-
-    return html`
-      <th class="header-selector selector">
-        ${exclusive
-          ? ''
-          : html`
-              <input
-                id="select-all"
-                type="checkbox"
-                ?disabled="${!handySelector}"
-                @change="${this.onSelectorAllChangeHandler.bind(this)}"
-              />
-            `}
-      </th>
-      <div class="splitter non-resizable"></div>
-    `
   }
 
   private renderTableCell(column: ColumnConfig, columnIdx: number): TemplateResult {
@@ -161,28 +167,39 @@ export class M2TableHeader extends AbstractM2TablePart {
     e.preventDefault()
     e.stopPropagation()
 
-    const cell: HTMLTableHeaderCellElement = (e.currentTarget as HTMLDivElement)
-      .previousElementSibling as HTMLTableHeaderCellElement
+    this.removeStickyStyles()
+    const splitter: HTMLDivElement = e.currentTarget as HTMLDivElement
+    const cell: HTMLTableHeaderCellElement = splitter.previousElementSibling as HTMLTableHeaderCellElement
 
     const padding: number = this.paddingDiff(cell)
     const columnWidth: number = cell.offsetWidth - padding
     const pageX: number = e.pageX
 
+    let columnIdx: number
+    let width: number
+
     const modifyCellWidth = (e: MouseEvent) => {
-      const columnIdx: number = Number(cell.getAttribute('columnIdx'))
+      columnIdx = Number(cell.getAttribute('columnIdx'))
       const diffX = e.pageX - pageX
 
-      let width: number = columnWidth + diffX
+      width = columnWidth + diffX
       if (width <= this.minColumnWidth) width = this.minColumnWidth
       if (width >= this.maxColumnWidth) width = this.maxColumnWidth
 
       cell.style.width = `${width}px`
-
-      this.dispatchEvent(new CustomEvent(CellEvents.ColumnWidthChange, { detail: { columnIdx, width } }))
     }
 
     document.addEventListener('mousemove', modifyCellWidth)
-    document.addEventListener('mouseup', () => document.removeEventListener('mousemove', modifyCellWidth))
+    document.addEventListener('mouseup', () => {
+      this.dispatchEvent(new CustomEvent(CellEvents.ColumnWidthChange, { detail: { columnIdx, width } }))
+      document.removeEventListener('mousemove', modifyCellWidth)
+    })
+  }
+
+  private removeStickyStyles(): void {
+    Array.from(this.renderRoot.querySelectorAll('[sticky]')).forEach((element: Element) =>
+      element.removeAttribute('sticky')
+    )
   }
 
   paddingDiff(cell: HTMLTableHeaderCellElement): number {

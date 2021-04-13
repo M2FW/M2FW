@@ -224,6 +224,10 @@ export class M2TableBody extends AbstractM2TablePart {
         this.selectedDataMap.set(identifier, record)
       })
     }
+
+    if ((changedProps.has('_data') || changedProps.has('columns')) && this._data?.length && this.columns?.length) {
+      this.setStickyColumnStyle()
+    }
   }
 
   getRow(rowIdx: number): any {
