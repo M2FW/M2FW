@@ -9,6 +9,7 @@ import { ColumnConfig, TableData } from '../interfaces'
 
 import { M2TableBody } from './m2-table-body'
 import { M2TableBooleanCell } from './m2-table-boolean-cell'
+import { M2TableCell } from './m2-table-cell'
 import { M2TableDateCell } from './m2-table-date-cell'
 import { M2TableDateTimeCell } from './m2-table-datetime-cell'
 import { M2TableFloatCell } from './m2-table-float-cell'
@@ -76,11 +77,11 @@ export class M2Table extends AbstractM2TablePart {
           .scrollSpeedLevel="${this.scrollSpeedLevel}"
           .minColumnWidth="${this.minColumnWidth}"
           .maxColumnWidth="${this.maxColumnWidth}"
-          .enableBulkEdit="${this.enableBulkEdit}"
           @selectAll="${this.onSelectAllHandler.bind(this)}"
           @deselectAll="${this.onDeselectAllHandler.bind(this)}"
           @wheel="${this.onHeaderWheelHandler}"
           @columnWidthChange="${this.onColumnWidthChange.bind(this)}"
+          @headerCellValueChange="${this.onHeaderCellValueChange.bind(this)}"
         ></m2-table-header>
 
         <m2-table-body
@@ -270,6 +271,18 @@ export class M2Table extends AbstractM2TablePart {
 
       return column
     })
+  }
+
+  onHeaderCellValueChange(e: CustomEvent): void {
+    const { field, newValue } = e.detail
+    for (let rowIdx: number = 0; rowIdx < this.data.length; rowIdx++) {
+      try {
+        const cell: AbstractM2TableCell<any> = this.getCell<AbstractM2TableCell<any>>(rowIdx, field)
+        cell.setValue(newValue, false)
+      } catch (e) {
+        continue
+      }
+    }
   }
 
   checkValidity(): void {

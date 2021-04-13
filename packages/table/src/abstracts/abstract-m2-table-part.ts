@@ -1,8 +1,8 @@
+import { ColumnConfig, RowSelectorOption, TableButton } from '../interfaces'
 import { LitElement, property } from 'lit-element'
-import { RowSelectorOption, TableButton } from '../interfaces'
 
 export abstract class AbstractM2TablePart extends LitElement {
-  @property({ type: Array }) columns: any[] = []
+  @property({ type: Array }) columns: (ColumnConfig | any)[] = []
   @property({ type: Array }) buttons: TableButton[] = []
   @property({ type: Boolean }) numbering: boolean = true
   @property({ type: Object }) selectable: RowSelectorOption | any = {
@@ -16,5 +16,4 @@ export abstract class AbstractM2TablePart extends LitElement {
   @property({ type: Boolean }) removable: boolean = true
   @property({ type: Number }) minColumnWidth: number = 60
   @property({ type: Number }) maxColumnWidth: number = Infinity
-  @property({ type: Boolean }) enableBulkEdit: boolean = false
 }

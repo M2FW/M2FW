@@ -68,6 +68,7 @@ export class Sample extends connect(store)(LitElement) {
       displayValue: (config: ColumnConfig, record: TableData, value: string, changedRecord: TableData) => {
         return `Category: ${value}`
       },
+      bulkEditable: true
     },
     {
       name: 'Integer',
@@ -92,14 +93,16 @@ export class Sample extends connect(store)(LitElement) {
       name: 'dynamicEditable',
       header: 'dynamic editable column',
       type: ColumnTypes.String,
-      width: 200,
+      width: 30,
       editable: (config: ColumnConfig, record: TableData, value: any): boolean =>
         Number(record?.name.replace('Setting ', '')) % 2 === 0,
+      bulkEditable: true
     },
     {
-      name: 'a-z only',
+      name: 'a-z only looooooong header',
       type: ColumnTypes.String,
-      width: 100,
+      bulkEditable: true,
+      width: 30,
       validator: /^[a-z]+$/,
     },
     {
@@ -187,6 +190,7 @@ export class Sample extends connect(store)(LitElement) {
           }
         }}"
         @validationFailed="${(e: CustomEvent) => alert(e.detail.error)}"
+        .enableBulkEdit="${true}"
       ></m2-table>
 
       <div class="button-container">

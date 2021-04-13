@@ -190,6 +190,9 @@ export const cellStyle: CSSResult = css`
   .dsp-cell {
     width: inherit;
   }
+  .header-edit-icon {
+    font-size: smaller;
+  }
 `
 
 export const indicatorStyle = css`
