@@ -57,6 +57,7 @@ export const headerStyle: CSSResult = css`
   th mwc-icon.tooltip-icon {
     cursor: help;
     color: var(--m2-table-tooltip-icon-color, white);
+    float: right;
   }
   th mwc-icon.tooltip-icon:hover {
     color: var(--m2-table-tooltip-icon-hover-color, lightgreen);
@@ -205,6 +206,9 @@ export const cellStyle: CSSResult = css`
   .dsp-cell {
     display: flex;
   }
+  .dsp-cell span {
+    display: flex;
+  }
   input,
   select {
     padding: 0;
@@ -216,7 +220,7 @@ export const cellStyle: CSSResult = css`
   }
   .header-edit-icon {
     font-size: var(--m2-table-header-icon-font-size, small);
-    vertical-align: top;
+    margin: auto 5px auto auto;
   }
 `
 

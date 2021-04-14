@@ -96,13 +96,6 @@ export class M2TableHeader extends AbstractM2TablePart {
           : column.bulkEditable
           ? this.renderBulkEditor(column, columnIdx)
           : this.displayHeader(column)}
-        ${column.tooltip
-          ? html`<mwc-icon
-              class="tooltip-icon"
-              @click="${(e: MouseEvent) => this.showToolTip(e, this.getHeaderText(column), column.tooltip as string)}"
-              >help</mwc-icon
-            >`
-          : ''}
       </th>
 
       ${column.hidden ? '' : html`<div class="splitter" @mousedown="${this.onMouseDownHandler.bind(this)}"></div>`}
@@ -113,8 +106,7 @@ export class M2TableHeader extends AbstractM2TablePart {
     let cloned: ColumnConfig = Object.assign({}, column)
 
     cloned.editable = true
-    cloned.displayValue = () =>
-      html`${this.getHeaderText(column)} ${html`<mwc-icon class="header-edit-icon">edit</mwc-icon>`}`
+    cloned.displayValue = () => html`${this.displayHeader(column)}`
 
     return html`<m2-table-cell
       @valueChange="${this.dispatchHeaderCellValueChangeEvent.bind(this)}"
@@ -142,7 +134,19 @@ export class M2TableHeader extends AbstractM2TablePart {
    */
   displayHeader(config: ColumnConfig): TemplateResult {
     const headerText: string = this.getHeaderText(config)
-    return html`<span>${headerText}</span>`
+    return html`<span>
+        ${config.bulkEditable ? html` <mwc-icon class="header-edit-icon">edit</mwc-icon> ` : ''} ${headerText}</span
+      >
+
+      ${config.tooltip
+        ? html`
+            <mwc-icon
+              class="tooltip-icon"
+              @click="${(e: MouseEvent) => this.showToolTip(e, headerText, config.tooltip as string)}"
+              >help</mwc-icon
+            >
+          `
+        : ''} `
   }
 
   /**
