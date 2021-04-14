@@ -52,6 +52,7 @@ export class Sample extends connect(store)(LitElement) {
       hidden: false,
       editable: true,
       align: ColumnAlign.Center,
+      tooltip: 'Tool tip test',
     },
     {
       name: 'category',

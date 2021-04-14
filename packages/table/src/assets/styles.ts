@@ -50,6 +50,17 @@ export const headerStyle: CSSResult = css`
     padding: var(--m2-table-cell-padding, 5px);
     background-color: inherit;
   }
+  th mwc-icon {
+    font-size: var(--m2-table-header-icon-font-size, small);
+    vertical-align: top;
+  }
+  th mwc-icon.tooltip-icon {
+    cursor: help;
+    color: var(--m2-table-tooltip-icon-color, white);
+  }
+  th mwc-icon.tooltip-icon:hover {
+    color: var(--m2-table-tooltip-icon-hover-color, lightgreen);
+  }
   .splitter {
     cursor: col-resize;
     height: var(--m2-table-header-row-height, 30px);
@@ -204,7 +215,8 @@ export const cellStyle: CSSResult = css`
     width: inherit;
   }
   .header-edit-icon {
-    font-size: smaller;
+    font-size: var(--m2-table-header-icon-font-size, small);
+    vertical-align: top;
   }
 `
 

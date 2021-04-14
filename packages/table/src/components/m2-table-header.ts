@@ -7,6 +7,7 @@ import { ColumnConfig, IconButtonOptions, RowSelectorOption, TableButton, TextBu
 import { commonStyle, headerStyle } from '../assets/styles'
 
 import { AbstractM2TablePart } from '../abstracts'
+import { Tooltip } from '@m2fw/tooltip'
 
 @customElement('m2-table-header')
 export class M2TableHeader extends AbstractM2TablePart {
@@ -95,6 +96,13 @@ export class M2TableHeader extends AbstractM2TablePart {
           : column.bulkEditable
           ? this.renderBulkEditor(column, columnIdx)
           : this.displayHeader(column)}
+        ${column.tooltip
+          ? html`<mwc-icon
+              class="tooltip-icon"
+              @click="${(e: MouseEvent) => this.showToolTip(e, this.getHeaderText(column), column.tooltip as string)}"
+              >help</mwc-icon
+            >`
+          : ''}
       </th>
 
       ${column.hidden ? '' : html`<div class="splitter" @mousedown="${this.onMouseDownHandler.bind(this)}"></div>`}
@@ -215,5 +223,9 @@ export class M2TableHeader extends AbstractM2TablePart {
         detail: event.detail,
       })
     )
+  }
+
+  private showToolTip(event: MouseEvent, subject: string, content: string): void {
+    Tooltip.show(event.clientX, event.clientY, { subject, content })
   }
 }
