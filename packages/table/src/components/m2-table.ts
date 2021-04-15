@@ -18,6 +18,7 @@ import { M2TableIntegerCell } from './m2-table-integer-cell'
 import { M2TableObjectCell } from './m2-table-object-cell'
 import { M2TableSelectCell } from './m2-table-select-cell'
 import { M2TableStringCell } from './m2-table-string-cell'
+import { M2TableCell } from './m2-table-cell'
 
 export type M2TableFetchResult = {
   data: any[]
@@ -76,6 +77,7 @@ export class M2Table extends AbstractM2TablePart {
           .scrollSpeedLevel="${this.scrollSpeedLevel}"
           .minColumnWidth="${this.minColumnWidth}"
           .maxColumnWidth="${this.maxColumnWidth}"
+          .numbering="${this.numbering}"
           @selectAll="${this.onSelectAllHandler.bind(this)}"
           @deselectAll="${this.onDeselectAllHandler.bind(this)}"
           @wheel="${this.onHeaderWheelHandler}"
@@ -94,6 +96,8 @@ export class M2Table extends AbstractM2TablePart {
           .data="${this.data}"
           .selectedData="${this.selectedData}"
           .fixedColumnCount="${this.fixedColumnCount}"
+          .numbering="${this.numbering}"
+          @focusChange="${this.onFocusChangeHandler.bind(this)}"
         ></m2-table-body>
       </div>
 
@@ -260,6 +264,7 @@ export class M2Table extends AbstractM2TablePart {
    * @param e Wheel Event
    */
   onHeaderWheelHandler(e: WheelEvent): void {
+    e.preventDefault()
     this.tableContainer.scrollLeft += e.deltaY / this.scrollSpeedLevel
   }
 
@@ -283,6 +288,49 @@ export class M2Table extends AbstractM2TablePart {
       } catch (e) {
         continue
       }
+    }
+  }
+
+  onFocusChangeHandler(): void {
+    this.matchUpScrollEndLine()
+    this.matchUpScrollBottomLine()
+  }
+
+  matchUpScrollEndLine(): void {
+    const focusedCell: M2TableCell | undefined = this.tableBody?.focusedCell
+    if (!focusedCell) return
+
+    let tableCellEl: HTMLElement | null = focusedCell.parentElement as HTMLElement | null
+    if (!tableCellEl) return
+
+    let totalWidth: number = 0
+
+    while (tableCellEl) {
+      totalWidth += tableCellEl.offsetWidth
+      tableCellEl = tableCellEl.previousElementSibling as HTMLElement | null
+    }
+
+    if (this.tableContainer.clientWidth < totalWidth) {
+      this.tableContainer.scrollLeft = totalWidth - this.tableContainer.clientWidth
+    }
+  }
+
+  matchUpScrollBottomLine(): void {
+    if (!this.tableBody) return
+
+    const focusedCell: M2TableCell | undefined = this.tableBody?.focusedCell
+    if (!focusedCell) return
+
+    let totalHeight: number = this.tableHeader?.offsetHeight || 0
+    let rowIdx: number = focusedCell.rowIdx
+    while (rowIdx >= 0) {
+      const tableRowElement: HTMLTableRowElement = this.tableBody.getRow(rowIdx)
+      totalHeight += tableRowElement.offsetHeight
+      rowIdx--
+    }
+
+    if (this.tableContainer.clientHeight < totalHeight) {
+      this.tableContainer.scrollTop = totalHeight - this.tableContainer.clientHeight
     }
   }
 

@@ -107,7 +107,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   _dispatchFocusChangeEvent(): void {
     this.dispatchEvent(
       new CustomEvent(CellEvents.FocusChange, {
-        detail: { _isFocused: this._isFocused },
+        detail: { _isFocused: this._isFocused, cell: this },
         bubbles: true,
         composed: true,
         cancelable: true,

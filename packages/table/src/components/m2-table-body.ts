@@ -20,10 +20,9 @@ import { M2TableCell } from './m2-table-cell'
 @customElement('m2-table-body')
 export class M2TableBody extends AbstractM2TablePart {
   @property({ type: Array }) data: TableData[] = []
-  @property({ type: Object }) focusedCell?: HTMLElement
-  @property({ type: Boolean }) _isEditing: boolean = false
-  @property({ type: Object }) _focusedCell?: M2TableCell
   @property({ type: Array }) private _data: TableData[] = []
+  @property({ type: Boolean }) isEditing: boolean = false
+  @property({ type: Object }) focusedCell?: M2TableCell
   @property({ type: Number }) startRowNumber: number = 1
 
   @property({ type: Array }) selectedData: TableData[] = []
@@ -439,7 +438,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param e
    */
   onModeChangeHandler(e: CustomEvent): void {
-    this._isEditing = e.detail._isEditing
+    this.isEditing = e.detail._isEditing
   }
 
   /**
@@ -447,7 +446,7 @@ export class M2TableBody extends AbstractM2TablePart {
    * @param e
    */
   onFocusChangeHandler(e: CustomEvent): void {
-    this._focusedCell = e.currentTarget as M2TableCell
+    this.focusedCell = e.currentTarget as M2TableCell
   }
 
   /**
@@ -508,14 +507,14 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   private moveFocusingKeyHandler(key: string) {
-    if (this._focusedCell && !this._isEditing) {
-      this.moveFocusByKeycode(this._focusedCell, key)
+    if (this.focusedCell && !this.isEditing) {
+      this.moveFocusByKeycode(this.focusedCell, key)
     }
   }
 
   private selectRowKeyHandler() {
-    if (this._focusedCell && this.selectable && !this._isEditing) {
-      const rowIdx: number = this._focusedCell.rowIdx
+    if (this.focusedCell && this.selectable && !this.isEditing) {
+      const rowIdx: number = this.focusedCell.rowIdx
       const isSelected: boolean = this._data[rowIdx]?.[this.propertyAccessKey]?.selected || false
       if (isSelected) {
         this.deselectRow(rowIdx)
@@ -526,8 +525,8 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   private deleteRowKeyHandler() {
-    if (this._focusedCell && !this._isEditing) {
-      const rowIdx: number = this._focusedCell.rowIdx
+    if (this.focusedCell && !this.isEditing) {
+      const rowIdx: number = this.focusedCell.rowIdx
       this.deleteRow(rowIdx)
     }
   }
@@ -652,8 +651,8 @@ export class M2TableBody extends AbstractM2TablePart {
     if (this._data[rowIdx]?.[this.propertyAccessKey]?.appended && this._data?.length > 1) {
       this._data.splice(rowIdx, 1)
 
-      if (rowIdx === this._data.length && this._focusedCell) {
-        this.moveFocusUp(this._focusedCell)
+      if (rowIdx === this._data.length && this.focusedCell) {
+        this.moveFocusUp(this.focusedCell)
       }
     } else if (!this._data[rowIdx]?.[this.propertyAccessKey]?.appended) {
       if (this.removable) {
@@ -736,16 +735,16 @@ export class M2TableBody extends AbstractM2TablePart {
 
   private onEditNextRowHandler(event: any): void {
     this.moveFocusDown(event.detail.cell)
-    if (this._focusedCell?.cell) {
-      const cell: AbstractM2TableCell<any> = this._focusedCell.cell
+    if (this.focusedCell?.cell) {
+      const cell: AbstractM2TableCell<any> = this.focusedCell.cell
       cell.toggleEditing()
     }
   }
 
   private onEditNextColumnHandler(event: any): void {
     this.moveFocusRight(event.detail.cell)
-    if (this._focusedCell?.cell) {
-      const cell: AbstractM2TableCell<any> = this._focusedCell.cell
+    if (this.focusedCell?.cell) {
+      const cell: AbstractM2TableCell<any> = this.focusedCell.cell
       cell.toggleEditing()
     }
   }
@@ -821,15 +820,6 @@ export class M2TableBody extends AbstractM2TablePart {
         deleted: !Boolean(record[this.propertyAccessKey]?.deleted),
       },
     }
-  }
-
-  /**
-   * @description Returning table row based on row index
-   * @param rowIdx
-   * @returns {HTMLTableRowElement}
-   */
-  private getRowByIndex(rowIdx: number): HTMLTableRowElement | null {
-    return this.renderRoot?.querySelector(`tr[rowIdx="${rowIdx}"`)
   }
 
   /**

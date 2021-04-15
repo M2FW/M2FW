@@ -180,9 +180,8 @@ export class Sample extends connect(store)(LitElement) {
     return html`
       <m2-table
         .maxColumnWidth="${350}"
-        .selectable="${{
-          exclusive: false,
-        } as RowSelectorOption}"
+        .selectable="${false}"
+        .numbering="${false}"
         .columns="${this.columns}"
         .addable="${false}"
         .fetchHandler="${this.generateRandomData as any}"
