@@ -500,7 +500,6 @@ export class M2TableBody extends AbstractM2TablePart {
    */
   onkeydownHandler(event: KeyboardEvent): void {
     const key: string = event.code
-    event.preventDefault()
     if (keyMapper(key, KeyActions.MOVE_FOCUSING)) this.moveFocusingKeyHandler(key)
     if (keyMapper(key, KeyActions.SELECT_ROW)) this.selectRowKeyHandler()
     if (keyMapper(key, KeyActions.DELETE_ROW)) this.deleteRowKeyHandler()
@@ -733,11 +732,11 @@ export class M2TableBody extends AbstractM2TablePart {
     this.requestUpdate()
   }
 
-  private onEditNextRowHandler(event: any): void {
-    this.moveFocusDown(event.detail.cell)
+  private async onEditNextRowHandler(event: any): Promise<void> {
+    await this.moveFocusDown(event.detail.cell)
     if (this.focusedCell?.cell) {
       const cell: AbstractM2TableCell<any> = this.focusedCell.cell
-      cell.toggleEditing()
+      if (cell.checkEditable()) cell.toggleEditing()
     }
   }
 
@@ -745,7 +744,7 @@ export class M2TableBody extends AbstractM2TablePart {
     this.moveFocusRight(event.detail.cell)
     if (this.focusedCell?.cell) {
       const cell: AbstractM2TableCell<any> = this.focusedCell.cell
-      cell.toggleEditing()
+      if (cell.checkEditable()) cell.toggleEditing()
     }
   }
 

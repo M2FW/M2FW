@@ -161,6 +161,7 @@ export class Tooltip {
     const tooltipBox: TooltipBox = document.createElement('tooltip-box') as TooltipBox
     tooltipBox.positionX = positionX
     tooltipBox.positionY = positionY
+    tooltipBox.resizable = options.resizable || false
     if (options.subject) tooltipBox.subject = options.subject
     tooltipBox.content = options.content
 

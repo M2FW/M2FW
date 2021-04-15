@@ -179,7 +179,6 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
       if (event.code === 'Enter' && event.ctrlKey) nextEditTargetDirection = 'down'
       if (event.code === 'Tab') {
         if (this._isEditing) {
-          event.preventDefault()
           nextEditTargetDirection = 'right'
         } else {
           return

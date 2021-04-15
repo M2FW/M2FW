@@ -3,4 +3,5 @@ export interface TooltipOptions {
   content: string
   width?: number
   height?: number
+  resizable?: boolean
 }

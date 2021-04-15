@@ -165,6 +165,16 @@ export class M2Table extends AbstractM2TablePart {
     this.tableBody?.deselectRow(rowIdx)
   }
 
+  deleteRow(rowIdx: number): void {
+    this.tableBody?.deleteRow(rowIdx)
+  }
+
+  deleteAll(): void {
+    for (let rowIdx: number = 0; rowIdx < this.data.length; rowIdx++) {
+      this.tableBody?.deleteRow(rowIdx)
+    }
+  }
+
   getRecords<T>(withProps: boolean = false): (T & TableData)[] {
     if (!this.tableBody) {
       throw new Error('tableBody is not exists')
@@ -310,7 +320,7 @@ export class M2Table extends AbstractM2TablePart {
       tableCellEl = tableCellEl.previousElementSibling as HTMLElement | null
     }
 
-    if (this.tableContainer.clientWidth < totalWidth) {
+    if (this.tableContainer.scrollLeft + this.tableContainer.clientWidth < totalWidth) {
       this.tableContainer.scrollLeft = totalWidth - this.tableContainer.clientWidth
     }
   }
@@ -329,7 +339,7 @@ export class M2Table extends AbstractM2TablePart {
       rowIdx--
     }
 
-    if (this.tableContainer.clientHeight < totalHeight) {
+    if (this.tableContainer.scrollTop + this.tableContainer.clientHeight < totalHeight) {
       this.tableContainer.scrollTop = totalHeight - this.tableContainer.clientHeight
     }
   }
