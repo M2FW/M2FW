@@ -39,6 +39,14 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
 
   abstract checkValidity(value?: any): void
 
+  get isRequired(): boolean {
+    if (typeof this.config.required === 'function') {
+      return this.config.required(this.config, this.record || {}, this.value, this.changedRecord)
+    } else {
+      return Boolean(this.config.required)
+    }
+  }
+
   get editor(): T {
     const editor: T | null = this.renderRoot?.querySelector(this.editorAccessor) as any
     if (!editor) {
@@ -166,7 +174,19 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
     if (keyMapper(event.code, KeyActions.TOGGLE_EDITING)) {
       const editable: boolean = this.checkEditable()
       if (!editable) return
-      this.toggleEditing()
+
+      let nextEditTargetDirection: 'down' | 'right' | undefined = undefined
+      if (event.code === 'Enter' && event.ctrlKey) nextEditTargetDirection = 'down'
+      if (event.code === 'Tab') {
+        if (this._isEditing) {
+          event.preventDefault()
+          nextEditTargetDirection = 'right'
+        } else {
+          return
+        }
+      }
+
+      this.toggleEditing(nextEditTargetDirection)
     }
 
     if (this._isEditing && keyMapper(event.code, KeyActions.CANCEL_EDITING)) {
@@ -192,11 +212,18 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   /**
    * @description toggle editing/displaying mode
    */
-  async toggleEditing(): Promise<void> {
+  async toggleEditing(nextEditTargetDirection?: 'down' | 'right'): Promise<void> {
     if (this._isEditing) {
       this._isEditing = false
       this.setValue()
-      this.focus()
+
+      if (nextEditTargetDirection === 'down') {
+        this.dispatchEditNextRowEvent()
+      } else if (nextEditTargetDirection === 'right') {
+        this.dispatchEditNextColumnEvent()
+      } else {
+        this.focus()
+      }
     } else {
       this._isEditing = true
       await this.updateComplete
@@ -270,17 +297,35 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
       innerText = ''
     }
 
-    return html`
-      <div class="dsp-cell">
-        <span>${innerText}</span>
-      </div>
-    `
+    return html` <div class="dsp-cell">${innerText}</div> `
   }
 
   dispatchValueChangeEvent(oldValue: any, newValue: any): void {
     this.dispatchEvent(
       new CustomEvent(CellEvents.CellValueChange, {
         detail: { field: this.config?.name, oldValue, newValue, rowIdx: this.rowIdx, columnIdx: this.columnIdx },
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      })
+    )
+  }
+
+  dispatchEditNextRowEvent(): void {
+    this.dispatchEvent(
+      new CustomEvent(CellEvents.EditNextRow, {
+        detail: { field: this.config.name, rowIdx: this.rowIdx, cell: this },
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      })
+    )
+  }
+
+  dispatchEditNextColumnEvent(): void {
+    this.dispatchEvent(
+      new CustomEvent(CellEvents.EditNextColumn, {
+        detail: { field: this.config.name, rowIdx: this.rowIdx, cell: this },
         bubbles: true,
         composed: true,
         cancelable: true,

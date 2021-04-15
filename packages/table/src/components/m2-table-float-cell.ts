@@ -24,7 +24,7 @@ export class M2TableFloatCell extends AbstractM2TableCell<HTMLInputElement> {
               min="${ifDefined(min)}"
               max="${ifDefined(max)}"
               step="${ifDefined(step)}"
-              ?required="${this.config.required}"
+              ?required="${this.isRequired}"
             />
           `
         : html`${this.renderDisplay}`}

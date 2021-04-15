@@ -16,7 +16,7 @@ export class M2TableStringCell extends AbstractM2TableCell<HTMLInputElement> {
       <input
         value="${ifDefined(this.value)}"
         placeholder="${ifDefined(config?.placeholder)}"
-        ?required="${this.config.required}"
+        ?required="${this.isRequired}"
       />
     `
   }

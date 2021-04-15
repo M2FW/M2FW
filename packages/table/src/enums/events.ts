@@ -21,4 +21,7 @@ export enum CellEvents {
   ValidationFailed = 'validationFailed',
 
   HeaderCellValueChange = 'headerCellValueChange',
+
+  EditNextRow = 'editNextRow',
+  EditNextColumn = 'editNextColumn',
 }

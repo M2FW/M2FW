@@ -1,13 +1,13 @@
 import './m2-table-cell'
-import '@material/mwc-icon'
+import './m2-table-header-display-cell'
 
 import { ButtonType, CellEvents, Events } from '../enums'
 import { CSSResult, PropertyValues, TemplateResult, customElement, html } from 'lit-element'
 import { ColumnConfig, IconButtonOptions, RowSelectorOption, TableButton, TextButtonOptions } from '../interfaces'
+import { Tooltip, TooltipOptions } from '@m2fw/tooltip'
 import { commonStyle, headerStyle } from '../assets/styles'
 
 import { AbstractM2TablePart } from '../abstracts'
-import { Tooltip } from '@m2fw/tooltip'
 
 @customElement('m2-table-header')
 export class M2TableHeader extends AbstractM2TablePart {
@@ -86,27 +86,33 @@ export class M2TableHeader extends AbstractM2TablePart {
     }
   }
 
-  private renderTableCell(column: ColumnConfig, columnIdx: number): TemplateResult {
+  private renderTableCell(config: ColumnConfig, columnIdx: number): TemplateResult {
+    let batchEditable: boolean = false
+    if (typeof config.batchEditable === 'function') {
+      batchEditable = config.batchEditable(config)
+    } else {
+      batchEditable = Boolean(config.batchEditable)
+    }
+
+    let tooltipOptions: TooltipOptions | undefined = this.getTooltipOptions(config)
+
     return html`
-      <th columnIdx="${columnIdx}" style="width: ${column.width || 150}px" ?hidden="${column.hidden}">
-        ${typeof column.bulkEditable === 'function'
-          ? html`
-              ${column.bulkEditable(column) ? this.renderBulkEditor(column, columnIdx) : this.displayHeader(column)}
-            `
-          : column.bulkEditable
-          ? this.renderBulkEditor(column, columnIdx)
-          : this.displayHeader(column)}
+      <th columnIdx="${columnIdx}" style="width: ${config.width || 150}px" ?hidden="${config.hidden}">
+        <m2-table-header-display-cell .batchEditable="${batchEditable}" .tooltipOptions="${tooltipOptions}">
+          ${batchEditable ? html`${this.renderBatchEditor(config, columnIdx)}` : html`${this.displayHeader(config)}`}
+        </m2-table-header-display-cell>
       </th>
 
-      ${column.hidden ? '' : html`<div class="splitter" @mousedown="${this.onMouseDownHandler.bind(this)}"></div>`}
+      ${config.hidden ? '' : html`<div class="splitter" @mousedown="${this.onMouseDownHandler.bind(this)}"></div>`}
     `
   }
 
-  renderBulkEditor(column: ColumnConfig, columnIdx: number): TemplateResult {
+  renderBatchEditor(column: ColumnConfig, columnIdx: number): TemplateResult {
     let cloned: ColumnConfig = Object.assign({}, column)
 
     cloned.editable = true
-    cloned.displayValue = () => html`${this.displayHeader(column)}`
+    cloned.displayValue = () =>
+      html` <m2-table-header-display-cell> ${this.displayHeader(column)} </m2-table-header-display-cell> `
 
     return html`<m2-table-cell
       @valueChange="${this.dispatchHeaderCellValueChangeEvent.bind(this)}"
@@ -128,25 +134,23 @@ export class M2TableHeader extends AbstractM2TablePart {
     }
   }
 
+  getTooltipOptions(config: ColumnConfig): TooltipOptions | undefined {
+    let tooltipOptions: TooltipOptions | undefined = undefined
+    if (config.tooltip) {
+      const headerText: string = this.getHeaderText(config)
+      tooltipOptions = { subject: headerText, content: config.tooltip }
+    }
+
+    return tooltipOptions
+  }
+
   /**
    * @description This is the function to concrete how header looks like.
    * @param config configuration for header
    */
   displayHeader(config: ColumnConfig): TemplateResult {
     const headerText: string = this.getHeaderText(config)
-    return html`<span>
-        ${config.bulkEditable ? html` <mwc-icon class="header-edit-icon">edit</mwc-icon> ` : ''} ${headerText}</span
-      >
-
-      ${config.tooltip
-        ? html`
-            <mwc-icon
-              class="tooltip-icon"
-              @click="${(e: MouseEvent) => this.showToolTip(e, headerText, config.tooltip as string)}"
-              >help</mwc-icon
-            >
-          `
-        : ''} `
+    return html`<span class="header-text">${headerText}</span>`
   }
 
   /**

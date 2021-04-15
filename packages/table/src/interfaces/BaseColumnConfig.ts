@@ -14,7 +14,7 @@ export interface BaseColumnConfig {
   hidden?: boolean
   align?: ColumnAlign
   editable?: boolean | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => boolean)
-  required?: boolean
-  bulkEditable?: boolean | ((config: ColumnConfig) => boolean)
+  required?: boolean | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => boolean)
+  batchEditable?: boolean | ((config: ColumnConfig) => boolean)
   tooltip?: string
 }

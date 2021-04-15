@@ -12,6 +12,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@material/mwc-icon": "^0.20.0",
     "lit-element": "^2.4.0",
     "pwa-helpers": "^0.9.1"
   },

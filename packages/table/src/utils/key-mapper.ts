@@ -4,7 +4,7 @@ import { HotKeyMapper } from '../interfaces'
  * @description Mapped object for action and keys by default
  */
 const DEFAULT_KEY_MAP: HotKeyMapper = {
-  TOGGLE_EDITING: ['Enter'],
+  TOGGLE_EDITING: ['Enter', 'Tab'],
   CANCEL_EDITING: ['Escape'],
   MOVE_FOCUSING: ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'],
   MOVE_FOCUSING_UP: ['ArrowUp'],

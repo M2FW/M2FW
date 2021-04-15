@@ -26,7 +26,7 @@ export class M2TableDateTimeCell extends AbstractM2TableCell<HTMLInputElement> {
         max="${ifDefined(max)}"
         min="${ifDefined(min)}"
         step="${ifDefined(step)}"
-        ?required="${this.config.required}"
+        ?required="${this.isRequired}"
         type="datetime-local"
       />
     `

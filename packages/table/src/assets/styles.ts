@@ -9,7 +9,6 @@ export const commonStyle: CSSResult = css`
     width: var(--m2-table-numbering-width, 30px);
     position: sticky;
   }
-
   [sticky] {
     position: sticky;
   }
@@ -49,18 +48,6 @@ export const headerStyle: CSSResult = css`
   th {
     padding: var(--m2-table-cell-padding, 5px);
     background-color: inherit;
-  }
-  th mwc-icon {
-    font-size: var(--m2-table-header-icon-font-size, small);
-    vertical-align: top;
-  }
-  th mwc-icon.tooltip-icon {
-    cursor: help;
-    color: var(--m2-table-tooltip-icon-color, white);
-    float: right;
-  }
-  th mwc-icon.tooltip-icon:hover {
-    color: var(--m2-table-tooltip-icon-hover-color, lightgreen);
   }
   .splitter {
     cursor: col-resize;

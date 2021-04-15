@@ -13,7 +13,7 @@ export class M2TableImageCell extends AbstractM2TableCell<HTMLInputElement> {
   renderEditor({ srcType = 'url' }: ImageColumnConfig): TemplateResult {
     const inputType: 'url' | 'text' = srcType === 'url' ? 'url' : 'text'
 
-    return html`<input type="${inputType}" value="${this.value || ''}" ?required="${this.config.required}" />`
+    return html`<input type="${inputType}" value="${this.value || ''}" ?required="${this.isRequired}" />`
   }
 
   renderDisplay(imageColumnConfig: ImageColumnConfig): TemplateResult {

@@ -1,5 +1,6 @@
 import './m2-table-cell'
 
+import { AbstractM2TableCell, AbstractM2TablePart } from '../abstracts'
 import { ButtonType, CellEvents, DataStatus, Events } from '../enums'
 import { CSSResult, PropertyValues, TemplateResult, customElement, html, property } from 'lit-element'
 import {
@@ -14,7 +15,6 @@ import {
 import { KeyActions, keyMapper } from '../utils/key-mapper'
 import { bodyStyle, commonStyle } from '../assets/styles'
 
-import { AbstractM2TablePart } from '../abstracts'
 import { M2TableCell } from './m2-table-cell'
 
 @customElement('m2-table-body')
@@ -39,6 +39,8 @@ export class M2TableBody extends AbstractM2TablePart {
     super()
     this.addEventListener('keydown', this.onkeydownHandler.bind(this))
     this.addEventListener(CellEvents.CellValueChange, this.onValueChangeHandler.bind(this))
+    this.addEventListener(CellEvents.EditNextRow, this.onEditNextRowHandler.bind(this))
+    this.addEventListener(CellEvents.EditNextColumn, this.onEditNextColumnHandler.bind(this))
   }
 
   render(): TemplateResult {
@@ -499,6 +501,7 @@ export class M2TableBody extends AbstractM2TablePart {
    */
   onkeydownHandler(event: KeyboardEvent): void {
     const key: string = event.code
+    event.preventDefault()
     if (keyMapper(key, KeyActions.MOVE_FOCUSING)) this.moveFocusingKeyHandler(key)
     if (keyMapper(key, KeyActions.SELECT_ROW)) this.selectRowKeyHandler()
     if (keyMapper(key, KeyActions.DELETE_ROW)) this.deleteRowKeyHandler()
@@ -729,6 +732,22 @@ export class M2TableBody extends AbstractM2TablePart {
     }
 
     this.requestUpdate()
+  }
+
+  private onEditNextRowHandler(event: any): void {
+    this.moveFocusDown(event.detail.cell)
+    if (this._focusedCell?.cell) {
+      const cell: AbstractM2TableCell<any> = this._focusedCell.cell
+      cell.toggleEditing()
+    }
+  }
+
+  private onEditNextColumnHandler(event: any): void {
+    this.moveFocusRight(event.detail.cell)
+    if (this._focusedCell?.cell) {
+      const cell: AbstractM2TableCell<any> = this._focusedCell.cell
+      cell.toggleEditing()
+    }
   }
 
   /**

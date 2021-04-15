@@ -45,10 +45,10 @@ export class Sample extends connect(store)(LitElement) {
       styles: { margin: 'auto' },
     },
     {
-      name: 'name',
+      name: 'name name name name name name name',
       header: '설정 이름',
       type: ColumnTypes.String,
-      width: 120,
+      width: 40,
       hidden: false,
       editable: true,
       align: ColumnAlign.Center,
@@ -69,7 +69,7 @@ export class Sample extends connect(store)(LitElement) {
       displayValue: (config: ColumnConfig, record: TableData, value: string, changedRecord: TableData) => {
         return `Category: ${value}`
       },
-      bulkEditable: true,
+      batchEditable: true,
     },
     {
       name: 'Integer',
@@ -89,6 +89,8 @@ export class Sample extends connect(store)(LitElement) {
       hidden: false,
       editable: true,
       align: ColumnAlign.Left,
+      batchEditable: true,
+      tooltip: 'Description tooltip',
     },
     {
       name: 'dynamicEditable',
@@ -97,14 +99,15 @@ export class Sample extends connect(store)(LitElement) {
       width: 30,
       editable: (config: ColumnConfig, record: TableData, value: any): boolean =>
         Number(record?.name.replace('Setting ', '')) % 2 === 0,
-      bulkEditable: true,
+      batchEditable: true,
     },
     {
       name: 'a-z only looooooong header',
       type: ColumnTypes.String,
-      bulkEditable: true,
       width: 30,
       validator: /^[a-z]+$/,
+      batchEditable: true,
+      tooltip: 'asdf',
     },
     {
       name: 'value',

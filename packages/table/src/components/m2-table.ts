@@ -9,7 +9,6 @@ import { ColumnConfig, TableData } from '../interfaces'
 
 import { M2TableBody } from './m2-table-body'
 import { M2TableBooleanCell } from './m2-table-boolean-cell'
-import { M2TableCell } from './m2-table-cell'
 import { M2TableDateCell } from './m2-table-date-cell'
 import { M2TableDateTimeCell } from './m2-table-datetime-cell'
 import { M2TableFloatCell } from './m2-table-float-cell'

@@ -14,7 +14,7 @@ export abstract class AbstractM2TablePart extends LitElement {
   }
   @property({ type: Boolean }) addable: boolean = true
   @property({ type: Boolean }) removable: boolean = true
-  @property({ type: Number }) minColumnWidth: number = 60
+  @property({ type: Number }) minColumnWidth: number = 0
   @property({ type: Number }) maxColumnWidth: number = Infinity
   @property({ type: Number }) fixedColumnCount: number = 0
 
@@ -23,7 +23,6 @@ export abstract class AbstractM2TablePart extends LitElement {
   async setStickyColumnStyle(): Promise<void> {
     if (this.setStickyColumnStyleTimeout) clearTimeout(this.setStickyColumnStyleTimeout)
     this.setStickyColumnStyleTimeout = setTimeout(async () => {
-      console.log('set sticky column style')
       await this.updateComplete
 
       let fixedColumnCount: number = this.fixedColumnCount

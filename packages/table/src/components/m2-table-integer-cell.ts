@@ -20,7 +20,7 @@ export class M2TableIntegerCell extends AbstractM2TableCell<HTMLInputElement> {
         value="${ifDefined(this.value)}"
         min="${ifDefined(min)}"
         max="${ifDefined(max)}"
-        ?required="${this.config.required}"
+        ?required="${this.isRequired}"
       />
     `
   }

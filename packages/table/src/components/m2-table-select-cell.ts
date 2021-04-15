@@ -12,7 +12,7 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
     const { includeEmpty = true, options }: SelectColumnConfig = config
 
     return html`
-      <select ?required="${this.config.required}">
+      <select ?required="${this.isRequired}">
         ${includeEmpty ? html`<option></option>` : ''}
         ${((options as any) || []).map(
           (option: string | SelectOption): TemplateResult => {
