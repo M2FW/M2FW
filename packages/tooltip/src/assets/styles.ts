@@ -59,7 +59,7 @@ export const styles: CSSResult = css`
     transform: rotate(0deg);
   }
   [content] {
-    font-size: var(--m2-tooltip-content-font-size, 12pt);
+    font-size: var(--m2-tooltip-content-font-size, 10pt);
     flex: 1;
     overflow-y: auto;
   }

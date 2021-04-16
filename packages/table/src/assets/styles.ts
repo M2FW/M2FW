@@ -90,6 +90,9 @@ export const bodyStyle: CSSResult = css`
   tr {
     height: var(--m2-table-row-height, 30px);
   }
+  tr[focused] {
+    background-color: var(--m2-table-focused-row-bg-color, skyblue) !important;
+  }
   tr:nth-child(even) {
     background-color: var(--m2-table-even-row-bg-color, lightgray);
   }

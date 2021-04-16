@@ -23,6 +23,7 @@ export class M2TableBody extends AbstractM2TablePart {
   @property({ type: Array }) private _data: TableData[] = []
   @property({ type: Boolean }) isEditing: boolean = false
   @property({ type: Object }) focusedCell?: M2TableCell
+  @property({ type: Number }) focusedRowIdx?: number = -1
   @property({ type: Number }) startRowNumber: number = 1
 
   @property({ type: Array }) selectedData: TableData[] = []
@@ -55,6 +56,7 @@ export class M2TableBody extends AbstractM2TablePart {
               ?selected="${record?.[this.propertyAccessKey]?.selected || false}"
               @dblclick="${this.onDblClickHandler}"
               @click="${this.onClickHandler}"
+              ?focused="${this.focusedRowIdx === rowIdx}"
             >
               ${this.selectable ? this.renderSelectInput(rowIdx, record) : ''}
               ${this.numbering ? this.renderRowNumbering(rowIdx) : ''}
@@ -447,6 +449,7 @@ export class M2TableBody extends AbstractM2TablePart {
    */
   onFocusChangeHandler(e: CustomEvent): void {
     this.focusedCell = e.currentTarget as M2TableCell
+    this.focusedRowIdx = this.focusedCell.rowIdx
   }
 
   /**
