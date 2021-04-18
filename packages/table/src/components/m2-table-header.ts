@@ -51,13 +51,11 @@ export class M2TableHeader extends AbstractM2TablePart {
               />
             `}
       </th>
-      <div class="splitter non-resizable"></div>
     `
   }
 
   private renderRowNumbering(): TemplateResult {
-    return html` <th class="header-numbering numbering">No.</th>
-      <div class="splitter non-resizable"></div>`
+    return html` <th class="header-numbering numbering">No.</th>`
   }
 
   private renderButton(button: TableButton): TemplateResult | void {
@@ -73,16 +71,14 @@ export class M2TableHeader extends AbstractM2TablePart {
       }
 
       return html`<th>
-          <button disabled></button>
-        </th>
-        <div class="splitter non-resizable"></div>`
+        <button disabled></button>
+      </th>`
     } else if (button.type === ButtonType.Text) {
       const buttonOptions: TextButtonOptions = button.options as TextButtonOptions
 
       return html` <th>
-          <button>${buttonOptions.text}</button>
-        </th>
-        <div class="splitter non-resizable"></div>`
+        <button>${buttonOptions.text}</button>
+      </th>`
     }
   }
 
@@ -97,13 +93,18 @@ export class M2TableHeader extends AbstractM2TablePart {
     let tooltipOptions: TooltipOptions | undefined = this.getTooltipOptions(config)
 
     return html`
-      <th columnIdx="${columnIdx}" style="width: ${config.width || 150}px" ?hidden="${config.hidden}">
+      <th
+        columnIdx="${columnIdx}"
+        style="width: ${config.width || 150}px"
+        ?hidden="${config.hidden}"
+        @mousemove="${this.onMouseMoveHandler.bind(this)}"
+        @mouseleave="${this.onMouseLeaveHandler.bind(this)}"
+        @mousedown="${this.onMouseDownHandler.bind(this)}"
+      >
         <m2-table-header-display-cell .batchEditable="${batchEditable}" .tooltipOptions="${tooltipOptions}">
           ${batchEditable ? html`${this.renderBatchEditor(config, columnIdx)}` : html`${this.displayHeader(config)}`}
         </m2-table-header-display-cell>
       </th>
-
-      ${config.hidden ? '' : html`<div class="splitter" @mousedown="${this.onMouseDownHandler.bind(this)}"></div>`}
     `
   }
 
@@ -179,30 +180,43 @@ export class M2TableHeader extends AbstractM2TablePart {
     }
   }
 
+  private onMouseMoveHandler(e: MouseEvent): void {
+    const thEl: HTMLTableHeaderCellElement = e.currentTarget as HTMLTableHeaderCellElement
+    if (thEl.clientWidth - 10 <= e.offsetX) {
+      thEl.setAttribute('resizable', '')
+    } else if (thEl.hasAttribute('resizable')) {
+      thEl.removeAttribute('resizable')
+    }
+  }
+
+  private onMouseLeaveHandler(e: MouseEvent): void {
+    const thEl: HTMLTableHeaderCellElement = e.currentTarget as HTMLTableHeaderCellElement
+    if (thEl.hasAttribute('resizable')) thEl.removeAttribute('resizable')
+  }
+
   private onMouseDownHandler(e: MouseEvent): void {
+    const thEl: HTMLTableHeaderCellElement = e.currentTarget as HTMLTableHeaderCellElement
+    if (!thEl.hasAttribute('resizable')) return
+
     e.preventDefault()
     e.stopPropagation()
 
-    this.removeStickyStyles()
-    const splitter: HTMLDivElement = e.currentTarget as HTMLDivElement
-    const cell: HTMLTableHeaderCellElement = splitter.previousElementSibling as HTMLTableHeaderCellElement
-
-    const padding: number = this.paddingDiff(cell)
-    const columnWidth: number = cell.offsetWidth - padding
+    const padding: number = this.paddingDiff(thEl)
+    const columnWidth: number = thEl.offsetWidth - padding
     const pageX: number = e.pageX
 
     let columnIdx: number
     let width: number
 
     const modifyCellWidth = (e: MouseEvent) => {
-      columnIdx = Number(cell.getAttribute('columnIdx'))
+      columnIdx = Number(thEl.getAttribute('columnIdx'))
       const diffX = e.pageX - pageX
 
       width = columnWidth + diffX
       if (width <= this.minColumnWidth) width = this.minColumnWidth
       if (width >= this.maxColumnWidth) width = this.maxColumnWidth
 
-      cell.style.width = `${width}px`
+      thEl.style.width = `${width}px`
     }
 
     document.addEventListener('mousemove', modifyCellWidth)
@@ -210,12 +224,6 @@ export class M2TableHeader extends AbstractM2TablePart {
       this.dispatchEvent(new CustomEvent(CellEvents.ColumnWidthChange, { detail: { columnIdx, width } }))
       document.removeEventListener('mousemove', modifyCellWidth)
     })
-  }
-
-  private removeStickyStyles(): void {
-    Array.from(this.renderRoot.querySelectorAll('[sticky]')).forEach((element: Element) =>
-      element.removeAttribute('sticky')
-    )
   }
 
   paddingDiff(cell: HTMLTableHeaderCellElement): number {

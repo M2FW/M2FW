@@ -19,7 +19,6 @@ export class M2TableFloatCell extends AbstractM2TableCell<HTMLInputElement> {
         ? html`
             <input
               type="number"
-              type="number"
               value="${ifDefined(this.value)}"
               min="${ifDefined(min)}"
               max="${ifDefined(max)}"
@@ -40,30 +39,35 @@ export class M2TableFloatCell extends AbstractM2TableCell<HTMLInputElement> {
       return this.displayCellFactory(displayValue(this.config, this.record || {}, this.value, this.changedRecord))
     }
 
-    const valueStr: string = this.value?.toString() || ''
-    const stepStr: string = step.toString() || ''
-    const parsedValue: string = valueStr?.substr(0, valueStr.split('.')[0].length + 1 + stepStr.split('.')[1].length)
-    this.value = Number(parsedValue)
+    if (typeof this.value === 'number') {
+      const valueStr: string = this.value?.toString() || ''
+      const stepStr: string = step.toString() || ''
+      const parsedValue: string = valueStr?.substr(0, valueStr.split('.')[0].length + 1 + stepStr.split('.')[1].length)
+      this.value = Number(parsedValue)
 
-    return this.displayCellFactory(this.value)
+      return this.displayCellFactory(this.value)
+    } else {
+      return this.displayCellFactory(this.value)
+    }
   }
 
   focusOnEditor(): void {
     this.editor?.select()
   }
 
-  parseValue(value: any): number {
+  parseValue(value: any): number | null {
+    if (value === '' || value === undefined || value === null || isNaN(value)) return null
     return Number(value)
   }
 
-  checkValidity(): void {
-    const { required, min, max }: FloatColumnConfig = this.config
-    if (required && (this.value === null || this.value === undefined || isNaN(this.value)))
+  checkValidity(value: any): void {
+    const { min, max }: FloatColumnConfig = this.config
+    if (this.isRequired && (value === null || value === undefined || isNaN(value)))
       throw new Error(ValidityErrors.VALUE_MISSING)
 
-    if (this.value) {
-      if (min !== undefined && min > this.value) throw new Error(ValidityErrors.RANGE_UNDERFLOW)
-      if (max !== undefined && max < this.value) throw new Error(ValidityErrors.RANGE_OVERFLOW)
+    if (value) {
+      if (min !== undefined && min > value) throw new Error(ValidityErrors.RANGE_UNDERFLOW)
+      if (max !== undefined && max < value) throw new Error(ValidityErrors.RANGE_OVERFLOW)
     }
   }
 }

@@ -242,6 +242,10 @@ export class M2TableBody extends AbstractM2TablePart {
     return selectedRowElements
   }
 
+  getSelectedIndexes(): number[] {
+    return this.getSelectedRowElements().map((rowEl: HTMLTableRowElement) => Number(rowEl.getAttribute('rowIdx')))
+  }
+
   getRecords(withProps: boolean = false): TableData[] {
     return this._data.map((record: TableData) => {
       let clone: TableData = Object.assign({}, record)

@@ -9,9 +9,9 @@ export const styles: CSSResult = css`
     max-width: var(--m2-tooltip-box-max-width, 400px);
     max-height: var(--m2-tooltip-box-max-height, 200px);
 
-    border: 1px solid black;
-    border-radius: 5px;
-    background-color: white;
+    border: var(--m2-tooltip-box-border, 2px solid black);
+    border-radius: var(--m2-tooltip-box-border-radius, 5px);
+    background-color: var(--m2-tooltip-box-bg-color, white);
 
     box-shadow: var(--m2-tooltip-box-shadow, 3px 3px 3px rgba(0, 0, 0, 0.6));
 
@@ -20,6 +20,9 @@ export const styles: CSSResult = css`
     transition-property: width, height;
     transition-duration: 0.3s;
     transition-timing-function: ease-in-out;
+  }
+  [tooltip-box]:hover {
+    border: var(--m2-tooltip-box-hover-border, 2px solid blue);
   }
   :host([show]) [tooltip-box] {
     width: var(--m2-tooltip-box-width, 200px); /* When it's changed, 'defaultWidth' also has to be changed */

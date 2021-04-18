@@ -65,7 +65,7 @@ export class M2TableObjectCell extends AbstractM2TableCell<HTMLInputElement> {
     return
   }
 
-  checkValidity(): void {
-    if (this.config.required && !this.value) throw new Error(ValidityErrors.VALUE_MISSING)
+  checkValidity(value: any): void {
+    if (this.isRequired && !value) throw new Error(ValidityErrors.VALUE_MISSING)
   }
 }

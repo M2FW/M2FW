@@ -19,6 +19,7 @@ import { M2TableObjectCell } from './m2-table-object-cell'
 import { M2TableSelectCell } from './m2-table-select-cell'
 import { M2TableStringCell } from './m2-table-string-cell'
 import { M2TableCell } from './m2-table-cell'
+import { M2TableTextareaCell } from './m2-table-textarea-cell'
 
 export type M2TableFetchResult = {
   data: any[]
@@ -35,6 +36,7 @@ export type M2TableCellTypes =
   | M2TableObjectCell
   | M2TableSelectCell
   | M2TableStringCell
+  | M2TableTextareaCell
 
 @customElement('m2-table')
 export class M2Table extends AbstractM2TablePart {
@@ -175,6 +177,12 @@ export class M2Table extends AbstractM2TablePart {
     }
   }
 
+  getSelectedIndexes(): number[] {
+    if (!this.tableBody) throw new Error('tableBody is not exists')
+
+    return this.tableBody.getSelectedIndexes()
+  }
+
   getRecords<T>(withProps: boolean = false): (T & TableData)[] {
     if (!this.tableBody) {
       throw new Error('tableBody is not exists')
@@ -248,9 +256,15 @@ export class M2Table extends AbstractM2TablePart {
     return this.tableBody.getDeleted(withProps) as (T & TableData)[]
   }
 
+  getCellsByRowIdx(rowIdx: number): AbstractM2TableCell<any>[] {
+    const tableCells: M2TableCell[] = Array.from(this.tableBody?.getRow(rowIdx).querySelectorAll('m2-table-cell'))
+    return tableCells.map((tableCell: M2TableCell) => tableCell.cell)
+  }
+
   getCell<T>(rowIdx: number, columnName: string): T {
     const columnIdx: number = this.columns.findIndex((column: ColumnConfig) => column.name === columnName)
     if (columnIdx < 0) throw new Error('Failed to find column by name')
+
     return this.tableBody?.getRow(rowIdx).querySelector(`m2-table-cell[columnidx="${columnIdx}"]`).renderRoot
       .firstElementChild
   }

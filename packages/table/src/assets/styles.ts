@@ -47,24 +47,48 @@ export const headerStyle: CSSResult = css`
   }
   th {
     padding: var(--m2-table-cell-padding, 5px);
+    border-right-width: var(--m2-table-splitter-width, 2px);
+    border-right-color: var(--m2-table-header-splitter-color, white);
+    border-right-style: var(--m2-table-header-splitter-style, solid);
     background-color: inherit;
   }
-  .splitter {
-    cursor: col-resize;
-    height: var(--m2-table-header-row-height, 30px);
-    width: 5px;
-    background-color: inherit;
-    border-right: var(--m2-table-splitter-width, 2px) solid var(--m2-table-splitter-color, lightgray);
+  th[resizable] {
+    border-right-color: var(--m2-table-header-splitter-hover-color, lightgreen);
+    cursor: ew-resize;
   }
-  .splitter.non-resizable {
-    cursor: initial;
-    width: 0px;
+`
+
+export const headerDisplayStyle: CSSResult = css`
+  :host {
+    width: inherit;
+    display: flex;
+    flex: 1;
+    overflow: hidden;
   }
-  .splitter:hover {
-    border-right-color: var(--m2-table-splitter-hover-color, lightgreen);
+  ::slotted(*) {
+    width: inherit;
+    flex: 1;
   }
-  .splitter.non-resizable:hover {
-    border-right-color: var(--m2-table-splitter-color, lightgray);
+  ::slotted(span.header-text) {
+    display: block !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  mwc-icon {
+    font-size: var(--m2-table-header-icon-font-size, small);
+    margin: auto 0px;
+  }
+  mwc-icon.batch-edit-icon {
+    float: left;
+  }
+  mwc-icon.tooltip-icon {
+    float: right;
+    cursor: help;
+    color: var(--m2-table-tooltip-icon-color, white);
+  }
+  mwc-icon.tooltip-icon:hover {
+    color: var(--m2-table-tooltip-icon-hover-color, lightgreen);
   }
 `
 
@@ -115,16 +139,10 @@ export const bodyStyle: CSSResult = css`
   }
   td {
     padding: var(--m2-table-cell-padding, 5px);
-    padding-right: calc(var(--m2-table-cell-padding, 5px) + 5px);
     border-right-width: var(--m2-table-splitter-width, 2px);
     border-right-color: var(--m2-table-body-splitter-color, darkgray);
     border-right-style: var(--m2-table-body-splitter-style, dotted);
     background-color: inherit;
-  }
-  td.selector,
-  td.button,
-  td.numbering {
-    padding: var(--m2-table-cell-padding, 5px);
   }
   td,
   span {
@@ -200,13 +218,26 @@ export const cellStyle: CSSResult = css`
     display: flex;
   }
   input,
-  select {
+  select,
+  textarea {
     padding: 0;
     font-size: inherit;
     width: inherit;
   }
+  .textarea-container {
+    display: flex;
+    flex-direction: column;
+    height: var(--m2-table-textarea-cell-height, 60px);
+  }
+  textarea {
+    flex: 1;
+    resize: none;
+  }
   .dsp-cell {
     width: inherit;
+  }
+  .dsp-cell.textarea {
+    white-space: break-spaces;
   }
   .header-edit-icon {
     font-size: var(--m2-table-header-icon-font-size, small);

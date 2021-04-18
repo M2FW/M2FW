@@ -6,7 +6,7 @@ import { KeyActions, keyMapper } from '../utils/key-mapper'
 import { cellStyle } from '../assets/styles'
 
 export abstract class AbstractM2TableCell<T> extends LitElement {
-  @property({ type: Object }) config: ColumnConfig
+  @property({ type: Object }) config: ColumnConfig | any
   @property({ type: Object }) record?: TableData
   @property({ type: String }) value?: any
   @property({ type: Boolean }) _isEditing: boolean = false
@@ -175,17 +175,10 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
       const editable: boolean = this.checkEditable()
       if (!editable) return
 
-      let nextEditTargetDirection: 'down' | 'right' | undefined = undefined
-      if (event.code === 'Enter' && event.ctrlKey) nextEditTargetDirection = 'down'
-      if (event.code === 'Tab') {
-        if (this._isEditing) {
-          nextEditTargetDirection = 'right'
-        } else {
-          return
-        }
+      if (event.code === 'Enter') {
+        event.preventDefault()
+        this.toggleEditing(event.ctrlKey)
       }
-
-      this.toggleEditing(nextEditTargetDirection)
     }
 
     if (this._isEditing && keyMapper(event.code, KeyActions.CANCEL_EDITING)) {
@@ -211,15 +204,15 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   /**
    * @description toggle editing/displaying mode
    */
-  async toggleEditing(nextEditTargetDirection?: 'down' | 'right'): Promise<void> {
+  async toggleEditing(continueNextRowEditing: boolean = false): Promise<void> {
     if (this._isEditing) {
+      if (this.config.type === ColumnTypes.Textarea) return // Block to toggle editing if it's textarea to append new line
+
       this._isEditing = false
       this.setValue()
 
-      if (nextEditTargetDirection === 'down') {
+      if (continueNextRowEditing) {
         this.dispatchEditNextRowEvent()
-      } else if (nextEditTargetDirection === 'right') {
-        this.dispatchEditNextColumnEvent()
       } else {
         this.focus()
       }
@@ -270,6 +263,10 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
     }
   }
 
+  public clearValue(): void {
+    this.value = ''
+  }
+
   public doValidations(value: any): void {
     this.checkValidity(value)
 
@@ -296,7 +293,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
       innerText = ''
     }
 
-    return html` <div class="dsp-cell">${innerText}</div> `
+    return html` <div class="dsp-cell"><span>${innerText}</span></div> `
   }
 
   dispatchValueChangeEvent(oldValue: any, newValue: any): void {

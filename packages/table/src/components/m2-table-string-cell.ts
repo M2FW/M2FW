@@ -15,8 +15,10 @@ export class M2TableStringCell extends AbstractM2TableCell<HTMLInputElement> {
     return html`
       <input
         value="${ifDefined(this.value)}"
-        placeholder="${ifDefined(config?.placeholder)}"
+        placeholder="${config?.placeholder || ''}"
         ?required="${this.isRequired}"
+        maxlength="${ifDefined(config.maxlength)}"
+        minlength="${ifDefined(config.minlength)}"
       />
     `
   }
@@ -38,6 +40,6 @@ export class M2TableStringCell extends AbstractM2TableCell<HTMLInputElement> {
   }
 
   checkValidity(value?: string): void {
-    if (this.config.required && !value) throw new Error(ValidityErrors.VALUE_MISSING)
+    if (this.isRequired && !value) throw new Error(ValidityErrors.VALUE_MISSING)
   }
 }

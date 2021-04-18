@@ -32,8 +32,7 @@ export class M2TableBooleanCell extends AbstractM2TableCell<HTMLInputElement> {
     return Boolean(value)
   }
 
-  checkValidity(): void {
-    const { required }: BooleanColumnConfig = this.config
-    if (required && !(this.value === true || this.value === false)) throw new Error(ValidityErrors.VALUE_MISSING)
+  checkValidity(value: boolean): void {
+    if (this.isRequired && !(value === true || value === false)) throw new Error(ValidityErrors.VALUE_MISSING)
   }
 }

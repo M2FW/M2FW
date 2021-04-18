@@ -86,14 +86,14 @@ export class M2TableDateTimeCell extends AbstractM2TableCell<HTMLInputElement> {
     return `${year}-${month}-${date}T${hours}:${minutes}:${seconds}`
   }
 
-  checkValidity(): void {
-    const { required, min, max }: DateTimeColumnConfig = this.config
-    if (required && (this.value === null || this.value === undefined || isNaN(this.value)))
+  checkValidity(value: number): void {
+    const { min, max }: DateTimeColumnConfig = this.config
+    if (this.isRequired && (value === null || value === undefined || isNaN(value)))
       throw new Error(ValidityErrors.VALUE_MISSING)
 
-    if (this.value) {
-      if (min !== undefined && min > this.value) throw new Error(ValidityErrors.RANGE_UNDERFLOW)
-      if (max !== undefined && max < this.value) throw new Error(ValidityErrors.RANGE_OVERFLOW)
+    if (value) {
+      if (typeof min === 'number' && min > value) throw new Error(ValidityErrors.RANGE_UNDERFLOW)
+      if (typeof max === 'number' && max < value) throw new Error(ValidityErrors.RANGE_OVERFLOW)
     }
   }
 }

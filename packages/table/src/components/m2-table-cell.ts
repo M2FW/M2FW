@@ -1,3 +1,7 @@
+import { CSSResult, customElement, html, LitElement, property, TemplateResult } from 'lit-element'
+import { commonStyle, tableCellStyle } from '../assets/styles'
+import { ColumnTypes } from '../enums'
+import { ColumnConfig, TableData } from '../interfaces'
 import './m2-table-boolean-cell'
 import './m2-table-date-cell'
 import './m2-table-datetime-cell'
@@ -7,12 +11,7 @@ import './m2-table-integer-cell'
 import './m2-table-object-cell'
 import './m2-table-select-cell'
 import './m2-table-string-cell'
-
-import { CSSResult, LitElement, TemplateResult, css, customElement, html, property } from 'lit-element'
-import { ColumnConfig, TableData } from '../interfaces'
-import { commonStyle, tableCellStyle } from '../assets/styles'
-
-import { ColumnTypes } from '../enums'
+import './m2-table-textarea-cell'
 
 @customElement('m2-table-cell')
 export class M2TableCell extends LitElement {
@@ -33,6 +32,7 @@ export class M2TableCell extends LitElement {
     [ColumnTypes.Date]: 'm2-table-date-cell',
     [ColumnTypes.DateTime]: 'm2-table-datetime-cell',
     [ColumnTypes.Image]: 'm2-table-image-cell',
+    [ColumnTypes.Textarea]: 'm2-table-textarea-cell',
   }
 
   static get styles(): CSSResult[] {
@@ -75,7 +75,7 @@ export class M2TableCell extends LitElement {
               class="${this._computeClasses(this.config)}"
               .config="${this.config}"
               .record="${this.record}"
-              .value="${Number(this.value)}"
+              .value="${this.value}"
               .rowIdx="${this.rowIdx}"
               .columnIdx="${this.columnIdx}"
             ></m2-table-float-cell>
@@ -86,7 +86,7 @@ export class M2TableCell extends LitElement {
               class="${this._computeClasses(this.config)}"
               .config="${this.config}"
               .record="${this.record}"
-              .value="${Number(this.value)}"
+              .value="${this.value}"
               .rowIdx="${this.rowIdx}"
               .columnIdx="${this.columnIdx}"
             ></m2-table-integer-cell>
@@ -144,6 +144,17 @@ export class M2TableCell extends LitElement {
               .rowIdx="${this.rowIdx}"
               .columnIdx="${this.columnIdx}"
             ></m2-table-image-cell>
+          `
+        : this.type === ColumnTypes.Textarea
+        ? html`
+            <m2-table-textarea-cell
+              class="${this._computeClasses(this.config)}"
+              .config="${this.config}"
+              .record="${this.record}"
+              .value="${String(this.value)}"
+              .rowIdx="${this.rowIdx}"
+              .columnIdx="${this.columnIdx}"
+            ></m2-table-textarea-cell>
           `
         : html` <m2-table-string-cell
             class="${this._computeClasses(this.config)}"

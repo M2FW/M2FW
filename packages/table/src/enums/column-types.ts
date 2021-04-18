@@ -1,5 +1,6 @@
 export enum ColumnTypes {
   String = 'string',
+  Textarea = 'textarea',
   Integer = 'integer',
   Float = 'float',
   Boolean = 'boolean',

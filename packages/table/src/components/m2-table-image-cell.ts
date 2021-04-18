@@ -49,7 +49,7 @@ export class M2TableImageCell extends AbstractM2TableCell<HTMLInputElement> {
     return imageElement
   }
 
-  checkValidity(): void {
-    if (this.config.required && !this.value) throw new Error(ValidityErrors.VALUE_MISSING)
+  checkValidity(value: string): void {
+    if (this.isRequired && !value) throw new Error(ValidityErrors.VALUE_MISSING)
   }
 }

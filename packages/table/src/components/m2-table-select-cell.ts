@@ -70,6 +70,6 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
   }
 
   checkValidity(value: any): void {
-    if (this.config.required && !value) throw new Error(ValidityErrors.VALUE_MISSING)
+    if (this.isRequired && !value) throw new Error(ValidityErrors.VALUE_MISSING)
   }
 }
