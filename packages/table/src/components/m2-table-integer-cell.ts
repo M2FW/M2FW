@@ -46,9 +46,9 @@ export class M2TableIntegerCell extends AbstractM2TableCell<HTMLInputElement> {
     return Number(value)
   }
 
-  checkValidity(value: number): void {
+  checkValidity(value: any): void {
     const { min, max }: IntegerColumnConfig = this.config
-    if (this.isRequired && (value === null || value === undefined || isNaN(value)))
+    if (this.isRequired && (value === null || value === undefined || isNaN(value) || value === ''))
       throw new Error(ValidityErrors.VALUE_MISSING)
 
     if (value) {

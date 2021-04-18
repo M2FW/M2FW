@@ -86,9 +86,9 @@ export class M2TableDateTimeCell extends AbstractM2TableCell<HTMLInputElement> {
     return `${year}-${month}-${date}T${hours}:${minutes}:${seconds}`
   }
 
-  checkValidity(value: number): void {
+  checkValidity(value: any): void {
     const { min, max }: DateTimeColumnConfig = this.config
-    if (this.isRequired && (value === null || value === undefined || isNaN(value)))
+    if (this.isRequired && (value === null || value === undefined || isNaN(value) || value === ''))
       throw new Error(ValidityErrors.VALUE_MISSING)
 
     if (value) {

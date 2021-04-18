@@ -243,7 +243,6 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
       }
 
       this.doValidations(newValue)
-      this.invalid = false
 
       const oldValue: any = this.parseValue(this.value)
       if (oldValue != newValue) {
@@ -251,7 +250,6 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
         this.dispatchValueChangeEvent(oldValue, newValue)
       }
     } catch (e) {
-      this.invalid = true
       this.dispatchEvent(
         new CustomEvent(CellEvents.ValidationFailed, {
           detail: { config: this.config, value: this.value, record: this.record, error: e },
@@ -268,19 +266,25 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   }
 
   public doValidations(value: any): void {
-    this.checkValidity(value)
+    try {
+      this.checkValidity(value)
 
-    const validator:
-      | RegExp
-      | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => void)
-      | undefined = this.config.validator
+      const validator:
+        | RegExp
+        | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => void)
+        | undefined = this.config.validator
 
-    if (validator) {
-      if (validator instanceof RegExp) {
-        if (!validator.test(value)) throw new Error(ValidityErrors.PATTERN_MISMATCH)
-      } else {
-        validator(this.config, this.record || {}, value, this.changedRecord)
+      if (validator) {
+        if (validator instanceof RegExp) {
+          if (!validator.test(value)) throw new Error(ValidityErrors.PATTERN_MISMATCH)
+        } else {
+          validator(this.config, this.record || {}, value, this.changedRecord)
+        }
       }
+      this.invalid = false
+    } catch (e) {
+      this.invalid = true
+      throw e
     }
   }
 

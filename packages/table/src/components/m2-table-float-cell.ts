@@ -62,7 +62,7 @@ export class M2TableFloatCell extends AbstractM2TableCell<HTMLInputElement> {
 
   checkValidity(value: any): void {
     const { min, max }: FloatColumnConfig = this.config
-    if (this.isRequired && (value === null || value === undefined || isNaN(value)))
+    if (this.isRequired && (value === null || value === undefined || isNaN(value) || value === ''))
       throw new Error(ValidityErrors.VALUE_MISSING)
 
     if (value) {

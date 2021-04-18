@@ -70,9 +70,9 @@ export class M2TableDateCell extends AbstractM2TableCell<HTMLInputElement> {
     return `${year}-${month}-${date}`
   }
 
-  checkValidity(value: number): void {
+  checkValidity(value: any): void {
     const { min, max }: DateColumnConfig = this.config
-    if (this.isRequired && (value === null || value === undefined || isNaN(value)))
+    if (this.isRequired && (value === null || value === undefined || isNaN(value) || value === ''))
       throw new Error(ValidityErrors.VALUE_MISSING)
 
     if (value) {

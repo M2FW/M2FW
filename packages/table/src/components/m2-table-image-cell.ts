@@ -17,6 +17,7 @@ export class M2TableImageCell extends AbstractM2TableCell<HTMLInputElement> {
   }
 
   renderDisplay(imageColumnConfig: ImageColumnConfig): TemplateResult {
+    if (this.rowIdx !== undefined && this.rowIdx < 0) return this.displayCellFactory(this.config.header)
     return html`${this.buildImageTag(imageColumnConfig)}`
   }
 

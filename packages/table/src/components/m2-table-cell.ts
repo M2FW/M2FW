@@ -1,6 +1,6 @@
 import { CSSResult, customElement, html, LitElement, property, TemplateResult } from 'lit-element'
 import { commonStyle, tableCellStyle } from '../assets/styles'
-import { ColumnTypes } from '../enums'
+import { ColumnAlign, ColumnTypes } from '../enums'
 import { ColumnConfig, TableData } from '../interfaces'
 import './m2-table-boolean-cell'
 import './m2-table-date-cell'
@@ -185,7 +185,8 @@ export class M2TableCell extends LitElement {
    * @param config Object having class list
    */
   _computeClasses(config?: ColumnConfig): string {
-    const { align } = config || {}
+    let { align } = config || {}
+    if (this.rowIdx < 0) align = ColumnAlign.Center
     let classes: string[] = []
     if (align) classes.push(align)
 
