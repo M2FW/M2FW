@@ -19,8 +19,18 @@ export class M2TableStringCell extends AbstractM2TableCell<HTMLInputElement> {
         ?required="${this.isRequired}"
         maxlength="${ifDefined(config.maxlength)}"
         minlength="${ifDefined(config.minlength)}"
+        @input="${this.onTextInputChangeHandler.bind(this)}"
+          @keyup="${this.onTextInputChangeHandler.bind(this)}"
       />
     `
+  }
+
+  private onTextInputChangeHandler(event: KeyboardEvent): void {
+    if (!this.config.maxlength) return
+
+    const textarea: HTMLTextAreaElement = event.currentTarget as HTMLTextAreaElement
+    const value: string = textarea.value
+    if (value.length >= this.config.maxlength) value.substr(-1, 1)
   }
 
   renderDisplay(config: StringColumnConfig): TemplateResult {

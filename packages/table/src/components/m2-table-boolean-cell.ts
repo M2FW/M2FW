@@ -15,7 +15,9 @@ export class M2TableBooleanCell extends AbstractM2TableCell<HTMLInputElement> {
   }
 
   renderDisplay(_config: ColumnConfig): TemplateResult {
+    
     const { displayValue }: BooleanColumnConfig = this.config
+    if(this.rowIdx && this.rowIdx < 0) return this.displayCellFactory(this.config.header || this.config.name)
     let value: boolean = Boolean(this.value)
     if (typeof displayValue === 'function') {
       value = displayValue(this.config, this.record || {}, this.value, this.changedRecord)
