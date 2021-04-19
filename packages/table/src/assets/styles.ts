@@ -11,6 +11,7 @@ export const commonStyle: CSSResult = css`
   }
   [sticky] {
     position: sticky;
+    outline: 1px dashed transparent;
   }
 `
 

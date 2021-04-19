@@ -644,6 +644,7 @@ export class M2TableBody extends AbstractM2TablePart {
    */
   private async appendData(): Promise<void> {
     this._data.push({ [this.propertyAccessKey]: { appended: true } })
+    this.setStickyColumnStyle()
     await this.requestUpdate()
   }
 

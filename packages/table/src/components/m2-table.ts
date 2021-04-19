@@ -269,6 +269,18 @@ export class M2Table extends AbstractM2TablePart {
       .firstElementChild
   }
 
+  getSelectedColumns(): ColumnConfig[] {
+    const selectableColumns: ColumnConfig[] = this.columns.filter(
+      (columnConfig: ColumnConfig) => columnConfig.selectable
+    )
+    if (!selectableColumns?.length) return []
+    const columnSelectors: HTMLInputElement[] = Array.from(
+      this.tableHeader?.renderRoot.querySelectorAll('input.column-selector') as any
+    )
+
+    return columnSelectors.filter((input: HTMLInputElement) => input.checked).map((input) => (input as any).config)
+  }
+
   /**
    * @description Event handler for selectAll from m2-table-header
    */

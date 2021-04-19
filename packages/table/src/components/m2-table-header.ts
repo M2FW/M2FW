@@ -101,6 +101,7 @@ export class M2TableHeader extends AbstractM2TablePart {
         @mouseleave="${this.onMouseLeaveHandler.bind(this)}"
         @mousedown="${this.onMouseDownHandler.bind(this)}"
       >
+        ${config.selectable ? html` <input class="column-selector" type="checkbox" .config="${config}" /> ` : ''}
         <m2-table-header-display-cell .batchEditable="${batchEditable}" .tooltipOptions="${tooltipOptions}">
           ${batchEditable ? html`${this.renderBatchEditor(config, columnIdx)}` : html`${this.displayHeader(config)}`}
         </m2-table-header-display-cell>

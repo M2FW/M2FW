@@ -17,4 +17,5 @@ export interface BaseColumnConfig {
   required?: boolean | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => boolean)
   batchEditable?: boolean | ((config: ColumnConfig) => boolean)
   tooltip?: string
+  selectable?: boolean
 }

@@ -22,7 +22,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
 
     this.contentEditable = 'true'
 
-    this.addEventListener('focus', this.onfocusHandler.bind(this))
+    this.addEventListener('focus', this.onfocusHandler.bind(this), { capture: true })
     this.addEventListener('blur', this.onblurHandler.bind(this))
     this.addEventListener('dblclick', this.ondblclickHandler.bind(this))
     this.addEventListener('keydown', this.onkeydownHandler.bind(this))
