@@ -9,6 +9,7 @@ export class M2TableBooleanCell extends AbstractM2TableCell<HTMLInputElement> {
   @property({ type: Boolean }) value?: boolean
 
   editorAccessor: string = 'input[type=checkbox]'
+  valueAccessKey: string = 'checked'
 
   renderEditor(_config: BooleanColumnConfig): TemplateResult {
     return html` <input type="checkbox" .checked="${this.value || false}" ?required="${this.isRequired}" /> `

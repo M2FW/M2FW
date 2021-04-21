@@ -8,8 +8,7 @@ import { ifDefined } from 'lit-html/directives/if-defined'
 @customElement('m2-table-float-cell')
 export class M2TableFloatCell extends AbstractM2TableCell<HTMLInputElement> {
   editorAccessor: string = 'input[type=number]'
-
-  @property({ type: Number }) value?: number
+  valueAccessKey: string = 'value'
 
   renderEditor(config: FloatColumnConfig): TemplateResult {
     const { min, max, step = 0.01 }: FloatColumnConfig = config
@@ -43,9 +42,8 @@ export class M2TableFloatCell extends AbstractM2TableCell<HTMLInputElement> {
       const valueStr: string = this.value?.toString() || ''
       const stepStr: string = step.toString() || ''
       const parsedValue: string = valueStr?.substr(0, valueStr.split('.')[0].length + 1 + stepStr.split('.')[1].length)
-      this.value = Number(parsedValue)
 
-      return this.displayCellFactory(this.value)
+      return this.displayCellFactory(Number(parsedValue))
     } else {
       return this.displayCellFactory(this.value)
     }

@@ -1,7 +1,3 @@
-import { CSSResult, customElement, html, LitElement, property, TemplateResult } from 'lit-element'
-import { commonStyle, tableCellStyle } from '../assets/styles'
-import { ColumnAlign, ColumnTypes } from '../enums'
-import { ColumnConfig, TableData } from '../interfaces'
 import './m2-table-boolean-cell'
 import './m2-table-date-cell'
 import './m2-table-datetime-cell'
@@ -13,10 +9,15 @@ import './m2-table-select-cell'
 import './m2-table-string-cell'
 import './m2-table-textarea-cell'
 
+import { CSSResult, LitElement, TemplateResult, customElement, html, property } from 'lit-element'
+import { ColumnAlign, ColumnTypes } from '../enums'
+import { ColumnConfig, TableData } from '../interfaces'
+import { commonStyle, tableCellStyle } from '../assets/styles'
+
 @customElement('m2-table-cell')
 export class M2TableCell extends LitElement {
   @property({ type: String }) type?: ColumnTypes
-  @property({ type: Object }) config: ColumnConfig
+  @property({ type: Object }) config: ColumnConfig | any
   @property({ type: Object }) record?: TableData
   @property() value: any
   @property({ type: Boolean }) _isFocused: boolean = false
@@ -46,6 +47,7 @@ export class M2TableCell extends LitElement {
 
   render(): TemplateResult {
     this.value = this.value || ''
+
     return html`
       ${this.type === ColumnTypes.String
         ? html`

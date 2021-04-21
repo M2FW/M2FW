@@ -6,9 +6,8 @@ import { ValidityErrors } from '../enums'
 
 @customElement('m2-table-image-cell')
 export class M2TableImageCell extends AbstractM2TableCell<HTMLInputElement> {
-  @property({ type: String }) value?: string
-
   editorAccessor: string = 'input'
+  valueAccessKey: string = 'value'
 
   renderEditor({ srcType = 'url' }: ImageColumnConfig): TemplateResult {
     const inputType: 'url' | 'text' = srcType === 'url' ? 'url' : 'text'

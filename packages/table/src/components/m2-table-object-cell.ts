@@ -6,7 +6,10 @@ import { ValidityErrors } from '../enums'
 
 @customElement('m2-table-object-cell')
 export class M2TableObjectCell extends AbstractM2TableCell<HTMLInputElement> {
-  editorAccessor: string = ''
+  private selectedRecord: Record<string, any> = {}
+  
+  editorAccessor: string = '#object-input'
+  valueAccessKey: string = 'data-object'
 
   renderEditor(config: ObjectColumnConfig): TemplateResult {
     const { renderEditor }: ObjectColumnConfig = config
@@ -19,20 +22,14 @@ export class M2TableObjectCell extends AbstractM2TableCell<HTMLInputElement> {
       config,
       this.record || {},
       this.value,
-      (newValue: any) => {
-        this._isEditing = false
-
-        const oldValue = this.value
-        if (oldValue != newValue) {
-          this.value = newValue
-          this.dispatchValueChangeEvent(oldValue, newValue)
-        }
-      },
-      html
+      async (value: Record<string, any>): Promise<void> => {
+        this.selectedRecord = value
+        this.toggleEditing()
+      }
     )
 
     if (result) return result
-    return this.renderDisplay(config)
+    return html`<input id="object-input" hidden .data-object="${this.selectedRecord}" />`
   }
 
   renderDisplay(config: ObjectColumnConfig): TemplateResult {
@@ -66,6 +63,10 @@ export class M2TableObjectCell extends AbstractM2TableCell<HTMLInputElement> {
   }
 
   checkValidity(value: any): void {
-    if (this.isRequired && !value) throw new Error(ValidityErrors.VALUE_MISSING)
+    if (this.isRequired && (!value || !Object.keys(value).length)) throw new Error(ValidityErrors.VALUE_MISSING)
+  }
+
+  getEditorValue(): Record<string, any> {
+    return this.selectedRecord
   }
 }

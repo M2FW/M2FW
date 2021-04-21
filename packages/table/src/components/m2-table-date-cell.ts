@@ -8,8 +8,7 @@ import { ifDefined } from 'lit-html/directives/if-defined'
 @customElement('m2-table-date-cell')
 export class M2TableDateCell extends AbstractM2TableCell<HTMLInputElement> {
   editorAccessor: string = 'input'
-
-  @property({ type: Number }) value?: number
+  valueAccessKey: string = 'value'
 
   renderEditor(config: DateColumnConfig): TemplateResult {
     const { max, min, step }: DateColumnConfig = config

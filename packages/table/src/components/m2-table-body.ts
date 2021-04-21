@@ -153,6 +153,14 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   private renderTableCell(column: ColumnConfig, record: TableData, rowIdx: number, columnIdx: number): TemplateResult {
+    let value: any = record[column.name]
+    if (record[this.propertyAccessKey]?.changed) {
+      const changedFields: string[] = record[this.propertyAccessKey].changedValues.map((change: any) => change.field)
+      if (changedFields.indexOf(column.name) >= 0) {
+        value = record[this.propertyAccessKey].changedValues.find((change: any) => change.field === column.name).changes
+      }
+    }
+
     return html`
       <td columnIdx="${columnIdx}" style="width: ${column.width || 150}px;" ?hidden="${column.hidden}">
         <m2-table-cell
@@ -160,7 +168,7 @@ export class M2TableBody extends AbstractM2TablePart {
           columnIdx="${columnIdx}"
           .type="${column.type}"
           .config="${column}"
-          .value="${record[column.name]}"
+          .value="${value}"
           .record="${record}"
           @modeChange="${this.onModeChangeHandler}"
           @focusChange="${this.onFocusChangeHandler}"

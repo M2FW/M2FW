@@ -7,7 +7,6 @@ export interface ObjectColumnConfig extends BaseColumnConfig {
     config: ObjectColumnConfig,
     record: TableData,
     value: any,
-    setValueHandler: (value: any) => void,
-    html: any
+    setValueHandler: (value: Record<string, any>) => void
   ) => any
 }

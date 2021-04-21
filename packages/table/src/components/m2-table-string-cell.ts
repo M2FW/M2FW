@@ -7,9 +7,10 @@ import { ifDefined } from 'lit-html/directives/if-defined'
 
 @customElement('m2-table-string-cell')
 export class M2TableStringCell extends AbstractM2TableCell<HTMLInputElement> {
-  editorAccessor: string = 'input'
-
   @property({ type: String }) value?: string
+
+  editorAccessor: string = 'input'
+  valueAccessKey: string = 'value'
 
   renderEditor(config: StringColumnConfig): TemplateResult {
     return html`
@@ -20,7 +21,7 @@ export class M2TableStringCell extends AbstractM2TableCell<HTMLInputElement> {
         maxlength="${ifDefined(config.maxlength)}"
         minlength="${ifDefined(config.minlength)}"
         @input="${this.onTextInputChangeHandler.bind(this)}"
-          @keyup="${this.onTextInputChangeHandler.bind(this)}"
+        @keyup="${this.onTextInputChangeHandler.bind(this)}"
       />
     `
   }

@@ -33,6 +33,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   }
 
   abstract editorAccessor: string
+  abstract valueAccessKey: string
   abstract renderEditor(config: ColumnConfig): TemplateResult
   abstract renderDisplay(config: ColumnConfig): TemplateResult
   abstract focusOnEditor(): void
@@ -161,9 +162,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
 
     if (!editable) return
 
-    this._isEditing = true
-    await this.updateComplete
-    this.focusOnEditor()
+    this.toggleEditing()
   }
 
   /**
@@ -233,13 +232,10 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
    */
   public async setValue(newValue?: any, ignoreEditable: boolean = true): Promise<void> {
     try {
-      const editable: boolean = this.checkEditable()
-      if (!ignoreEditable && !editable) return
+      if(!ignoreEditable && !this.checkEditable()) return
 
       if (newValue === undefined) {
-        const valueAccessKey: string = this.config.type === ColumnTypes.Boolean ? 'checked' : 'value'
-
-        newValue = this.parseValue((this.editor as any)[valueAccessKey])
+        newValue = this.getEditorValue()
       }
 
       this.doValidations(newValue)
@@ -250,6 +246,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
         this.dispatchValueChangeEvent(oldValue, newValue)
       }
     } catch (e) {
+      console.error(e)
       this.dispatchEvent(
         new CustomEvent(CellEvents.ValidationFailed, {
           detail: { config: this.config, value: this.value, record: this.record, error: e },
@@ -259,6 +256,14 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
         })
       )
     }
+  }
+
+  getEditorValue(): any {
+    return this.parseValue((this.editor as any)[this.valueAccessKey])
+  }
+
+  parseValue(value: any): any {
+    return value
   }
 
   public clearValue(): void {
@@ -286,10 +291,6 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
       this.invalid = true
       throw e
     }
-  }
-
-  parseValue(value: any): any {
-    return value
   }
 
   displayCellFactory(innerText: string | number | TemplateResult | undefined): TemplateResult {

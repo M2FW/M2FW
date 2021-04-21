@@ -7,6 +7,7 @@ import { ValidityErrors } from '../enums'
 @customElement('m2-table-select-cell')
 export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
   editorAccessor: string = 'select'
+  valueAccessKey: string = 'value'
 
   renderEditor(config: SelectColumnConfig): TemplateResult {
     const { includeEmpty = true, options }: SelectColumnConfig = config
