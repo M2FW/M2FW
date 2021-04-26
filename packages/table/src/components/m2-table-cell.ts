@@ -46,7 +46,7 @@ export class M2TableCell extends LitElement {
   }
 
   render(): TemplateResult {
-    this.value = this.value || ''
+    if(this.value === undefined || this.value === null) this.value = ''
 
     return html`
       ${this.type === ColumnTypes.String
