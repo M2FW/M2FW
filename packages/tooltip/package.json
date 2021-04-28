@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/tooltip",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.76",
   "description": "tooltip powered by M2 Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/m2fw",

@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/menu-tree",
-  "version": "0.1.0-alpha.30",
+  "version": "0.1.0-alpha.76",
   "description": "menu-tree powered by M2 Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/m2fw",
@@ -12,7 +12,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@m2fw/redux-manager": "^0.1.0-alpha.30",
+    "@m2fw/redux-manager": "^0.1.0-alpha.76",
     "lit-element": "^2.2.1",
     "pwa-helpers": "^0.9.1"
   },
