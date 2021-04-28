@@ -220,11 +220,14 @@ export class M2TableHeader extends AbstractM2TablePart {
       thEl.style.width = `${width}px`
     }
 
-    document.addEventListener('mousemove', modifyCellWidth)
-    document.addEventListener('mouseup', () => {
+    const mouseUpHandler = () => {
       this.dispatchEvent(new CustomEvent(CellEvents.ColumnWidthChange, { detail: { columnIdx, width } }))
       document.removeEventListener('mousemove', modifyCellWidth)
-    })
+      document.removeEventListener('mouseup', mouseUpHandler)
+    }
+
+    document.addEventListener('mousemove', modifyCellWidth)
+    document.addEventListener('mouseup', mouseUpHandler)
   }
 
   paddingDiff(cell: HTMLTableHeaderCellElement): number {
