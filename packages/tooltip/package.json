@@ -2,7 +2,7 @@
   "name": "@m2fw/tooltip",
   "version": "0.0.1",
   "description": "tooltip powered by M2 Framework",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "repository": "https://github.com/m2fw/m2fw",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
   "license": "MIT",
