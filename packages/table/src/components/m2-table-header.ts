@@ -4,15 +4,13 @@ import './m2-table-header-display-cell'
 import { ButtonType, CellEvents, Events } from '../enums'
 import { CSSResult, PropertyValues, TemplateResult, customElement, html } from 'lit-element'
 import { ColumnConfig, IconButtonOptions, RowSelectorOption, TableButton, TextButtonOptions } from '../interfaces'
-import { Tooltip, TooltipOptions } from '@m2fw/tooltip'
 import { commonStyle, headerStyle } from '../assets/styles'
 
 import { AbstractM2TablePart } from '../abstracts'
+import { TooltipOptions } from '@m2fw/tooltip'
 
 @customElement('m2-table-header')
 export class M2TableHeader extends AbstractM2TablePart {
-  _lastAccVal?: number
-
   static get styles(): CSSResult[] {
     return [commonStyle, headerStyle]
   }
@@ -30,6 +28,8 @@ export class M2TableHeader extends AbstractM2TablePart {
   }
 
   updated(changedProps: PropertyValues): void {
+    super.updated(changedProps)
+
     if (changedProps.has('columns') && this.columns?.length) {
       this.setStickyColumnStyle()
     }
@@ -236,6 +236,10 @@ export class M2TableHeader extends AbstractM2TablePart {
     return padLeft + padRight
   }
 
+  private dispatchColumnWidthChangeEvent(columnIdx: number, width: number): void {
+    this.dispatchEvent(new CustomEvent(CellEvents.ColumnWidthChange, { detail: { columnIdx, width } }))
+  }
+
   private dispatchHeaderCellValueChangeEvent(event: CustomEvent): void {
     event.stopPropagation()
     this.dispatchEvent(
@@ -243,9 +247,5 @@ export class M2TableHeader extends AbstractM2TablePart {
         detail: event.detail,
       })
     )
-  }
-
-  private showToolTip(event: MouseEvent, subject: string, content: string): void {
-    Tooltip.show(event.clientX, event.clientY, { subject, content })
   }
 }

@@ -9,6 +9,7 @@ import { ColumnConfig, TableData } from '../interfaces'
 
 import { M2TableBody } from './m2-table-body'
 import { M2TableBooleanCell } from './m2-table-boolean-cell'
+import { M2TableCell } from './m2-table-cell'
 import { M2TableDateCell } from './m2-table-date-cell'
 import { M2TableDateTimeCell } from './m2-table-datetime-cell'
 import { M2TableFloatCell } from './m2-table-float-cell'
@@ -18,7 +19,6 @@ import { M2TableIntegerCell } from './m2-table-integer-cell'
 import { M2TableObjectCell } from './m2-table-object-cell'
 import { M2TableSelectCell } from './m2-table-select-cell'
 import { M2TableStringCell } from './m2-table-string-cell'
-import { M2TableCell } from './m2-table-cell'
 import { M2TableTextareaCell } from './m2-table-textarea-cell'
 
 export type M2TableFetchResult = {

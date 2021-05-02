@@ -5,6 +5,7 @@ export interface PageInfo {
 }
 export interface RouteState extends PageInfo {
   homeRoute: string
+  notFoundRoute?: string
   pages: PageDetail[]
   importedHandler?: (page: PageDetail) => any
 }

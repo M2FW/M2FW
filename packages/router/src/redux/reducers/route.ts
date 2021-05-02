@@ -1,4 +1,4 @@
-import { ADD_PAGES, NAVIGATE, SET_HOME_ROUTE, SET_IMPORTED_HANDLER, SWITCH_TO_IMPORTED } from '../actions/route'
+import { ADD_PAGES, NAVIGATE, REPLACE_PAGES, SET_404_ROUTE, SET_HOME_ROUTE, SET_IMPORTED_HANDLER, SWITCH_TO_IMPORTED } from '../actions/route'
 import { PageDetail, RouteState } from '../../interfaces'
 
 const INITIAL_STATE: RouteState = {
@@ -18,10 +18,23 @@ export const route = (state = INITIAL_STATE, action: RouteState & { type: string
       }
     }
 
+    case SET_404_ROUTE: {
+      return {
+        ...state,
+        notFoundRoute: action.notFoundRoute,
+      }
+    }
+
     case ADD_PAGES:
       return {
         ...state,
         pages: [...state.pages, ...extractValidPages(state.pages, action.pages)],
+      }
+
+    case REPLACE_PAGES:
+      return {
+        ...state,
+        pages: mergePages(state.pages, action.pages)
       }
 
     case NAVIGATE:
@@ -71,4 +84,20 @@ function extractValidPages(currentPages: PageDetail[], newPages: PageDetail[] = 
         route: page.route.replace(/(^\/|\/$)/g, ''),
       }
     })
+}
+
+function mergePages(currentPages: PageDetail[], newPages: PageDetail[]): PageDetail[] {
+  const mergedPages: PageDetail[] = []
+  const currentPageMap: Map<string, PageDetail> = new Map()
+  currentPages.forEach((pageDetail: PageDetail) => currentPageMap.set(pageDetail.route, pageDetail))
+
+  newPages.forEach((pageDetail: PageDetail) => {
+    if(currentPageMap.has(pageDetail.route)) {
+      mergedPages.push(currentPageMap.get(pageDetail.route) as PageDetail)
+    } else {
+      mergedPages.push(pageDetail)
+    }
+  })
+
+  return mergedPages
 }

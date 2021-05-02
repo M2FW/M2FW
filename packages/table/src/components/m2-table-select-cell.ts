@@ -52,6 +52,10 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
       }
     })
 
+    if(this.value === false) {
+      console.log('Selected option is ' + selectedOption)
+    }
+
     if (selectedOption) {
       const displayValue: string = typeof selectedOption === 'string' ? selectedOption : selectedOption.display
       return this.displayCellFactory(displayValue)

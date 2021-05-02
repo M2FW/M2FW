@@ -207,6 +207,8 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   updated(changedProps: PropertyValues): void {
+    super.updated(changedProps)
+
     if (changedProps.has('data') || changedProps.has('addable')) {
       this._data = (this.data || []).map((record: TableData) => {
         let cloned: TableData = Object.assign({}, record)

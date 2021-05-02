@@ -20,6 +20,10 @@ export abstract class AbstractM2TablePart extends LitElement {
 
   private setStickyColumnStyleTimeout?: NodeJS.Timeout
 
+  updated(changedProps: PropertyValues): void {
+    if (changedProps.has('buttons')) this.setStickyColumnStyle()
+  }
+
   async setStickyColumnStyle(): Promise<void> {
     if (this.setStickyColumnStyleTimeout) clearTimeout(this.setStickyColumnStyleTimeout)
     this.setStickyColumnStyleTimeout = setTimeout(async () => {
