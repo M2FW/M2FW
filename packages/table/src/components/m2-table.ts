@@ -4,8 +4,8 @@ import './m2-table-header'
 import './m2-table-page-indicator'
 
 import { AbstractM2TableCell, AbstractM2TablePart } from '../abstracts'
-import { CSSResult, TemplateResult, css, customElement, html, property } from 'lit-element'
-import { ColumnConfig, TableData } from '../interfaces'
+import { CSSResult, PropertyValues, TemplateResult, css, customElement, html, property } from 'lit-element'
+import { ColumnConfig, Sorting, TableData } from '../interfaces'
 
 import { M2TableBody } from './m2-table-body'
 import { M2TableBooleanCell } from './m2-table-boolean-cell'
@@ -48,7 +48,11 @@ export class M2Table extends AbstractM2TablePart {
 
   private page: number = 1
 
-  @property({ type: Object }) fetchHandler?: (page: number, limit: number) => Promise<M2TableFetchResult>
+  @property({ type: Object }) fetchHandler?: (
+    page: number,
+    limit: number,
+    sortings: Sorting[]
+  ) => Promise<M2TableFetchResult>
 
   static get styles(): CSSResult[] {
     return [
@@ -85,6 +89,7 @@ export class M2Table extends AbstractM2TablePart {
           @wheel="${this.onHeaderWheelHandler}"
           @columnWidthChange="${this.onColumnWidthChange.bind(this)}"
           @headerCellValueChange="${this.onHeaderCellValueChange.bind(this)}"
+          @sortChanged="${this.onSortChangeHandler.bind(this)}"
           .fixedColumnCount="${this.fixedColumnCount}"
         ></m2-table-header>
 
@@ -99,6 +104,7 @@ export class M2Table extends AbstractM2TablePart {
           .selectedData="${this.selectedData}"
           .fixedColumnCount="${this.fixedColumnCount}"
           .numbering="${this.numbering}"
+          .sortings="${this.sortings}"
           @focusChange="${this.onFocusChangeHandler.bind(this)}"
         ></m2-table-body>
       </div>
@@ -112,7 +118,7 @@ export class M2Table extends AbstractM2TablePart {
                 @pageChanged="${(e: CustomEvent) => {
                   this.page = e.detail.page
                   this.limit = e.detail.limit
-                  if (this.fetchHandler) this.refreshData()
+                  // if (this.fetchHandler) this.refreshData()
                 }}"
               ></m2-table-page-indicator>
             `
@@ -127,9 +133,15 @@ export class M2Table extends AbstractM2TablePart {
     }
   }
 
+  updated(changedProps: PropertyValues): void {
+    if (changedProps.has('page') || changedProps.has('limit') || changedProps.has('sorting')) {
+      if (typeof this.fetchHandler === 'function') this.refreshData()
+    }
+  }
+
   async refreshData(): Promise<void> {
-    if (this.fetchHandler) {
-      const { data, total } = await this.fetchHandler(this.page, this.limit)
+    if (typeof this.fetchHandler === 'function') {
+      const { data, total } = await this.fetchHandler(this.page, this.limit, this.sortings)
       this.data = data
       this.total = total
     } else {
@@ -383,5 +395,12 @@ export class M2Table extends AbstractM2TablePart {
         }
       }
     }
+  }
+
+  onSortChangeHandler(event: CustomEvent): void {
+    const { config, desc }: { config: ColumnConfig; desc: boolean | undefined } = event.detail
+
+    this.sortings = this.sortings.filter((sorting: Sorting) => sorting.name !== config.name)
+    if (desc !== undefined) this.sortings = [...this.sortings, { name: config.name, desc }]
   }
 }

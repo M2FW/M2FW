@@ -25,3 +25,7 @@ export enum CellEvents {
   EditNextRow = 'editNextRow',
   EditNextColumn = 'editNextColumn',
 }
+
+export enum HeaderEvents {
+  SortChanged = 'sortChanged',
+}

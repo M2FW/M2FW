@@ -102,7 +102,15 @@ export class M2TableHeader extends AbstractM2TablePart {
         @mousedown="${this.onMouseDownHandler.bind(this)}"
       >
         ${config.selectable ? html` <input class="column-selector" type="checkbox" .config="${config}" /> ` : ''}
-        <m2-table-header-display-cell .batchEditable="${batchEditable}" .tooltipOptions="${tooltipOptions}">
+        <m2-table-header-display-cell
+          .batchEditable="${batchEditable}"
+          .tooltipOptions="${tooltipOptions}"
+          .sortable="${Boolean(config.sortable)}"
+          @sortChanged="${(event: CustomEvent) => {
+            event.detail.config = config
+            // this.dispatchEvent(event)
+          }}"
+        >
           ${batchEditable ? html`${this.renderBatchEditor(config, columnIdx)}` : html`${this.displayHeader(config)}`}
         </m2-table-header-display-cell>
       </th>
@@ -242,10 +250,6 @@ export class M2TableHeader extends AbstractM2TablePart {
 
   private dispatchHeaderCellValueChangeEvent(event: CustomEvent): void {
     event.stopPropagation()
-    this.dispatchEvent(
-      new CustomEvent(CellEvents.HeaderCellValueChange, {
-        detail: event.detail,
-      })
-    )
+    this.dispatchEvent(new CustomEvent(CellEvents.HeaderCellValueChange, { detail: event.detail }))
   }
 }

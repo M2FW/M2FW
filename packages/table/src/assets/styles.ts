@@ -83,6 +83,12 @@ export const headerDisplayStyle: CSSResult = css`
   mwc-icon.batch-edit-icon {
     float: left;
   }
+  mwc-icon.sort-icon {
+    cursor: pointer;
+  }
+  mwc-icon.sort-icon:hover {
+    color: var(--m2-table-sort-icon-hover-color, lightgreen);
+  }
   mwc-icon.tooltip-icon {
     float: right;
     cursor: help;

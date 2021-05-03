@@ -91,6 +91,7 @@ export class Sample extends connect(store)(LitElement) {
       align: ColumnAlign.Left,
       batchEditable: true,
       tooltip: 'Description tooltip',
+      sortable: true,
     },
     {
       name: 'dynamicEditable',

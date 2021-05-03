@@ -7,6 +7,7 @@ import {
   ColumnConfig,
   IconButtonOptions,
   RowSelectorOption,
+  Sorting,
   TableButton,
   TableChangeValueProperties,
   TableData,
@@ -838,6 +839,8 @@ export class M2TableBody extends AbstractM2TablePart {
       },
     }
   }
+
+  sort(): void {}
 
   /**
    * @description Returning specific cell by row index and column index

@@ -18,4 +18,5 @@ export interface BaseColumnConfig {
   batchEditable?: boolean | ((config: ColumnConfig) => boolean)
   tooltip?: string
   selectable?: boolean
+  sortable?: boolean
 }

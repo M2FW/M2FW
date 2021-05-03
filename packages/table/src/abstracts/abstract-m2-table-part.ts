@@ -1,4 +1,4 @@
-import { ColumnConfig, RowSelectorOption, TableButton } from '../interfaces'
+import { ColumnConfig, RowSelectorOption, Sorting, TableButton } from '../interfaces'
 import { LitElement, PropertyValues, property } from 'lit-element'
 
 export abstract class AbstractM2TablePart extends LitElement {
@@ -17,6 +17,8 @@ export abstract class AbstractM2TablePart extends LitElement {
   @property({ type: Number }) minColumnWidth: number = 0
   @property({ type: Number }) maxColumnWidth: number = Infinity
   @property({ type: Number }) fixedColumnCount: number = 0
+
+  @property({ type: Array }) sortings: Sorting[] = []
 
   private setStickyColumnStyleTimeout?: NodeJS.Timeout
 
