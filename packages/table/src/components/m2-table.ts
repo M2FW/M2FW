@@ -134,8 +134,16 @@ export class M2Table extends AbstractM2TablePart {
   }
 
   updated(changedProps: PropertyValues): void {
-    if (changedProps.has('page') || changedProps.has('limit') || changedProps.has('sorting')) {
+    if (changedProps.has('page') || changedProps.has('limit')) {
       if (typeof this.fetchHandler === 'function') this.refreshData()
+    }
+
+    if (changedProps.has('sortings')) {
+      if (typeof this.fetchHandler === 'function') {
+        this.refreshData()
+      } else {
+        this.tableBody?.sort()
+      }
     }
   }
 

@@ -128,6 +128,8 @@ export class M2TablePageIndicator extends LitElement {
   }
 
   private computeTotalPage(limit: number, total: number): void {
+    if (total === 0) return
+
     this.totalPage = Math.ceil(total / limit)
     if (this.page > this.totalPage) {
       this.page = this.totalPage

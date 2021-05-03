@@ -17,6 +17,7 @@ import { KeyActions, keyMapper } from '../utils/key-mapper'
 import { bodyStyle, commonStyle } from '../assets/styles'
 
 import { M2TableCell } from './m2-table-cell'
+import { M2TableDateCell } from './m2-table-date-cell'
 
 @customElement('m2-table-body')
 export class M2TableBody extends AbstractM2TablePart {
@@ -840,7 +841,25 @@ export class M2TableBody extends AbstractM2TablePart {
     }
   }
 
-  sort(): void {}
+  sort(): void {
+    if (!this.sortings?.length) {
+      this._data = this.data.slice(0)
+    } else {
+      const cloned: TableData[] = this.data.slice(0)
+
+      this.sortings.forEach((sorting: Sorting) => {
+        if (!sorting.desc) {
+          // Ascending sort
+          cloned.sort((a: TableData, b: TableData) => a[sorting.name] - b[sorting.name])
+        } else {
+          // Descending sort
+          cloned.sort((a: TableData, b: TableData) => b[sorting.name] - a[sorting.name])
+        }
+      })
+
+      this._data = cloned.slice(0)
+    }
+  }
 
   /**
    * @description Returning specific cell by row index and column index

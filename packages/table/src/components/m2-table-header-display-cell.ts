@@ -1,5 +1,3 @@
-import '@material/mwc-icon'
-
 import { CSSResult, LitElement, PropertyValues, TemplateResult, customElement, html, property } from 'lit-element'
 import { Events, HeaderEvents } from '..'
 import { Tooltip, TooltipOptions } from '@m2fw/tooltip'
