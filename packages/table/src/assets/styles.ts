@@ -57,6 +57,20 @@ export const headerStyle: CSSResult = css`
     border-right-color: var(--m2-table-header-splitter-hover-color, lightgreen);
     cursor: ew-resize;
   }
+  span.header-text {
+    width: inherit;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .splitter {
+    cursor: col-resize;
+    height: var(--m2-table-header-row-height, 30px);
+    width: 5px;
+    background-color: transparent;
+    border-right: var(--m2-table-splitter-width, 2px) solid var(--m2-table-splitter-color, lightgray);
+  }
 `
 
 export const headerDisplayStyle: CSSResult = css`
