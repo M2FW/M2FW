@@ -19,11 +19,17 @@ export class M2TableDateCell extends AbstractM2TableCell<HTMLInputElement> {
       dateStr = this.convertDateToString(date)
     }
 
+    let maxDateStr: string | undefined = undefined
+    let minDateStr: string | undefined = undefined
+
+    if(max) maxDateStr = this.convertDateToString(new Date(max))
+    if(min) minDateStr = this.convertDateToString(new Date(min))
+
     return html`
       <input
         value="${ifDefined(dateStr)}"
-        max="${ifDefined(max)}"
-        min="${ifDefined(min)}"
+        max="${ifDefined(maxDateStr)}"
+        min="${ifDefined(minDateStr)}"
         step="${ifDefined(step)}"
         ?required="${this.isRequired}"
         type="date"

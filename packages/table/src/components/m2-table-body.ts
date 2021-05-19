@@ -62,7 +62,7 @@ export class M2TableBody extends AbstractM2TablePart {
             >
               ${this.selectable ? this.renderSelectInput(rowIdx, record) : ''}
               ${this.numbering ? this.renderRowNumbering(rowIdx) : ''}
-              ${this.buttons.map((button: TableButton) => this.renderButton(button, record))}
+              ${this.buttons.map((button: TableButton) => this.renderButton(button, record, rowIdx))}
               ${this.columns.map((column: ColumnConfig, columnIdx: number) =>
                 this.renderTableCell(column, record, rowIdx, columnIdx)
               )}
@@ -93,7 +93,9 @@ export class M2TableBody extends AbstractM2TablePart {
     </td>`
   }
 
-  private renderButton(button: TableButton, record: TableData): TemplateResult | void {
+  private renderButton(button: TableButton, record: TableData, rowIdx: number): TemplateResult | void {
+    const eventParams = { record, rowIdx }
+
     if (button.type === ButtonType.Icon) {
       let icon: any
       const buttonOptions: IconButtonOptions = button.options as IconButtonOptions
@@ -110,13 +112,13 @@ export class M2TableBody extends AbstractM2TablePart {
           @click="${() => {
             const handler: any = buttonOptions?.handlers?.click
             if (handler && typeof handler === 'function') {
-              handler(record)
+              handler(eventParams)
             }
           }}"
           @dblclick="${() => {
             const handler: any = buttonOptions?.handlers?.dblclick
             if (handler && typeof handler === 'function') {
-              handler(record)
+              handler(eventParams)
             }
           }}"
         >
@@ -138,13 +140,13 @@ export class M2TableBody extends AbstractM2TablePart {
           @click="${() => {
             const handler: any = buttonOptions?.handlers?.click
             if (handler && typeof handler === 'function') {
-              handler(record)
+              handler(eventParams)
             }
           }}"
           @dblclick="${() => {
             const handler: any = buttonOptions?.handlers?.click
             if (handler && typeof handler === 'function') {
-              handler(record)
+              handler(eventParams)
             }
           }}"
         >
@@ -485,15 +487,21 @@ export class M2TableBody extends AbstractM2TablePart {
   }
 
   onClickHandler(e: MouseEvent) {
+    const rowIdx: number = Number((e.currentTarget as HTMLTableRowElement).getAttribute('rowIdx'))
+
     const doDefaultAction: boolean = this.dispatchEvent(
-      new CustomEvent(Events.RowClick, { bubbles: true, composed: true, cancelable: true })
+      new CustomEvent(Events.RowClick, {
+        detail: { record: this._data[rowIdx] },
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      })
     )
     if (!doDefaultAction) return
 
     if (this.selectable?.oneClickSelect) {
       const tableRow: HTMLTableRowElement = e.currentTarget as HTMLTableRowElement
       const isSelected: boolean = tableRow.hasAttribute('selected')
-      const rowIdx: number = Number((e.currentTarget as HTMLTableRowElement).getAttribute('rowIdx'))
 
       if (isSelected) {
         this.deselectRow(rowIdx)
