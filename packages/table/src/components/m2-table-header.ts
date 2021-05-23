@@ -51,9 +51,6 @@ export class M2TableHeader extends AbstractM2TablePart {
               />
             `}
       </th>
-      <<<<<<< Updated upstream =======
-      <div class="splitter non-resizable"></div>
-      >>>>>>> Stashed changes
     `
   }
 

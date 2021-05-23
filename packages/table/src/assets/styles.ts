@@ -64,13 +64,6 @@ export const headerStyle: CSSResult = css`
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .splitter {
-    cursor: col-resize;
-    height: var(--m2-table-header-row-height, 30px);
-    width: 5px;
-    background-color: transparent;
-    border-right: var(--m2-table-splitter-width, 2px) solid var(--m2-table-splitter-color, lightgray);
-  }
 `
 
 export const headerDisplayStyle: CSSResult = css`

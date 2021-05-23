@@ -22,8 +22,8 @@ export class M2TableDateTimeCell extends AbstractM2TableCell<HTMLInputElement> {
     let maxDateStr: string | undefined = undefined
     let minDateStr: string | undefined = undefined
 
-    if(max) maxDateStr = this.convertDateToString(new Date(max))
-    if(min) minDateStr = this.convertDateToString(new Date(min))
+    if (max) maxDateStr = this.convertDateToString(new Date(max))
+    if (min) minDateStr = this.convertDateToString(new Date(min))
 
     return html`
       <input
@@ -56,12 +56,14 @@ export class M2TableDateTimeCell extends AbstractM2TableCell<HTMLInputElement> {
   }
 
   parseValue(value: any) {
-    if (typeof value === 'string') {
+    if (value) {
       const timezoneOffset: number = new Date().getTimezoneOffset() * 60000
       const date: Date = new Date(value)
       date.setTime(date.getTime() + timezoneOffset)
 
       return date.getTime()
+    } else if (isNaN(value)) {
+      return null
     } else {
       return value
     }
