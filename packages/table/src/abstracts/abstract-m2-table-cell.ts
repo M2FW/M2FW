@@ -232,7 +232,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
    */
   public async setValue(newValue?: any, ignoreEditable: boolean = true): Promise<void> {
     try {
-      if(!ignoreEditable && !this.checkEditable()) return
+      if (!ignoreEditable && !this.checkEditable()) return
 
       if (newValue === undefined) {
         newValue = this.getEditorValue()
@@ -246,15 +246,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
         this.dispatchValueChangeEvent(oldValue, newValue)
       }
     } catch (e) {
-      console.error(e)
-      this.dispatchEvent(
-        new CustomEvent(CellEvents.ValidationFailed, {
-          detail: { config: this.config, value: this.value, record: this.record, error: e },
-          bubbles: true,
-          composed: true,
-          cancelable: true,
-        })
-      )
+      throw e
     }
   }
 
@@ -272,8 +264,6 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
 
   public doValidations(value: any): void {
     try {
-      this.checkValidity(value)
-
       const validator:
         | RegExp
         | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => void)
@@ -286,9 +276,20 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
           validator(this.config, this.record || {}, value, this.changedRecord)
         }
       }
+      this.checkValidity(value)
+
       this.invalid = false
     } catch (e) {
       this.invalid = true
+      this.dispatchEvent(
+        new CustomEvent(CellEvents.ValidationFailed, {
+          detail: { config: this.config, value: this.value, record: this.record, error: e },
+          bubbles: true,
+          composed: true,
+          cancelable: true,
+        })
+      )
+
       throw e
     }
   }
