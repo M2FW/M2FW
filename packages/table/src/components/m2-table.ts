@@ -390,14 +390,14 @@ export class M2Table extends AbstractM2TablePart {
     }
   }
 
-  checkValidity(): void {
+  checkValidity(dispatchEvent: boolean = true): void {
     for (let rowIdx: number = 0; rowIdx < this.data.length; rowIdx++) {
       for (let columnIdx: number = 0; columnIdx < this.columns.length; columnIdx++) {
         const columnName: string = this.columns[columnIdx].name
         const cell: AbstractM2TableCell<any> = this.getCell<AbstractM2TableCell<any>>(rowIdx, columnName)
 
         try {
-          cell.doValidations(cell.value)
+          cell.doValidations(cell.value, dispatchEvent)
         } catch (e) {
           throw e
         }
