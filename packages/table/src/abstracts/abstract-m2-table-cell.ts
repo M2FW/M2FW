@@ -262,7 +262,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
     this.value = ''
   }
 
-  public doValidations(value: any): void {
+  public doValidations(value: any, dispatchEvent: boolean = true): void {
     try {
       const validator:
         | RegExp
@@ -281,14 +281,16 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
       this.invalid = false
     } catch (e) {
       this.invalid = true
-      this.dispatchEvent(
-        new CustomEvent(CellEvents.ValidationFailed, {
-          detail: { config: this.config, value: this.value, record: this.record, error: e },
-          bubbles: true,
-          composed: true,
-          cancelable: true,
-        })
-      )
+      if (dispatchEvent) {
+        this.dispatchEvent(
+          new CustomEvent(CellEvents.ValidationFailed, {
+            detail: { config: this.config, value: this.value, record: this.record, error: e },
+            bubbles: true,
+            composed: true,
+            cancelable: true,
+          })
+        )
+      }
 
       throw e
     }

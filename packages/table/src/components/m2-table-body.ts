@@ -714,7 +714,7 @@ export class M2TableBody extends AbstractM2TablePart {
 
     this.dispatchEvent(
       new CustomEvent(Events.RowSelected, {
-        detail: { record: this._data[rowIdx] },
+        detail: { record: this._data[rowIdx], rowIdx },
         bubbles: true,
         composed: true,
         cancelable: true,
