@@ -16,6 +16,8 @@ export class M2TableHeader extends AbstractM2TablePart {
   }
 
   render(): TemplateResult {
+    if (!this.columns?.length) return html``
+
     return html`
       <thead>
         <tr>
