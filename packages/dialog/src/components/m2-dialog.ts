@@ -33,7 +33,6 @@ export class M2Dialog extends connect(store)(LitElement) {
         .dialog {
           display: flex;
           flex-direction: column;
-          position: relative;
           border: none;
           border-radius: none;
           background-color: transparent;
@@ -44,6 +43,11 @@ export class M2Dialog extends connect(store)(LitElement) {
           max-height: 80vh;
           max-width: 80vw;
           margin: auto;
+
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
         }
         #popup-header {
           cursor: move;
@@ -128,6 +132,7 @@ export class M2Dialog extends connect(store)(LitElement) {
     this.draggingDialog.style.left = this.calcPositionLeft(this.draggingDialog, diffX)
     this.draggingDialog.style.top = this.calcPositionTop(this.draggingDialog, diffY)
     this.draggingDialog.style.position = 'absolute'
+    this.draggingDialog.style.transform = 'initial'
 
     this.clickX = currentX
     this.clickY = currentY
