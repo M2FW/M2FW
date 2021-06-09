@@ -108,22 +108,24 @@ export class M2TableBody extends AbstractM2TablePart {
       }
 
       return html`<td class="button">
-        <button
-          @click="${() => {
-            const handler: any = buttonOptions?.handlers?.click
-            if (handler && typeof handler === 'function') {
-              handler(eventParams)
-            }
-          }}"
-          @dblclick="${() => {
-            const handler: any = buttonOptions?.handlers?.dblclick
-            if (handler && typeof handler === 'function') {
-              handler(eventParams)
-            }
-          }}"
-        >
-          ${icon}
-        </button>
+        ${icon
+          ? html` <button
+              @click="${() => {
+                const handler: any = buttonOptions?.handlers?.click
+                if (handler && typeof handler === 'function') {
+                  handler(eventParams)
+                }
+              }}"
+              @dblclick="${() => {
+                const handler: any = buttonOptions?.handlers?.dblclick
+                if (handler && typeof handler === 'function') {
+                  handler(eventParams)
+                }
+              }}"
+            >
+              ${icon}
+            </button>`
+          : html`<button disabled></button>`}
       </td>`
     } else if (button.type === ButtonType.Text) {
       const buttonOptions: TextButtonOptions = button.options as TextButtonOptions

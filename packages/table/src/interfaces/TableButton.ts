@@ -15,7 +15,7 @@ export interface ButtonOptions {
   handlers?: ButtonOptionHandlers
 }
 
-type IconRenderFunctionType = (record?: TableData) => HTMLElement
+type IconRenderFunctionType = (record?: TableData) => HTMLElement | void
 
 export interface IconButtonOptions extends ButtonOptions {
   icon: IconRenderFunctionType | string

@@ -22,6 +22,7 @@ export const headerStyle: CSSResult = css`
     position: sticky;
     top: 0px;
     z-index: 5;
+    border-bottom: var(--m2-table-header-border-bottom, 1px double gray);
   }
   :host > * {
     font-size: var(--m2-table-header-font-size, 12px);
@@ -47,6 +48,7 @@ export const headerStyle: CSSResult = css`
     background-color: var(--m2-table-header-bg-color, darkgray);
   }
   th {
+    box-sizing: border-box;
     padding: var(--m2-table-cell-padding, 5px);
     border-right-width: var(--m2-table-splitter-width, 2px);
     border-right-color: var(--m2-table-header-splitter-color, white);
@@ -152,6 +154,7 @@ export const bodyStyle: CSSResult = css`
     font-style: var(--m2-table-selected-font-style, italic);
   }
   td {
+    box-sizing: border-box;
     padding: var(--m2-table-cell-padding, 5px);
     border-right-width: var(--m2-table-splitter-width, 2px);
     border-right-color: var(--m2-table-body-splitter-color, darkgray);

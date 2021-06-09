@@ -127,12 +127,6 @@ export class M2Table extends AbstractM2TablePart {
     `
   }
 
-  async firstUpdated(): Promise<void> {
-    if (this.fetchHandler) {
-      this.refreshData()
-    }
-  }
-
   updated(changedProps: PropertyValues): void {
     if (changedProps.has('page') || changedProps.has('limit')) {
       if (typeof this.fetchHandler === 'function') this.refreshData()
