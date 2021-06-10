@@ -135,14 +135,13 @@ export class M2TableHeader extends AbstractM2TablePart {
   }
 
   getHeaderText(config: ColumnConfig): string {
-    if (config.header) {
-      if (typeof config.header === 'function') {
-        return config.header()
-      } else {
-        return config.header
-      }
+    if (config.header && typeof config.header === 'function') {
+      return config.header()
     } else {
-      return config.name
+      let headerText: string = config.header || config.name
+      if (config.required) headerText += ' *'
+
+      return headerText
     }
   }
 
@@ -244,10 +243,6 @@ export class M2TableHeader extends AbstractM2TablePart {
     const padLeft: number = parseInt(window.getComputedStyle(cell, null).getPropertyValue('padding-left'))
     const padRight: number = parseInt(window.getComputedStyle(cell, null).getPropertyValue('padding-right'))
     return padLeft + padRight
-  }
-
-  private dispatchColumnWidthChangeEvent(columnIdx: number, width: number): void {
-    this.dispatchEvent(new CustomEvent(CellEvents.ColumnWidthChange, { detail: { columnIdx, width } }))
   }
 
   private dispatchHeaderCellValueChangeEvent(event: CustomEvent): void {
