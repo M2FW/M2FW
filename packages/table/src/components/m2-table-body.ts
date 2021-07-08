@@ -17,7 +17,6 @@ import { KeyActions, keyMapper } from '../utils/key-mapper'
 import { bodyStyle, commonStyle } from '../assets/styles'
 
 import { M2TableCell } from './m2-table-cell'
-import { M2TableDateCell } from './m2-table-date-cell'
 
 @customElement('m2-table-body')
 export class M2TableBody extends AbstractM2TablePart {
