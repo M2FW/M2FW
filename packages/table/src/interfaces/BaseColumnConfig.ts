@@ -8,6 +8,7 @@ export interface BaseColumnConfig {
   primary?: boolean
   header?: string | ((...args: any) => string)
   displayValue?: string | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => any)
+  defaultValue?: any | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => any)
   type?: ColumnTypes
   width?: number
   validator?: RegExp | ((config: ColumnConfig, record: TableData, value: any, changedRecord: TableData) => void)

@@ -9,7 +9,7 @@ import { ifDefined } from 'lit-html/directives/if-defined'
 export class M2TableTextareaCell extends AbstractM2TableCell<HTMLTextAreaElement> {
   @property({ type: String }) value?: string
   @property({ type: Number }) currentLength: number = 0
-  
+
   editorAccessor: string = 'textarea'
   valueAccessKey: string = 'value'
 
@@ -23,7 +23,9 @@ export class M2TableTextareaCell extends AbstractM2TableCell<HTMLTextAreaElement
           minlength="${ifDefined(config.minlength)}"
           @input="${this.onTextareaChangeHandler.bind(this)}"
           @keyup="${this.onTextareaChangeHandler.bind(this)}"
-        >${this.value}</textarea>
+        >
+${this.value}</textarea
+        >
 
         ${config.maxlength && config.maxlength > 0
           ? html` <span id="length-indicator">${this.currentLength} / ${config.maxlength}</span> `

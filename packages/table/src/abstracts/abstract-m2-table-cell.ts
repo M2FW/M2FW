@@ -16,10 +16,8 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   @property({ type: Number, reflect: true }) columnIdx?: number
   @property({ type: Boolean, reflect: true }) invalid: boolean = false
 
-  constructor(config: ColumnConfig) {
+  constructor() {
     super()
-    this.config = config
-
     this.contentEditable = 'true'
 
     this.addEventListener('focus', this.onfocusHandler.bind(this), { capture: true })
@@ -74,6 +72,10 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
   }
 
   updated(changedProps: PropertyValues) {
+    if (changedProps.has('config')) {
+      this.setDefaultValue()
+    }
+
     if (changedProps.has('_isEditing')) {
       this._dispatchModeChangeEvent()
     }
@@ -114,6 +116,17 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
         cancelable: true,
       })
     )
+  }
+
+  private setDefaultValue(): void {
+    const config: ColumnConfig = this.config as ColumnConfig
+    if (!config?.defaultValue) return
+
+    if (typeof config.defaultValue === 'function') {
+      this.value = config.defaultValue(this.config, this.record, this.value, this.changedRecord)
+    } else {
+      this.value = config.defaultValue
+    }
   }
 
   /**
@@ -175,8 +188,7 @@ export abstract class AbstractM2TableCell<T> extends LitElement {
       if (!editable) return
 
       if (event.code === 'Enter') {
-        event.preventDefault()
-        this.toggleEditing(event.ctrlKey)
+        setTimeout(() => this.toggleEditing(event.ctrlKey)) // To block enter keypress inside of editor
       }
     }
 
