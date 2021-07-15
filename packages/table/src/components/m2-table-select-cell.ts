@@ -32,7 +32,7 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
   }
 
   renderDisplay(config: SelectColumnConfig): TemplateResult {
-    const { options, displayValue }: SelectColumnConfig = config
+    const { options, displayValue, includeEmpty }: SelectColumnConfig = config
 
     if (displayValue && typeof displayValue !== 'function') {
       return this.displayCellFactory(displayValue)
@@ -44,16 +44,20 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
       return this.displayCellFactory('')
     }
 
-    const selectedOption: string | SelectOption = (options as any).find((option: string | SelectOption) => {
-      if (typeof option === 'string') {
-        return option === this.value
-      } else {
-        return option.value === this.value
-      }
-    })
+    let selectedOption: string | SelectOption
 
-    if(this.value === false) {
-      console.log('Selected option is ' + selectedOption)
+    if(!this.value && includeEmpty) {
+      return this.displayCellFactory('')
+    } else if(!this.value) {
+      selectedOption = options[0]
+    } else {
+      selectedOption = (options as any).find((option: string | SelectOption) => {  
+        if (typeof option === 'string') {
+          return option === this.value
+        } else {
+          return option.value === this.value
+        }
+      })
     }
 
     if (selectedOption) {
@@ -75,6 +79,6 @@ export class M2TableSelectCell extends AbstractM2TableCell<HTMLSelectElement> {
   }
 
   checkValidity(value: any): void {
-    if (this.isRequired && !value) throw new Error(ValidityErrors.VALUE_MISSING)
+    if (this.isRequired && (value === undefined || value === null)) throw new Error(ValidityErrors.VALUE_MISSING)
   }
 }

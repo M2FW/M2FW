@@ -1,15 +1,8 @@
-import '@m2fw/dialog/src'
+import '@m2fw/adv-editor'
+import '@m2fw/dialog'
 
 import { CSSResult, LitElement, PropertyValues, TemplateResult, css, customElement, html, property } from 'lit-element'
-import {
-  ColumnAlign,
-  ColumnConfig,
-  ColumnTypes,
-  M2Table,
-  M2TableFetchResult,
-  RowSelectorOption,
-  TableData,
-} from '@m2fw/table/src'
+import { ColumnAlign, ColumnConfig, ColumnTypes, M2Table, M2TableFetchResult, TableData } from '@m2fw/table/src'
 import { Dialog, closeDialog, openDialog } from '@m2fw/dialog/src'
 
 import { ExImport } from '@m2fw/eximport/src'
@@ -214,6 +207,7 @@ export class Sample extends connect(store)(LitElement) {
         >
           Import
         </button>
+        <button @click="${this.openAdvEditor}">Open Advanced Editor</button>
       </div>
 
       <m2-dialog></m2-dialog>
@@ -265,6 +259,15 @@ export class Sample extends connect(store)(LitElement) {
         content: (html: any) => {
           return html`<h2>Dialog Content</h2>`
         },
+      },
+    })
+  }
+
+  openAdvEditor() {
+    openDialog({
+      templateRenderer: {
+        header: (html: any, dialog: Dialog) => html`<button @click="${() => closeDialog(dialog)}">X</button>`,
+        content: (html: any) => html`<adv-editor></adv-editor>`,
       },
     })
   }

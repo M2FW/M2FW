@@ -391,8 +391,9 @@ export class M2Table extends AbstractM2TablePart {
         const cell: AbstractM2TableCell<any> = this.getCell<AbstractM2TableCell<any>>(rowIdx, columnName)
 
         try {
-          cell.doValidations(cell.value, dispatchEvent)
+          cell.doValidations(cell?.record?.[columnName] || cell.value, dispatchEvent)
         } catch (e) {
+          debugger
           throw e
         }
       }

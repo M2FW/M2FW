@@ -14,6 +14,8 @@ import { ColumnAlign, ColumnTypes } from '../enums'
 import { ColumnConfig, TableData } from '../interfaces'
 import { commonStyle, tableCellStyle } from '../assets/styles'
 
+import { ifDefined } from 'lit-html/directives/if-defined'
+
 @customElement('m2-table-cell')
 export class M2TableCell extends LitElement {
   @property({ type: String }) type?: ColumnTypes
@@ -52,7 +54,7 @@ export class M2TableCell extends LitElement {
       ${this.type === ColumnTypes.String
         ? html`
             <m2-table-string-cell
-              class="${this.computeClasses(this.config)}"
+              class="${ifDefined(this._computeClasses(this.config))}"
               .config="${this.config}"
               .record="${this.record}"
               .value="${String(this.value)}"
@@ -63,7 +65,7 @@ export class M2TableCell extends LitElement {
         : this.type === ColumnTypes.Boolean
         ? html`
             <m2-table-boolean-cell
-              class="${this.computeClasses(this.config)}"
+              class="${ifDefined(this._computeClasses(this.config))}"
               .config="${this.config}"
               .record="${this.record}"
               .value="${Boolean(this.value)}"
@@ -74,7 +76,7 @@ export class M2TableCell extends LitElement {
         : this.type === ColumnTypes.Float
         ? html`
             <m2-table-float-cell
-              class="${this.computeClasses(this.config)}"
+              class="${ifDefined(this._computeClasses(this.config))}"
               .config="${this.config}"
               .record="${this.record}"
               .value="${this.value}"
@@ -85,7 +87,7 @@ export class M2TableCell extends LitElement {
         : this.type === ColumnTypes.Integer
         ? html`
             <m2-table-integer-cell
-              class="${this.computeClasses(this.config)}"
+              class="${ifDefined(this._computeClasses(this.config))}"
               .config="${this.config}"
               .record="${this.record}"
               .value="${this.value}"
@@ -96,7 +98,7 @@ export class M2TableCell extends LitElement {
         : this.type === ColumnTypes.Select
         ? html`
             <m2-table-select-cell
-              class="${this.computeClasses(this.config)}"
+              class="${ifDefined(this._computeClasses(this.config))}"
               .config="${this.config}"
               .record="${this.record}"
               .value="${this.value}"
@@ -107,7 +109,7 @@ export class M2TableCell extends LitElement {
         : this.type === ColumnTypes.Object
         ? html`
             <m2-table-object-cell
-              class="${this.computeClasses(this.config)}"
+              class="${ifDefined(this._computeClasses(this.config))}"
               .config="${this.config}"
               .record="${this.record}"
               .value="${this.value}"
@@ -118,7 +120,7 @@ export class M2TableCell extends LitElement {
           `
         : this.type === ColumnTypes.Date
         ? html`<m2-table-date-cell
-            class="${this.computeClasses(this.config)}"
+            class="${ifDefined(this._computeClasses(this.config))}"
             .config="${this.config}"
             .record="${this.record}"
             .value="${Number(this.value)}"
@@ -128,7 +130,7 @@ export class M2TableCell extends LitElement {
         : this.type === ColumnTypes.DateTime
         ? html`
             <m2-table-datetime-cell
-              class="${this.computeClasses(this.config)}"
+              class="${ifDefined(this._computeClasses(this.config))}"
               .config="${this.config}"
               .record="${this.record}"
               .value="${Number(this.value)}"
@@ -139,7 +141,7 @@ export class M2TableCell extends LitElement {
         : this.type === ColumnTypes.Image
         ? html`
             <m2-table-image-cell
-              class="${this.computeClasses(this.config)}"
+              class="${ifDefined(this._computeClasses(this.config))}"
               .config="${this.config}"
               .record="${this.record}"
               .value="${String(this.value)}"
@@ -150,7 +152,7 @@ export class M2TableCell extends LitElement {
         : this.type === ColumnTypes.Textarea
         ? html`
             <m2-table-textarea-cell
-              class="${this.computeClasses(this.config)}"
+              class="${ifDefined(this._computeClasses(this.config))}"
               .config="${this.config}"
               .record="${this.record}"
               .value="${String(this.value)}"
@@ -159,7 +161,7 @@ export class M2TableCell extends LitElement {
             ></m2-table-textarea-cell>
           `
         : html` <m2-table-string-cell
-            class="${this.computeClasses(this.config)}"
+            class="${ifDefined(this._computeClasses(this.config))}"
             .config="${this.config}"
             .record="${this.record}"
             .value="${String(this.value)}"
@@ -186,11 +188,18 @@ export class M2TableCell extends LitElement {
    * currently alignment for insert text of cell is only supported.
    * @param config Object having class list
    */
-  private computeClasses(config?: ColumnConfig): string {
-    let { align } = config || {}
+  private _computeClasses(config?: ColumnConfig): string {
+    let { align, type } = config || {}
     if (this.rowIdx < 0) align = ColumnAlign.Center
     let classes: string[] = []
-    if (align) classes.push(align)
+    if (align) {
+      classes.push(align)
+    } else {
+      if (type === ColumnTypes.Integer || type === ColumnTypes.Float) {
+        align = ColumnAlign.Right
+        classes.push(align)
+      }
+    }
 
     return classes.join(' ')
   }
