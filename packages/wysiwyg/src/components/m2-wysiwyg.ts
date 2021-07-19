@@ -1,5 +1,12 @@
+import '@material/mwc-icon'
+import './modifiers/format-modifier'
+
 import { CSSResult, LitElement, TemplateResult, css, customElement, html, property } from 'lit-element'
 
+export type CommandIconMapType = {
+  command: string
+  icon: string
+}
 @customElement('m2-wysiwyg')
 export class M2Wysiwyg extends LitElement {
   public focusedParagraph: HTMLParagraphElement | null = null
@@ -11,20 +18,40 @@ export class M2Wysiwyg extends LitElement {
       css`
         :host {
           background-color: var(--m2-wysiwyg-bg-color, white);
-          width: var(--m2-wysiwyg-width, 600px);
-          height: var(--m2-wysiwyg-height, 400px);
           display: flex;
+          flex: 1;
           flex-direction: column;
+          overflow: hidden;
+        }
+        #control-panel {
+          margin: var(--m2-wysiwyg-editor-margin, 10px);
         }
         #editor {
           outline: none;
           margin: var(--m2-wysiwyg-editor-margin, 10px);
-          border: var(--m2-wysiwyg-editor-border, 1px solid black);
+          padding: var(--m2-wysiwyg-editor-padding, 10px);
+          border-top: var(
+            --m2-wysiwyg-editor-border-top,
+            1px var(--m2-wysiwyg-editor-border-style, solid) var(--m2-wysiwyg-editor-border-color, gray)
+          );
+          border-bottom: var(
+            --m2-wysiwyg-editor-border-bottom,
+            1px var(--m2-wysiwyg-editor-border-style, solid) var(--m2-wysiwyg-editor-border-color, gray)
+          );
+          border-left: var(
+            --m2-wysiwyg-editor-border-left,
+            0px var(--m2-wysiwyg-editor-border-style, solid) var(--m2-wysiwyg-editor-border-color, gray)
+          );
+          border-right: var(
+            --m2-wysiwyg-editor-border-right,
+            0px var(--m2-wysiwyg-editor-border-style, solid) var(--m2-wysiwyg-editor-border-color, gray)
+          );
           flex: 1;
+          overflow: auto;
         }
         #editor p {
           margin: 0px;
-          padding: 5px;
+          padding: 0px;
         }
       `,
     ]
@@ -37,18 +64,6 @@ export class M2Wysiwyg extends LitElement {
     return editor
   }
 
-  get paragraphs(): HTMLParagraphElement[] {
-    return Array.from(this.editor.querySelectorAll('p'))
-  }
-
-  get lastParagraph(): HTMLParagraphElement {
-    return this.rowByIdx(this.rowCount - 1)
-  }
-
-  get rowCount(): number {
-    return this.paragraphs.length
-  }
-
   async firstUpdated(): Promise<void> {
     await this.updateComplete
     this.editor.focus()
@@ -56,38 +71,21 @@ export class M2Wysiwyg extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <div id="control-panel"></div>
-      <div id="editor" contenteditable="true" @keyup="${this.onKeyupHandler}">
+      <div id="control-panel">
+        <format-modifier></format-modifier>
+        <justify-modifier></justify-modifier>
+        <size-modifier></size-modifier>
+        <etc-modifier></etc-modifier>
+      </div>
+      <div id="editor" contenteditable="true">
         <p>
           <br />
         </p>
       </div>
-      <div id="status">
-        <span>Row: ${this.focusedRowIndex + 1}</span>
-      </div>
     `
   }
 
-  public rowByIdx(idx: number): HTMLParagraphElement {
-    const paragraphs: HTMLParagraphElement[] = Array.from(this.editor.querySelectorAll('p'))
-    if (!paragraphs[idx]) throw new Error(`No paragraph found at index ${idx}`)
-
-    return paragraphs[idx]
-  }
-
-  private onKeyupHandler(event: KeyboardEvent): void {
-    if (event.key === 'Enter' || event.key === 'Delete' || event.key === 'Backspace') {
-      console.log('Row Count', this.paragraphs.length)
-      this.paragraphs.forEach((p: HTMLParagraphElement, index: number) => {
-        p.onclick = () => {
-          this.focusedParagraph = p
-          this.focusedRowIndex = index
-        }
-        p.onkeydown = () => {
-          this.focusedParagraph = p
-          this.focusedRowIndex = index
-        }
-      })
-    }
+  getText(): string {
+    return this.editor.innerHTML
   }
 }
