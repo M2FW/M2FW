@@ -1,14 +1,14 @@
-import '@m2fw/adv-editor'
 import '@m2fw/dialog'
+import '@m2fw/wysiwyg'
 
 import { CSSResult, LitElement, PropertyValues, TemplateResult, css, customElement, html, property } from 'lit-element'
 import { ColumnAlign, ColumnConfig, ColumnTypes, M2Table, M2TableFetchResult, TableData } from '@m2fw/table/src'
-import { Dialog, closeDialog, openDialog } from '@m2fw/dialog/src'
+import { Dialog, closeDialog, openDialog } from '@m2fw/dialog'
 
 import { ExImport } from '@m2fw/eximport/src'
 import { M2TableStringCell } from '@m2fw/table/src/components/m2-table-string-cell'
 import { connect } from 'pwa-helpers/connect-mixin'
-import { navigate } from '@m2fw/router/src'
+import { navigate } from '@m2fw/router'
 import { store } from '@m2fw/redux-manager'
 
 interface User {
@@ -267,7 +267,7 @@ export class Sample extends connect(store)(LitElement) {
     openDialog({
       templateRenderer: {
         header: (html: any, dialog: Dialog) => html`<button @click="${() => closeDialog(dialog)}">X</button>`,
-        content: (html: any) => html`<adv-editor></adv-editor>`,
+        content: (html: any) => html`<m2-wysiwyg></m2-wysiwyg>`,
       },
     })
   }

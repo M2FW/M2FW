@@ -1,6 +1,6 @@
-import { addPages, route } from '@m2fw/router/src'
+import { addPages, route } from '@m2fw/router'
 
-import { dialog } from '@m2fw/dialog/src'
+import { dialog } from '@m2fw/dialog'
 import { store } from '@m2fw/redux-manager'
 
 store.addReducers({

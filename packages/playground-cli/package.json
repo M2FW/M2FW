@@ -13,7 +13,6 @@
     "serve": "webpack serve --config ./webpack.config.dev.js"
   },
   "dependencies": {
-    "@m2fw/adv-editor": "^0.0.1",
     "@m2fw/dialog": "^0.1.0-alpha.80",
     "@m2fw/eximport": "^0.1.0-alpha.77",
     "@m2fw/redux-manager": "^0.1.0-alpha.77",
