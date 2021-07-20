@@ -1,7 +1,8 @@
 import './m2-wysiwyg-controller'
 
-import { CSSResult, LitElement, TemplateResult, css, customElement, html, property } from 'lit-element'
+import { CSSResult, LitElement, PropertyValues, TemplateResult, css, customElement, html, property } from 'lit-element'
 
+import { ERRORS } from '../constants'
 import { M2WysiwygController } from './m2-wysiwyg-controller'
 
 export type CommandIconMapType = {
@@ -10,9 +11,10 @@ export type CommandIconMapType = {
 }
 @customElement('m2-wysiwyg')
 export class M2Wysiwyg extends LitElement {
-  public focusedParagraph: HTMLParagraphElement | null = null
-
   @property({ type: String }) content: string = ''
+  @property({ type: Number }) textLength: number = 0
+  @property({ type: Number }) textLimit: number = 200
+  @property({ type: Boolean }) imageUploadable: boolean = false
 
   static get styles(): CSSResult[] {
     return [
@@ -53,6 +55,19 @@ export class M2Wysiwyg extends LitElement {
           margin: 0px;
           padding: 0px;
         }
+        #status-bar {
+          display: flex;
+          background-color: var(--m2-wysiwyg-status-bar-bg-color, var(--m2-wysiwyg-control-panel-bg-color, #dddddd));
+          height: var(--m2-wysiwyg-status-bar-height, 30px);
+          gap: 10px;
+          padding: var(--m2-wysiwyg-status-bar-padding, 5px);
+        }
+        #status-bar > * {
+          margin: auto 0px;
+        }
+        #status-bar > *:first-child {
+          margin-left: auto;
+        }
       `,
     ]
   }
@@ -78,22 +93,43 @@ export class M2Wysiwyg extends LitElement {
     this.controller.editor = this.editor
   }
 
+  updated(changedProps: PropertyValues): void {
+    if (changedProps.has('content')) this.setContent(this.content)
+  }
+
   render(): TemplateResult {
     return html`
       <div id="control-panel">
-        <m2-wysiwyg-controller @optionChanged="${this.focusOnEditor}"></m2-wysiwyg-controller>
+        <m2-wysiwyg-controller
+          @optionChanged="${this.focusOnEditor}"
+          .imageUploadable="${this.imageUploadable}"
+        ></m2-wysiwyg-controller>
       </div>
-      <div id="editor" contenteditable="true">
-        <p>${this.content ? this.content : html`<br />`}</p>
+      <div id="editor" contenteditable="true" @input="${this.onInputHandler}">
+        <p><br /></p>
+      </div>
+
+      <div id="status-bar">
+        <span>${this.textLength}/${this.textLimit}</span>
       </div>
     `
   }
 
   public getText(): string {
+    if (this.textLength > this.textLimit) throw new Error(ERRORS.EXCEED_LIMITATION)
     return this.editor.innerHTML
+  }
+
+  public setContent(text: string): void {
+    this.editor.innerHTML = text
+    this.textLength = this.editor.textContent?.length || this.textLength
   }
 
   public focusOnEditor(): void {
     this.editor.focus()
+  }
+
+  private onInputHandler(): void {
+    this.textLength = this.editor.textContent?.length || this.textLength
   }
 }

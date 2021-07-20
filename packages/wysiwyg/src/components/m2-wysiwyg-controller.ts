@@ -7,6 +7,7 @@ import { property } from 'lit-element'
 export class M2WysiwygController extends LitElement {
   @property({ type: Object }) editor?: HTMLDivElement
   @property({ type: Boolean }) editLinkURL: boolean = false
+  @property({ type: Boolean }) imageUploadable: boolean = false
 
   static get styles(): CSSResult[] {
     return [
@@ -169,11 +170,13 @@ export class M2WysiwygController extends LitElement {
           </ul>
 
           <ul>
-            <li>
-              <button @click="${this.addImage}">
-                <mwc-icon>image</mwc-icon>
-              </button>
-            </li>
+            ${this.imageUploadable
+              ? html`<li>
+                  <button @click="${this.addImage}">
+                    <mwc-icon>image</mwc-icon>
+                  </button>
+                </li>`
+              : ''}
 
             <li>
               <button @click="${this.openLinkInput}">
@@ -216,6 +219,7 @@ export class M2WysiwygController extends LitElement {
   }
 
   private addImage(): void {
+    if (!this.imageUploadable) return
     let input: HTMLInputElement | null = document.createElement('input')
     input.type = 'file'
     input.accept = 'image/*'
