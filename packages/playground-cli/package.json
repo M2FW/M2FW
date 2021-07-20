@@ -6,6 +6,7 @@
   "repository": "https://github.com/m2fw/m2fw",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "clean": "rm -rf ./dist",
     "build": "npm run clean && webpack",
