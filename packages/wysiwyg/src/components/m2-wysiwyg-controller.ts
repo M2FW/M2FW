@@ -256,6 +256,8 @@ export class M2WysiwygController extends LitElement {
 
       this.editor.focus()
       document.execCommand('createLink', false, url)
+      const anchors: HTMLAnchorElement[] = Array.from(this.editor.querySelectorAll('a'))
+      if (anchors?.length) anchors.forEach((a: HTMLAnchorElement) => (a.target = '_blank'))
       this.dispatchEvent(new CustomEvent('optionChanged'))
     }
     urlInput.onblur = () => {

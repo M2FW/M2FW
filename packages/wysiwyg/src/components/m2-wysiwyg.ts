@@ -15,6 +15,7 @@ export class M2Wysiwyg extends LitElement {
   @property({ type: Number }) textLength: number = 0
   @property({ type: Number }) textLimit: number = 200
   @property({ type: Boolean }) imageUploadable: boolean = false
+  @property({ type: Boolean }) editable: boolean = true
 
   static get styles(): CSSResult[] {
     return [
@@ -64,6 +65,7 @@ export class M2Wysiwyg extends LitElement {
         }
         #status-bar > * {
           margin: auto 0px;
+          font-size: var(--m2-wysiwyg-status-bar-font-size, 12px);
         }
         #status-bar > *:first-child {
           margin-left: auto;
@@ -99,13 +101,18 @@ export class M2Wysiwyg extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <div id="control-panel">
-        <m2-wysiwyg-controller
-          @optionChanged="${this.focusOnEditor}"
-          .imageUploadable="${this.imageUploadable}"
-        ></m2-wysiwyg-controller>
-      </div>
-      <div id="editor" contenteditable="true" @input="${this.onInputHandler}">
+      ${this.editable
+        ? html`
+            <div id="control-panel">
+              <m2-wysiwyg-controller
+                @optionChanged="${this.focusOnEditor}"
+                .imageUploadable="${this.imageUploadable}"
+              ></m2-wysiwyg-controller>
+            </div>
+          `
+        : ''}
+
+      <div id="editor" contenteditable="${this.editable}" @input="${this.onInputHandler}">
         <p><br /></p>
       </div>
 
