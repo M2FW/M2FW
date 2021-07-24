@@ -45,8 +45,7 @@ export class M2Table extends AbstractM2TablePart {
   @property({ type: Number }) scrollSpeedLevel: number = 1
   @property({ type: Number }) limit: number = 50
   @property({ type: Array }) selectedData: Record<string, any>[] = []
-
-  private page: number = 1
+  @property({ type: Number }) page: number = 1
 
   @property({ type: Object }) fetchHandler?: (
     page: number,
