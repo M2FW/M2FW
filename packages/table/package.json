@@ -2,7 +2,7 @@
   "name": "@m2fw/table",
   "version": "0.1.0-alpha.82",
   "description": "table powered by M2 Framework",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "repository": "https://github.com/m2fw/m2fw",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
   "license": "MIT",
