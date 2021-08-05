@@ -392,7 +392,6 @@ export class M2Table extends AbstractM2TablePart {
         try {
           cell.doValidations(cell?.record?.[columnName] || cell.value, dispatchEvent)
         } catch (e) {
-          debugger
           throw e
         }
       }
