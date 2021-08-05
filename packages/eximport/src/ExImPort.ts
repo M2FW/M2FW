@@ -38,8 +38,6 @@ export class ExImport {
       input.type = 'file'
       input.accept = extensionTypes.map((extType: SupportingExtensions) => `.${extType}`).join(',')
       input.multiple = false
-      input.hidden = true
-      document.body.appendChild(input)
       let result: any
 
       input.onchange = async (): Promise<any> => {
@@ -69,8 +67,6 @@ export class ExImport {
           resolve(result)
         } catch (e) {
           reject(e)
-        } finally {
-          input.remove()
         }
       }
       input.click()
