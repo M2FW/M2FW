@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/intime",
-  "version": "0.1.0-alpha.35",
+  "version": "1.0.0",
   "description": "Scheduler",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/m2fw",
