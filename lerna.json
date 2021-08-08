@@ -2,6 +2,9 @@
   "packages": [
     "packages/*"
   ],
+  "accessConfig": {
+    "access": "public"
+  },
   "version": "0.1.0-alpha.83",
   "npmClient": "yarn",
   "useWorkspaces": true
