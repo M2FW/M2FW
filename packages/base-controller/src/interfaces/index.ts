@@ -1,6 +1,0 @@
-export * from './BaseController'
-export * from './DeleteBaseController'
-export * from './InsertBaseController'
-export * from './QueryCondition'
-export * from './ReadBaseController'
-export * from './UpdateBaseController'
