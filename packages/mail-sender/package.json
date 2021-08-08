@@ -11,6 +11,9 @@
     "build": "npm run clean && tsc",
     "prepublishOnly": "npm run build"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "nodemailer": "^6.4.17"
   },

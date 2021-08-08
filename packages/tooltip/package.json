@@ -11,6 +11,9 @@
     "build": "npm run clean && webpack",
     "prepublishOnly": "npm run build"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@material/mwc-icon": "^0.20.0",
     "lit-element": "^2.4.0",

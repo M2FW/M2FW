@@ -11,6 +11,9 @@
     "build": "npm run clean && webpack",
     "prepublishOnly": "npm run build"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "pwa-helpers": "^0.9.1",
     "redux": "^4.0.4",

@@ -11,6 +11,9 @@
     "build": "npm run clean && webpack",
     "prepublishOnly": "npm run build"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "lit-element": "^2.5.1",
     "pwa-helpers": "^0.9.1"

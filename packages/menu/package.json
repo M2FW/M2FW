@@ -11,6 +11,9 @@
     "build": "npm run clean && tsc",
     "prepublishOnly": "npm run build"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@m2fw/graphql-manager": "^1.0.0",
     "typeorm": "^0.2.24"
