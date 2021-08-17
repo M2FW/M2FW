@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/dialog",
-  "version": "0.1.0-alpha.83",
+  "version": "1.0.0-alpha.0",
   "description": "Dialog powered by M2 Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/dialog",
@@ -15,7 +15,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@m2fw/redux-manager": "^1.0.0",
+    "@m2fw/redux-manager": "1.0.0-alpha.0",
     "lit-element": "^2.3.1",
     "lit-html": "^1.3.0",
     "pwa-helpers": "^0.9.1",
