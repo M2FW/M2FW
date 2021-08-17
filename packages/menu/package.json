@@ -1,6 +1,6 @@
 {
   "name": "@m2fw/menu",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "description": "M2 framework server side module",
   "main": "dist/index.js",
   "repository": "https://github.com/m2fw/m2fw",
@@ -15,7 +15,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@m2fw/graphql-manager": "1.0.0-alpha.0",
+    "@m2fw/graphql-manager": "^1.0.0-alpha.1",
     "typeorm": "^0.2.24"
   },
   "devDependencies": {
