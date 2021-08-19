@@ -1,9 +1,9 @@
 {
-  "name": "@m2fw/mail-sender",
+  "name": "@m2-modules/mail-sender",
   "version": "1.0.0-alpha.1",
-  "description": "Mail sender by M2 Framework",
+  "description": "Mail sender by M2 modules",
   "main": "dist/index.js",
-  "repository": "https://github.com/m2fw/mail-sender",
+  "repository": "https://github.com/m2-modules/mail-sender",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
   "license": "MIT",
   "scripts": {

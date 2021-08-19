@@ -7,7 +7,7 @@ import { ColumnConfig, IconButtonOptions, RowSelectorOption, TableButton, TextBu
 import { commonStyle, headerStyle } from '../assets/styles'
 
 import { AbstractM2TablePart } from '../abstracts'
-import { TooltipOptions } from '@m2fw/tooltip'
+import { TooltipOptions } from '@m2-modules/tooltip'
 
 @customElement('m2-table-header')
 export class M2TableHeader extends AbstractM2TablePart {

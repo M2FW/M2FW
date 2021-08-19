@@ -1,18 +1,9 @@
-import {
-  CSSResult,
-  LitElement,
-  PropertyValues,
-  TemplateResult,
-  css,
-  customElement,
-  html,
-  property,
-} from 'lit-element'
+import { CSSResult, LitElement, PropertyValues, TemplateResult, css, customElement, html, property } from 'lit-element'
 
 import { PageInfo } from '../interfaces'
 import { connect } from 'pwa-helpers/connect-mixin'
 import { navigate } from '../redux/actions'
-import { store } from '@m2fw/redux-manager'
+import { store } from '@m2-modules/redux-manager'
 
 @customElement('nav-bar')
 export class NavBar extends connect(store)(LitElement) {
@@ -22,7 +13,7 @@ export class NavBar extends connect(store)(LitElement) {
   @property({ type: Array }) pages: PageInfo[] = []
   @property({ type: Boolean }) useTooltip: boolean = true
   @property({ type: Boolean }) storeHistory: boolean = true
-  @property({ type: String }) historyKey: string = '__m2fw__nav_histories__'
+  @property({ type: String }) historyKey: string = '__m2-modules__nav_histories__'
   @property({ type: Number }) maxItemCount: number = 10
   @property({ type: Array }) excludes: string[] = []
 
@@ -46,10 +37,7 @@ export class NavBar extends connect(store)(LitElement) {
           font-style: var(--nav-bar-page-item-font-style, none);
           text-align: var(--nav-bar-page-item-text-align, center);
           color: var(--nav-bar-page-item-color, darkblue);
-          background-color: var(
-            --nav-bar-page-item-background-color,
-            lightblue
-          );
+          background-color: var(--nav-bar-page-item-background-color, lightblue);
           border: var(--nav-bar-page-item-border, 1px solid darkblue);
           border-radius: var(--nav-bar-page-item-border-radius, 10px 10px 0 0);
           padding: var(--nav-bar-page-item-padding, 5px);
@@ -60,15 +48,9 @@ export class NavBar extends connect(store)(LitElement) {
           font-style: var(--nav-bar-page-item-activated-font-style, italic);
           text-align: var(--nav-bar-page-item-activated-text-align, center);
           color: var(--nav-bar-page-item-activated-color, white);
-          background-color: var(
-            --nav-bar-page-item-activated-background-color,
-            darkblue
-          );
+          background-color: var(--nav-bar-page-item-activated-background-color, darkblue);
           border: var(--nav-bar-page-item-activated-border, 1px solid darkblue);
-          border-radius: var(
-            --nav-bar-page-item-activated-border-radius,
-            10px 10px 0 0
-          );
+          border-radius: var(--nav-bar-page-item-activated-border-radius, 10px 10px 0 0);
           padding: var(--nav-bar-page-item-activated-padding, 5px);
         }
         #nav-bar > .page-item > .tooltip {
@@ -93,16 +75,8 @@ export class NavBar extends connect(store)(LitElement) {
       <div id="nav-bar">
         ${this.pages.map(
           (page: PageInfo) => html`
-            <div
-              class="page-item"
-              @click="${this.navigateTo}"
-              route="${page.route}"
-              ?activated="${page.activated}"
-            >
-              ${page.title}
-              ${this.useTooltip
-                ? html` <span class="tooltip">${page.route}</span> `
-                : ''}
+            <div class="page-item" @click="${this.navigateTo}" route="${page.route}" ?activated="${page.activated}">
+              ${page.title} ${this.useTooltip ? html` <span class="tooltip">${page.route}</span> ` : ''}
             </div>
           `
         )}
@@ -120,9 +94,7 @@ export class NavBar extends connect(store)(LitElement) {
    * @returns {PageInfo} pages
    */
   get storedPages(): PageInfo[] {
-    const storedPages: string | null = window.localStorage.getItem(
-      this.historyKey
-    )
+    const storedPages: string | null = window.localStorage.getItem(this.historyKey)
     if (storedPages) {
       return JSON.parse(storedPages)
     } else {
@@ -166,9 +138,7 @@ export class NavBar extends connect(store)(LitElement) {
   addPages(pageElement: PageInfo): void {
     const pages: PageInfo[] = [
       pageElement,
-      ...this.storedPages.filter(
-        (storedPage: PageInfo) => storedPage.route !== pageElement.route
-      ),
+      ...this.storedPages.filter((storedPage: PageInfo) => storedPage.route !== pageElement.route),
     ].slice(0, this.maxItemCount)
 
     window.localStorage.setItem(this.historyKey, JSON.stringify(pages))
@@ -178,22 +148,15 @@ export class NavBar extends connect(store)(LitElement) {
    * @description history box click handler
    */
   navigateTo(e: MouseEvent): void {
-    const route: string | null = (e.currentTarget as HTMLElement).getAttribute(
-      'route'
-    )
+    const route: string | null = (e.currentTarget as HTMLElement).getAttribute('route')
     if (route) {
       navigate(route)
-      this.currentPageElement = this.storedPages.find(
-        (page: PageInfo) => page.route === route
-      )
+      this.currentPageElement = this.storedPages.find((page: PageInfo) => page.route === route)
     }
   }
 
   _adjustBlockMaxWidth(): void {
-    this.navBar?.style.setProperty(
-      'grid-template-columns',
-      `repeat(${this.maxItemCount}, 1fr)`
-    )
+    this.navBar?.style.setProperty('grid-template-columns', `repeat(${this.maxItemCount}, 1fr)`)
   }
 
   stateChanged(state: any): void {

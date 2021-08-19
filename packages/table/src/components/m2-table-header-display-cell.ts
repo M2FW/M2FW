@@ -1,6 +1,6 @@
 import { CSSResult, LitElement, PropertyValues, TemplateResult, customElement, html, property } from 'lit-element'
 import { Events, HeaderEvents } from '..'
-import { Tooltip, TooltipOptions } from '@m2fw/tooltip'
+import { Tooltip, TooltipOptions } from '@m2-modules/tooltip'
 import { commonStyle, headerDisplayStyle } from '../assets/styles'
 
 @customElement('m2-table-header-display-cell')

@@ -1,7 +1,7 @@
-<h1>@m2fw/router</h1>
+<h1>@m2-modules/router</h1>
 <p>
-  <a href="https://www.npmjs.com/package/@m2fw/router" target="_blank">
-    <img alt="Version" src="https://img.shields.io/npm/v/@m2fw/router.svg">
+  <a href="https://www.npmjs.com/package/@m2-modules/router" target="_blank">
+    <img alt="Version" src="https://img.shields.io/npm/v/@m2-modules/router.svg">
   </a>
   <a href="#" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />

@@ -1,9 +1,9 @@
 {
-  "name": "@m2fw/redux-manager",
+  "name": "@m2-modules/redux-manager",
   "version": "1.0.0-alpha.1",
-  "description": "M2 framework redux-manager for client",
+  "description": "M2 modules redux-manager for client",
   "main": "dist/index.js",
-  "repository": "https://github.com/m2fw/m2fw",
+  "repository": "https://github.com/m2-modules/m2-modules",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
   "license": "MIT",
   "scripts": {

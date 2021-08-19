@@ -1,18 +1,9 @@
-import {
-  CSSResult,
-  LitElement,
-  PropertyValues,
-  TemplateResult,
-  css,
-  customElement,
-  html,
-  property,
-} from 'lit-element'
+import { CSSResult, LitElement, PropertyValues, TemplateResult, css, customElement, html, property } from 'lit-element'
 import { navigate, switchToImported } from '../redux/actions'
 
 import { PageDetail } from '../interfaces'
 import { connect } from 'pwa-helpers/connect-mixin'
-import { store } from '@m2fw/redux-manager'
+import { store } from '@m2-modules/redux-manager'
 
 @customElement('page-router')
 export class PageRouter extends connect(store)(LitElement) {
@@ -22,9 +13,9 @@ export class PageRouter extends connect(store)(LitElement) {
   @property({ type: String }) route: string = ''
   @property({ type: Boolean }) useHash: boolean = false
   @property({ type: String }) contextPath?: string
-  @property({ type: Object }) onRouteChanged: (
+  @property({ type: Object }) onRouteChanged: (e: CustomEventInit) => Promise<void> = async (
     e: CustomEventInit
-  ) => Promise<void> = async (e: CustomEventInit): Promise<void> => {
+  ): Promise<void> => {
     await this.importElement(e.detail.new.value)
     this.hidePage(e.detail.old.value)
     this.updateRoute(this.title, e.detail.new.value)
@@ -87,8 +78,7 @@ export class PageRouter extends connect(store)(LitElement) {
   private getUrlRoute(): string | undefined {
     if (this.useHash) return location.hash.replace('#', '')
     const pathname = location.pathname.replace('/', '')
-    if (this.contextPath)
-      return pathname.replace(this.contextPath, '').replace('/', '')
+    if (this.contextPath) return pathname.replace(this.contextPath, '').replace('/', '')
     if (!this.contextPath) return pathname
   }
 
@@ -146,16 +136,12 @@ export class PageRouter extends connect(store)(LitElement) {
 
   private addUrlChangedHandler(props: PropertyValues): void {
     if (props.has('useHash') && this.useHash) {
-      window.addEventListener(
-        'hashchange',
-        () => (this.route = window.location.hash.replace('#', ''))
-      )
+      window.addEventListener('hashchange', () => (this.route = window.location.hash.replace('#', '')))
     }
     if (props.has('useHash') && !this.useHash) {
       window.addEventListener('popstate', (e) => {
         let pathname: string = window.location.pathname.replace('/', '')
-        if (this.contextPath)
-          pathname = pathname.replace(this.contextPath, '').replace('/', '')
+        if (this.contextPath) pathname = pathname.replace(this.contextPath, '').replace('/', '')
         this.__history_back_flag__ = true
         this.route = pathname
       })
@@ -174,9 +160,7 @@ export class PageRouter extends connect(store)(LitElement) {
     if (this.pageSlot) {
       return this.pageSlot
         .assignedElements()
-        .find(
-          (page: Element) => page.getAttribute('route') === route
-        ) as HTMLElement
+        .find((page: Element) => page.getAttribute('route') === route) as HTMLElement
     }
   }
 
@@ -188,9 +172,7 @@ export class PageRouter extends connect(store)(LitElement) {
    */
   private async importElement(route: string): Promise<void> {
     if (!this.checkImported(route)) {
-      const page: PageDetail | undefined = this.pages.find(
-        (page: PageDetail) => page.route === route
-      )
+      const page: PageDetail | undefined = this.pages.find((page: PageDetail) => page.route === route)
       if (page) {
         await page.importer.call(page.importer)
         switchToImported(page.route)
@@ -205,19 +187,13 @@ export class PageRouter extends connect(store)(LitElement) {
    * @returns {Boolean}
    */
   private checkImported(route: string): boolean | void {
-    const page: PageDetail | undefined = this.pages.find(
-      (page: PageDetail) => page.route === route
-    )
+    const page: PageDetail | undefined = this.pages.find((page: PageDetail) => page.route === route)
     if (page) {
       return Boolean(page.imported)
     }
   }
 
-  private updateRoute(
-    title: string = this.title,
-    route: string = this.route,
-    data?: {}
-  ): void {
+  private updateRoute(title: string = this.title, route: string = this.route, data?: {}): void {
     if (route === (null || undefined)) return
     if (this.useHash) {
       this.changeHash(route)
@@ -228,8 +204,7 @@ export class PageRouter extends connect(store)(LitElement) {
 
   private changeHash(route: string): void {
     if (
-      location.pathname.split('/').join('') !==
-        this.contextPath?.split('/').join('') ||
+      location.pathname.split('/').join('') !== this.contextPath?.split('/').join('') ||
       location.hash.replace('#', '') !== route
     ) {
       const redirectLocation: URL = new URL(location.origin)
@@ -280,8 +255,7 @@ export class PageRouter extends connect(store)(LitElement) {
 
   stateChanged(state: any): void {
     this.title = state?.route?.title || this.title
-    this.route =
-      typeof state?.route?.route === 'string' ? state.route.route : this.route
+    this.route = typeof state?.route?.route === 'string' ? state.route.route : this.route
     this.pages = state?.route?.pages || this.pages
   }
 }

@@ -1,9 +1,9 @@
 {
-  "name": "@m2fw/form",
+  "name": "@m2-modules/form",
   "version": "1.0.0-alpha.1",
-  "description": "form powered by M2 Framework",
+  "description": "form powered by M2 modules",
   "main": "dist/index.js",
-  "repository": "https://github.com/m2fw/m2fw",
+  "repository": "https://github.com/m2-modules/m2-modules",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
   "license": "MIT",
   "scripts": {

@@ -1,17 +1,9 @@
-import {
-  CSSResult,
-  LitElement,
-  TemplateResult,
-  css,
-  customElement,
-  html,
-  property,
-} from 'lit-element'
+import { CSSResult, LitElement, TemplateResult, css, customElement, html, property } from 'lit-element'
 
 import { MenuItem } from '../interfaces'
 import { connect } from 'pwa-helpers/connect-mixin'
 import { setCurrentMenu } from '../redux/reducers'
-import { store } from '@m2fw/redux-manager'
+import { store } from '@m2-modules/redux-manager'
 
 @customElement('menu-tree-item')
 export class MenuTreeItem extends connect(store)(LitElement) {
