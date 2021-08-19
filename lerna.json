@@ -5,7 +5,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0",
   "npmClient": "yarn",
   "useWorkspaces": true
 }
