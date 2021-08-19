@@ -1,15 +1,15 @@
-import '@m2fw/dialog'
-import '@m2fw/wysiwyg'
+import '@m2-modules/dialog'
+import '@m2-modules/wysiwyg'
 
 import { CSSResult, LitElement, PropertyValues, TemplateResult, css, customElement, html, property } from 'lit-element'
-import { ColumnAlign, ColumnConfig, ColumnTypes, M2Table, M2TableFetchResult, TableData } from '@m2fw/table/src'
-import { Dialog, closeDialog, openDialog } from '@m2fw/dialog'
+import { ColumnAlign, ColumnConfig, ColumnTypes, M2Table, M2TableFetchResult, TableData } from '@m2-modules/table/src'
+import { Dialog, closeDialog, openDialog } from '@m2-modules/dialog'
 
-import { ExImport } from '@m2fw/eximport/src'
-import { M2TableStringCell } from '@m2fw/table/src/components/m2-table-string-cell'
+import { ExImport } from '@m2-modules/eximport/src'
+import { M2TableStringCell } from '@m2-modules/table/src/components/m2-table-string-cell'
 import { connect } from 'pwa-helpers/connect-mixin'
-import { navigate } from '@m2fw/router'
-import { store } from '@m2fw/redux-manager'
+import { navigate } from '@m2-modules/router'
+import { store } from '@m2-modules/redux-manager'
 
 interface User {
   id?: string

@@ -1,5 +1,5 @@
 import { Dialog } from '../../interfaces/dialog-state'
-import { store } from '@m2fw/redux-manager'
+import { store } from '@m2-modules/redux-manager'
 
 export const OPEN_DIALOG = 'OPEN_DIALOG'
 export const CLOSE_DIALOG = 'CLOSE_DIALOG'

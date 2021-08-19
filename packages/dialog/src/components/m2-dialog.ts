@@ -2,7 +2,7 @@ import { CSSResult, LitElement, TemplateResult, css, customElement, html, proper
 import { Dialog, DialogState } from '../interfaces/dialog-state'
 
 import { connect } from 'pwa-helpers/connect-mixin'
-import { store } from '@m2fw/redux-manager'
+import { store } from '@m2-modules/redux-manager'
 
 @customElement('m2-dialog')
 export class M2Dialog extends connect(store)(LitElement) {

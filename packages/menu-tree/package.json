@@ -1,9 +1,9 @@
 {
-  "name": "@m2fw/menu-tree",
+  "name": "@m2-modules/menu-tree",
   "version": "1.0.0-alpha.1",
-  "description": "menu-tree powered by M2 Framework",
+  "description": "menu-tree powered by M2 modules",
   "main": "dist/index.js",
-  "repository": "https://github.com/m2fw/m2fw",
+  "repository": "https://github.com/m2-modules/m2-modules",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
   "license": "MIT",
   "scripts": {
@@ -15,7 +15,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@m2fw/redux-manager": "^1.0.0-alpha.1",
+    "@m2-modules/redux-manager": "^1.0.0-alpha.1",
     "lit-element": "^2.2.1",
     "pwa-helpers": "^0.9.1"
   },

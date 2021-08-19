@@ -1,16 +1,8 @@
 import { AccessKeyMapper, MenuItem } from '../interfaces'
-import {
-  CSSResult,
-  LitElement,
-  TemplateResult,
-  css,
-  customElement,
-  html,
-  property,
-} from 'lit-element'
+import { CSSResult, LitElement, TemplateResult, css, customElement, html, property } from 'lit-element'
 
 import { connect } from 'pwa-helpers/connect-mixin'
-import { store } from '@m2fw/redux-manager'
+import { store } from '@m2-modules/redux-manager'
 
 @customElement('menu-tree-group')
 export class MenuTreeGroup extends connect(store)(LitElement) {

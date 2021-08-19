@@ -2,18 +2,11 @@ import './menu-tree-group'
 import './menu-tree-item'
 
 import { AccessKeyMapper, MenuItem } from '../interfaces'
-import {
-  LitElement,
-  PropertyValues,
-  TemplateResult,
-  customElement,
-  html,
-  property,
-} from 'lit-element'
+import { LitElement, PropertyValues, TemplateResult, customElement, html, property } from 'lit-element'
 
 import { connect } from 'pwa-helpers/connect-mixin'
 import { setMenus } from '../redux/reducers'
-import { store } from '@m2fw/redux-manager'
+import { store } from '@m2-modules/redux-manager'
 
 @customElement('menu-tree')
 export class MenuTree extends connect(store)(LitElement) {

@@ -7,7 +7,7 @@ module.exports = {
     extensions: ['.js', '.ts'],
   },
   externals: {
-    '@m2fw/redux-manager': '@m2fw/redux-manager',
+    '@m2-modules/redux-manager': '@m2-modules/redux-manager',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
