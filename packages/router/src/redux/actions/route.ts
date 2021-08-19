@@ -1,6 +1,6 @@
 import { PageDetail, RouteState } from '../../interfaces'
 
-import { store } from '@m2fw/redux-manager'
+import { store } from '@m2-modules/redux-manager'
 
 export const SET_HOME_ROUTE: string = 'SET_HOME_ROUTE'
 export const SET_404_ROUTE: string = 'SET_404_ROUTE'

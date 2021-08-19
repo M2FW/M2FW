@@ -1,7 +1,7 @@
-<h1>@m2fw/table</h1>
+<h1>@m2-modules/table</h1>
 <p>
-  <a href="https://www.npmjs.com/package/@m2fw/table" target="_blank">
-    <img alt="Version" src="https://img.shields.io/npm/v/@m2fw/table.svg">
+  <a href="https://www.npmjs.com/package/@m2-modules/table" target="_blank">
+    <img alt="Version" src="https://img.shields.io/npm/v/@m2-modules/table.svg">
   </a>
   <a href="#" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />

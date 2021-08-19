@@ -1,7 +1,7 @@
-import { addPages, route } from '@m2fw/router'
+import { addPages, route } from '@m2-modules/router'
 
-import { dialog } from '@m2fw/dialog'
-import { store } from '@m2fw/redux-manager'
+import { dialog } from '@m2-modules/dialog'
+import { store } from '@m2-modules/redux-manager'
 
 store.addReducers({
   route: route as any,
@@ -19,5 +19,5 @@ const pages = [
 addPages(pages)
 
 import('./playground-app').then(() => {
-  console.log(`playground-cli is launched! (Powered by M2FW)`)
+  console.log(`playground-cli is launched! (Powered by M2 Modules)`)
 })

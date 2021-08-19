@@ -1,14 +1,14 @@
-<h1>@m2fw/redux-manager</h1>
+<h1>@m2-modules/redux-manager</h1>
 <p>
-  <a href="https://www.npmjs.com/package/@m2fw/redux-manager" target="_blank">
-    <img alt="Version" src="https://img.shields.io/npm/v/@m2fw/redux-manager.svg">
+  <a href="https://www.npmjs.com/package/@m2-modules/redux-manager" target="_blank">
+    <img alt="Version" src="https://img.shields.io/npm/v/@m2-modules/redux-manager.svg">
   </a>
   <a href="#" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
   </a>
 </p>
 
-> Common module for sharing redux object all around of M2FW ecosystem
+> Common module for sharing redux object all around of M2 Modules ecosystem
 
 ## Install
 

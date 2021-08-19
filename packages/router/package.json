@@ -1,9 +1,9 @@
 {
-  "name": "@m2fw/router",
+  "name": "@m2-modules/router",
   "version": "1.0.0-alpha.1",
-  "description": "M2 framework router for client side",
+  "description": "M2 modules router for client side",
   "main": "dist/index.js",
-  "repository": "https://github.com/m2fw/m2fw",
+  "repository": "https://github.com/m2-modules/m2-modules",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
   "license": "MIT",
   "scripts": {
@@ -15,7 +15,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@m2fw/redux-manager": "^1.0.0-alpha.1",
+    "@m2-modules/redux-manager": "^1.0.0-alpha.1",
     "lit-element": "^2.2.1",
     "pwa-helpers": "^0.9.1"
   },
