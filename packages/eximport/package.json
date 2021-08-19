@@ -1,6 +1,6 @@
 {
   "name": "@m2-modules/eximport",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0",
   "description": "Module for exporting & importing from various type of file",
   "main": "dist/index.js",
   "repository": "https://github.com/m2-modules/m2-modules",
@@ -15,7 +15,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@m2-modules/redux-manager": "^1.0.0-alpha.1",
+    "@m2-modules/redux-manager": "^1.0.0",
     "lit-element": "^2.4.0",
     "pwa-helpers": "^0.9.1",
     "xlsx": "^0.16.9"
