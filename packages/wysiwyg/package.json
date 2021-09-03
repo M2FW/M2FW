@@ -15,6 +15,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@material/mwc-icon": "^0.22.1",
     "lit-element": "^2.5.1",
     "pwa-helpers": "^0.9.1"
   },
