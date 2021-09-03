@@ -1,7 +1,6 @@
-import { CSSResult, LitElement, TemplateResult, css, customElement, html } from 'lit-element'
+import '@material/mwc-icon'
 
-import { M2Wysiwyg } from './m2-wysiwyg'
-import { property } from 'lit-element'
+import { CSSResult, LitElement, TemplateResult, css, customElement, html, property } from 'lit-element'
 
 @customElement('m2-wysiwyg-controller')
 export class M2WysiwygController extends LitElement {
