@@ -1257,6 +1257,14 @@
     lit-element "^2.3.0"
     tslib "^2.0.1"
 
+"@material/mwc-icon@^0.22.1":
+  version "0.22.1"
+  resolved "https://registry.yarnpkg.com/@material/mwc-icon/-/mwc-icon-0.22.1.tgz#a2ab2e903d1677c773d5635c9bc81c5ce231d7e6"
+  integrity sha512-LX4MUThlYEBfpTr1O53J27KbzFhPbe2dBGouY9piztCI3FObbRVQI+LXFlXJm6KU0BzemaQfz105ZAuLlPAN4g==
+  dependencies:
+    lit-element "^2.5.1"
+    tslib "^2.0.1"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
