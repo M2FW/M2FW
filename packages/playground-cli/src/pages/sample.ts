@@ -1,12 +1,20 @@
 import '@m2-modules/dialog'
+import '@m2-modules/tag-iframe'
 import '@m2-modules/wysiwyg'
 
 import { CSSResult, LitElement, PropertyValues, TemplateResult, css, customElement, html, property } from 'lit-element'
-import { ColumnAlign, ColumnConfig, ColumnTypes, M2Table, M2TableFetchResult, TableData } from '@m2-modules/table/src'
+import {
+  ColumnAlign,
+  ColumnConfig,
+  ColumnTypes,
+  M2Table,
+  M2TableFetchResult,
+  M2TableStringCell,
+  TableData,
+} from '@m2-modules/table'
 import { Dialog, closeDialog, openDialog } from '@m2-modules/dialog'
 
-import { ExImport } from '@m2-modules/eximport/src'
-import { M2TableStringCell } from '@m2-modules/table/src/components/m2-table-string-cell'
+import { ExImport } from '@m2-modules/eximport'
 import { connect } from 'pwa-helpers/connect-mixin'
 import { navigate } from '@m2-modules/router'
 import { store } from '@m2-modules/redux-manager'
@@ -172,6 +180,7 @@ export class Sample extends connect(store)(LitElement) {
 
   render(): TemplateResult {
     return html`
+      <h2>M2 Table</h2>
       <m2-table
         .maxColumnWidth="${350}"
         .selectable="${false}"
@@ -209,6 +218,71 @@ export class Sample extends connect(store)(LitElement) {
         </button>
         <button @click="${this.openAdvEditor}">Open Advanced Editor</button>
       </div>
+
+      <h2>Tag iframe</h2>
+      <iframe style="border: none;" is="tag-iframe">
+        <html>
+          <head>
+            <style>
+              html,
+              body {
+                margin: 0px;
+              }
+              #container {
+                background-color: tomato;
+                margin: 50px auto;
+                width: 400px;
+                height: 200px;
+                overflow: auto;
+              }
+              #header {
+                background-color: skyblue;
+                position: absolute;
+                width: inherit;
+              }
+            </style>
+          </head>
+
+          <body>
+            <div id="container">
+              <div id="header">Header</div>
+
+              <ul>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+                <li>Item</li>
+              </ul>
+            </div>
+          </body>
+        </html>
+      </iframe>
 
       <m2-dialog></m2-dialog>
     `
