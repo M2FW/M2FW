@@ -1,6 +1,6 @@
 {
   "name": "@m2-modules/form",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "WebComponent `form` powered by M2 Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/m2-modules/m2-modules",
