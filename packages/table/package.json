@@ -1,7 +1,7 @@
 {
   "name": "@m2-modules/table",
   "version": "1.0.1",
-  "description": "table powered by M2 modules",
+  "description": "WebComponent `table` powered by M2 Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/m2-modules/m2-modules",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
