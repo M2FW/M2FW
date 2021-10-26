@@ -1,6 +1,6 @@
 {
   "name": "@m2-modules/mail-sender",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Node module `mail-sender` powered by M2 Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/m2-modules/mail-sender",
