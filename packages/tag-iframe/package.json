@@ -1,6 +1,6 @@
 {
   "name": "@m2-modules/tag-iframe",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "WebComponent `tag-iframe` powered by M2 Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/m2-modules/m2-modules",
@@ -10,6 +10,9 @@
     "clean": "rm -rf ./dist",
     "build": "npm run clean && webpack",
     "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "devDependencies": {
     "ts-loader": "^9.2.6",

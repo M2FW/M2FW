@@ -1,7 +1,7 @@
 {
   "name": "@m2-modules/wysiwyg",
-  "version": "1.0.3",
-  "description": "wysiwyg powered by M2 modules",
+  "version": "1.0.5",
+  "description": "WebComponent `wysiwyg` powered by M2 Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/m2-modules/m2-modules",
   "author": "Jay Lee <jaylee.possible@gmail.com>",

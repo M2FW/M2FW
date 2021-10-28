@@ -1,7 +1,7 @@
 {
   "name": "@m2-modules/table",
-  "version": "1.0.1",
-  "description": "table powered by M2 modules",
+  "version": "1.0.3",
+  "description": "WebComponent `table` powered by M2 Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/m2-modules/m2-modules",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
@@ -15,7 +15,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@m2-modules/tooltip": "^1.0.0",
+    "@m2-modules/tooltip": "^1.0.2",
     "@material/mwc-icon": "^0.20.0",
     "lit-element": "^2.3.1",
     "lit-html": "^1.3.0",

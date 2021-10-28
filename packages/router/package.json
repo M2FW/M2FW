@@ -1,7 +1,7 @@
 {
   "name": "@m2-modules/router",
-  "version": "1.0.0",
-  "description": "M2 modules router for client side",
+  "version": "1.0.2",
+  "description": "WebComponent `router` powered by M2 Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/m2-modules/m2-modules",
   "author": "Jay Lee <jaylee.possible@gmail.com>",
@@ -15,7 +15,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@m2-modules/redux-manager": "^1.0.0",
+    "@m2-modules/redux-manager": "^1.0.2",
     "lit-element": "^2.2.1",
     "pwa-helpers": "^0.9.1"
   },
