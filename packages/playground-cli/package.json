@@ -1,6 +1,6 @@
 {
   "name": "@m2-modules/playground-cli",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "playground-cli powered by M2 modules",
   "main": "index.js",
   "repository": "https://github.com/m2-modules/m2-modules",
@@ -14,11 +14,11 @@
     "serve": "webpack serve --config ./webpack.config.dev.js"
   },
   "dependencies": {
-    "@m2-modules/dialog": "^1.0.2",
-    "@m2-modules/eximport": "^1.0.2",
-    "@m2-modules/redux-manager": "^1.0.2",
-    "@m2-modules/router": "^1.0.2",
-    "@m2-modules/table": "^1.0.3",
+    "@m2-modules/dialog": "^1.0.3",
+    "@m2-modules/eximport": "^1.0.3",
+    "@m2-modules/redux-manager": "^1.0.3",
+    "@m2-modules/router": "^1.0.3",
+    "@m2-modules/table": "^1.0.4",
     "lit-element": "^2.4.0",
     "pwa-helpers": "^0.9.1",
     "redux": "^4.0.5",
